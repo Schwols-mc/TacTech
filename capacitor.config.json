@@ -1,0 +1,11 @@
+{
+  "appId": "com.schwolsmc.tactech",
+  "appName": "TacTech",
+  "webDir": "www",
+  "android": {
+    "backgroundColor": "#0f1a10"
+  },
+  "plugins": {
+    "CapacitorHttp": { "enabled": false }
+  }
+}

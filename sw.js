@@ -1,5 +1,5 @@
 // TacTech service worker — internetsiz çalışma
-const CACHE = 'tactech-v17';
+const CACHE = 'tactech-v18';
 const CORE = ['./', './index.html', './manifest.json',
   './icons/icon-192.png', './icons/icon-512.png', './icons/icon-maskable-512.png', './icons/apple-touch-icon.png'];
 

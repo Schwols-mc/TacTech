@@ -1,0 +1,16 @@
+{
+  "name": "tactech",
+  "version": "1.4.0",
+  "private": true,
+  "description": "TacTech — futbol taktik tahtası (Android)",
+  "scripts": {
+    "www": "rm -rf www && mkdir -p www && cp -r index.html sw.js manifest.json icons www/"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.6.2",
+    "@capacitor/cli": "^8.6.2",
+    "@capacitor/core": "^8.6.2",
+    "@capacitor/filesystem": "^8.1.5",
+    "@capacitor/share": "^8.0.3"
+  }
+}
