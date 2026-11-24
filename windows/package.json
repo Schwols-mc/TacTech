@@ -1,0 +1,47 @@
+{
+  "name": "tactech",
+  "productName": "TacTech",
+  "version": "1.4.0",
+  "description": "TacTech — futbol taktik tahtası (Windows)",
+  "author": "Mehmet Can Biçer",
+  "main": "main.js",
+  "build": {
+    "appId": "com.mcb.tactech",
+    "productName": "TacTech",
+    "files": [
+      "main.js",
+      "preload.js",
+      "app/**/*"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "build/icon.ico",
+      "signAndEditExecutable": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "TacTech",
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "installerLanguages": [
+        "tr_TR"
+      ]
+    }
+  },
+  "devDependencies": {
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8",
+    "png-to-ico": "^2.1.8",
+    "resedit": "^2.0.3"
+  },
+  "dependencies": {
+    "xlsx": "^0.18.5"
+  },
+  "scripts": {
+    "app": "rm -rf app && mkdir -p app && cp -r ../index.html ../sw.js ../manifest.json ../icons app/",
+    "start": "npm run app && electron ."
+  }
+}

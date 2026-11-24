@@ -2,3 +2,6 @@ node_modules/
 www/
 *.keystore
 *.jks
+windows/app/
+windows/dist/
+windows/node_modules/
