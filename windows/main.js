@@ -39,7 +39,7 @@ ipcMain.handle('tm-fetch', (e, url, binary) => {
 function createWindow() {
   const win = new BrowserWindow({
     width: 1400, height: 850, minWidth: 900, minHeight: 560,
-    backgroundColor: '#0f1a10',
+    backgroundColor: '#000000',
     title: 'TacTech',
     icon: path.join(__dirname, 'app', 'icons', 'icon-512.png'),
     autoHideMenuBar: true,
