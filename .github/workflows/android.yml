@@ -54,3 +54,41 @@ jobs:
           body: Tablete indirip kurun. Önceki sürümün üzerine güncelleme olarak kurulur.
           files: TacTech.apk
           make_latest: true
+
+  # Windows kurulum dosyası: APK ile aynı sürüme eklenir.
+  # Bu adım başarısız olsa bile APK yayınlanmış olur.
+  windows:
+    needs: build
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: windows
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Uygulama dosyalarını hazırla
+        run: |
+          npm ci
+          npm run app
+
+      - name: Electron paketini derle
+        run: |
+          npx electron-builder --win --x64 --dir
+          node seticon.js
+
+      - name: Kurulum dosyasını derle
+        run: |
+          MAKENSIS="/c/Program Files (x86)/NSIS/makensis.exe"
+          if [ ! -f "$MAKENSIS" ]; then choco install nsis -y --no-progress; fi
+          "$MAKENSIS" installer.nsi
+
+      - name: Sürüme ekle
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.4.${{ github.run_number }}
+          files: windows/dist/TacTech-Kurulum.exe
