@@ -1,3 +1,6 @@
+!ifndef APP_VERSION
+  !define APP_VERSION "0.0.0.0"
+!endif
 Unicode true
 !include "MUI2.nsh"
 Name "TacTech"
@@ -6,11 +9,11 @@ InstallDir "$LOCALAPPDATA\Programs\TacTech"
 InstallDirRegKey HKCU "Software\TacTech" "InstallDir"
 RequestExecutionLevel user
 SetCompressor /SOLID lzma
-VIProductVersion "0.5.0.0"
+VIProductVersion "${APP_VERSION}"
 VIAddVersionKey /LANG=1055 "ProductName" "TacTech"
 VIAddVersionKey /LANG=1055 "FileDescription" "TacTech Kurulum"
 VIAddVersionKey /LANG=1055 "CompanyName" "Mehmet Can Biçer"
-VIAddVersionKey /LANG=1055 "FileVersion" "0.5.0"
+VIAddVersionKey /LANG=1055 "FileVersion" "${APP_VERSION}"
 VIAddVersionKey /LANG=1055 "LegalCopyright" "Mehmet Can Biçer"
 
 !define MUI_ICON "build\icon.ico"
@@ -41,7 +44,7 @@ Section "TacTech"
   CreateShortcut "$SMPROGRAMS\TacTech\TacTech'i Kaldır.lnk" "$INSTDIR\Kaldir.exe"
   !define UK "Software\Microsoft\Windows\CurrentVersion\Uninstall\TacTech"
   WriteRegStr HKCU "${UK}" "DisplayName" "TacTech"
-  WriteRegStr HKCU "${UK}" "DisplayVersion" "0.5.0"
+  WriteRegStr HKCU "${UK}" "DisplayVersion" "${APP_VERSION}"
   WriteRegStr HKCU "${UK}" "Publisher" "Mehmet Can Biçer"
   WriteRegStr HKCU "${UK}" "DisplayIcon" "$INSTDIR\icon.ico"
   WriteRegStr HKCU "${UK}" "InstallLocation" "$INSTDIR"

@@ -15,6 +15,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Sürüm numarasını oku (VERSION dosyası)
+        shell: bash
+        run: echo "APP_VERSION=$(tr -d ' \r\n' < VERSION)" >> "$GITHUB_ENV"
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -49,8 +53,8 @@ jobs:
       - name: Sürüm olarak yayınla
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v0.5.${{ github.run_number }}
-          name: TacTech 0.5.${{ github.run_number }}
+          tag_name: v${{ env.APP_VERSION }}
+          name: TacTech ${{ env.APP_VERSION }}
           body: Tablete indirip kurun. Önceki sürümün üzerine güncelleme olarak kurulur.
           files: TacTech_AndTab.apk
           make_latest: true
@@ -66,6 +70,11 @@ jobs:
         working-directory: windows
     steps:
       - uses: actions/checkout@v4
+
+      - name: Sürüm numarasını oku (VERSION dosyası)
+        shell: bash
+        working-directory: .
+        run: echo "APP_VERSION=$(tr -d ' \r\n' < VERSION)" >> "$GITHUB_ENV"
 
       - uses: actions/setup-node@v4
         with:
@@ -85,10 +94,10 @@ jobs:
         run: |
           MAKENSIS="/c/Program Files (x86)/NSIS/makensis.exe"
           if [ ! -f "$MAKENSIS" ]; then choco install nsis -y --no-progress; fi
-          "$MAKENSIS" //INPUTCHARSET UTF8 installer.nsi
+          "$MAKENSIS" //INPUTCHARSET UTF8 //DAPP_VERSION="$(echo "$APP_VERSION.0.0.0" | cut -d. -f1-4)" installer.nsi
 
       - name: Sürüme ekle
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v0.5.${{ github.run_number }}
+          tag_name: v${{ env.APP_VERSION }}
           files: windows/dist/TacTech_win.exe
