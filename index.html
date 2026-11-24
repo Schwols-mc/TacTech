@@ -3918,7 +3918,7 @@ if('serviceWorker' in navigator && location.protocol.startsWith('http') && !wind
 <div id="mm-teamslot"></div>
 <div class="mm-right">
 <button type="button" class="mm-ib" data-act="saved" title="Kayıtlı Takımlar (rakip ve diğer takımlar)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z"></path><path d="M8.5 9l3 6 3-6"></path></svg>Kayıtlı Takımlar</button>
-<button type="button" class="mm-ib" data-soon="Google ile giriş" style="background:#fff;color:#1f1f1f;font-weight:600">Google ile giriş</button>
+<button type="button" class="mm-ib mm-gbtn" id="mm-google" onclick="ttAccountClick()">Google ile giriş</button>
 <button type="button" class="mm-ib" data-act="settings" aria-label="Ayarlar"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"></path></svg></button>
 </div>
 </header>
@@ -3927,7 +3927,8 @@ if('serviceWorker' in navigator && location.protocol.startsWith('http') && !wind
 <div class="qedit-overlay" id="settings-overlay" onclick="if(event.target===this)closeSettings()">
   <div class="qedit-box" style="min-width:300px">
     <h3>Ayarlar</h3>
-    <label style="display:flex;align-items:center;justify-content:space-between;gap:16px;font:15px 'DM Sans',sans-serif;cursor:pointer">Açılış animasyonu <input type="checkbox" id="set-splash" style="width:22px;height:22px;accent-color:#7fff5a"></label>
+    <div style="display:flex;flex-direction:column;gap:8px;font:14px 'DM Sans',sans-serif"><b style="color:#7fff5a;font-size:13px;letter-spacing:1px">GOOGLE HESABI VE DRIVE</b><div id="set-account" style="display:flex;flex-direction:column;gap:8px"></div></div>
+    <label style="display:flex;align-items:center;justify-content:space-between;gap:16px;font:15px 'DM Sans',sans-serif;cursor:pointer;border-top:1px solid var(--ui-border);padding-top:10px">Açılış animasyonu <input type="checkbox" id="set-splash" style="width:22px;height:22px;accent-color:#7fff5a"></label>
     <div style="border-top:1px solid var(--ui-border);padding-top:10px;display:flex;flex-direction:column;gap:8px;font:14px 'DM Sans',sans-serif">
       <b style="color:#7fff5a;font-size:13px;letter-spacing:1px">YEDEK</b>
       <span style="font-size:12px;color:#7a9a7c">Takımlar, kayıtlı takımlar, kadrolar, animasyonlar ve ayarlar tek dosyaya kaydedilir. Dosyayı WhatsApp ya da USB ile diğer cihaza taşıyıp orada geri yükleyebilirsin.</span>
@@ -3936,7 +3937,7 @@ if('serviceWorker' in navigator && location.protocol.startsWith('http') && !wind
       <button class="tm-btn" id="bk-over" onclick="bkPick('replace',this)" style="color:#e06060">⬆️ Yedekten geri yükle (her şeyi değiştir)</button>
       <input type="file" id="bk-file" accept=".json,application/json" style="display:none">
       <span id="bk-msg" style="font-size:12px;color:#7a9a7c"></span>
-      <span style="font-size:12px;color:#7a9a7c">Google hesabıyla eşitleme ileride burada olacak.</span>
+
     </div>
     <button class="qe-confirm" onclick="closeSettings()">Kapat</button>
   </div>
@@ -3989,7 +3990,7 @@ if('serviceWorker' in navigator && location.protocol.startsWith('http') && !wind
   window.openSettings=function(){
     var on=true; try{ on=localStorage.getItem('tactech_splash_off')!=='1'; }catch(e){}
     document.getElementById('set-splash').checked=on;
-    document.getElementById('settings-overlay').classList.add('show');
+    document.getElementById('settings-overlay').classList.add('show'); if(window.ttAccountRender) ttAccountRender();
   };
   // ---- Yedek: tactech_* ve taktik_squad_* kayıtları tek JSON dosyasında ----
   const bkKeys=()=>stKeys().filter(k=>k && (k.indexOf('tactech_')===0 || k.indexOf('taktik_squad_')===0));
@@ -4288,5 +4289,148 @@ function tmLoadIntoModal(id,kind){
     if(A&&A.addListener) A.addListener('backButton',function(){ ttGoBack(true); }); }catch(e){}
 })();
 </script>
+
+<!-- GOOGLE İLE GİRİŞ + DRIVE EŞİTLEME -->
+<script>
+// ---- Android: Google girişi (Capacitor SocialLogin eklentisi) ----
+(function(){
+  const C=window.Capacitor; if(!C||!C.isNativePlatform||!C.isNativePlatform()||!C.Plugins||!C.Plugins.SocialLogin) return;
+  const SL=C.Plugins.SocialLogin, HTTP=C.Plugins.CapacitorHttp;
+  const WEB_ID='366022273577-mfpcbdemfrif6knh0jenthonr83i1sca.apps.googleusercontent.com';
+  const DRIVE='https://www.googleapis.com/auth/drive.appdata', UKEY='tactech_g_user';
+  let inited=false, tok=null, tokExp=0;
+  const init=async()=>{ if(!inited){ await SL.initialize({google:{webClientId:WEB_ID}}); inited=true; } };
+  const keep=(r)=>{ const res=r&&(r.result||r); const at=res&&res.accessToken; tok=at?(at.token||at):null; tokExp=Date.now()+50*60*1000;
+    const pr=(res&&res.profile)||{}; const u={email:pr.email||'',name:pr.name||[pr.givenName,pr.familyName].filter(Boolean).join(' ')||''}; try{ localStorage.setItem(UKEY,JSON.stringify(u)); }catch(e){} return u; };
+  const g={platform:'android',
+    signIn:async()=>{ try{ await init(); const r=await SL.login({provider:'google',options:{scopes:[DRIVE]}}); const u=keep(r); if(!tok) return {ok:false,error:'Drive izni verilmedi'}; return {ok:true,user:u}; }catch(e){ return {ok:false,error:String(e&&e.message||e)}; } },
+    status:async()=>{ try{ const u=JSON.parse(localStorage.getItem(UKEY)||'null'); return u?{signedIn:true,user:u}:{signedIn:false}; }catch(e){ return {signedIn:false}; } },
+    token:async()=>{ try{
+        if(tok && Date.now()<tokExp) return {ok:true,token:tok};
+        await init();
+        try{ const a=await SL.getAuthorizationCode({provider:'google'}); if(a&&a.accessToken){ tok=a.accessToken; tokExp=Date.now()+50*60*1000; return {ok:true,token:tok}; } }catch(e){}
+        const r=await SL.login({provider:'google',options:{scopes:[DRIVE]}}); keep(r); return tok?{ok:true,token:tok}:{ok:false,error:'Token alınamadı'};
+      }catch(e){ return {ok:false,error:String(e&&e.message||e)}; } },
+    signOut:async()=>{ try{ await init(); await SL.logout({provider:'google'}); }catch(e){} tok=null; try{ localStorage.removeItem(UKEY); }catch(e){} return {ok:true}; },
+    fetch:async(url,opts)=>{ try{
+        const t=await g.token(); if(!t.ok) return {ok:false,status:401,error:t.error};
+        const o=opts||{}; const headers=Object.assign({},o.headers||{},{Authorization:'Bearer '+t.token});
+        const r=await HTTP.request({url,method:o.method||'GET',headers,data:o.body,responseType:'text'});
+        if(r.status===401){ tok=null; }
+        return {ok:r.status>=200&&r.status<300,status:r.status,text:typeof r.data==='string'?r.data:JSON.stringify(r.data)};
+      }catch(e){ return {ok:false,status:0,error:String(e&&e.message||e)}; } }
+  };
+  window.tactechNative=window.tactechNative||{}; window.tactechNative.google=g;
+})();
+
+// ---- Eşitleme motoru (Windows ve Android için ortak) ----
+(function(){
+  const G=()=>window.tactechNative&&window.tactechNative.google;
+  const FILE='tactech-data.json', API='https://www.googleapis.com';
+  const META='tactech_sync_meta', TOMB='tactech_sync_tomb', TTOMB='tactech_sync_teamtomb', LAST='tactech_sync_last';
+  const TEAMKEYS=[TEAMS_KEY,SAVED_TEAMS_KEY];
+  // Eşitlenmeyen, cihaza özel kayıtlar
+  const syncable=k=>!!k && (k.indexOf('tactech_')===0||k.indexOf('taktik_squad_')===0) && k.indexOf('tactech_sync_')!==0 && k.indexOf('tactech_g_')!==0 && k!=='tactech_splash_off' && k!==ACTIVE_TEAM_KEY;
+  const J=(k,d)=>{ try{ return JSON.parse(stGet(k)||'')||d; }catch(e){ return d; } };
+  const rawSet=stSet, rawDel=stDel;
+  let state={signedIn:false,user:null,status:'off',msg:''}, timer=null, running=false, again=false;
+  const setMeta=(k,del)=>{ if(!syncable(k)) return; const m=J(META,{}), t=J(TOMB,{}), now=Date.now(); if(del){ t[k]=now; delete m[k]; } else { m[k]=now; delete t[k]; } rawSet(META,JSON.stringify(m)); rawSet(TOMB,JSON.stringify(t)); };
+  // Takım listelerinde silinen takımları hatırla (öbür cihazda geri gelmesin)
+  const teamTomb=(k,oldV,newV)=>{ if(TEAMKEYS.indexOf(k)<0) return; let a=[],b=[]; try{ a=JSON.parse(oldV||'[]'); }catch(e){} try{ b=JSON.parse(newV||'[]'); }catch(e){}
+    const keep=new Set((b||[]).map(t=>t.id)); const tt=J(TTOMB,{}); tt[k]=tt[k]||{}; (a||[]).forEach(t=>{ if(t&&t.id&&!keep.has(t.id)) tt[k][t.id]=Date.now(); }); rawSet(TTOMB,JSON.stringify(tt)); };
+  stSet=function(k,v){ const old=TEAMKEYS.indexOf(k)>=0?stGet(k):null; const r=rawSet(k,v); try{ if(TEAMKEYS.indexOf(k)>=0) teamTomb(k,old,v); setMeta(k,false); if(syncable(k)) syncSoon(); }catch(e){} return r; };
+  stDel=function(k){ const r=rawDel(k); try{ setMeta(k,true); if(syncable(k)) syncSoon(); }catch(e){} return r; };
+  function snapshot(){ const data={}; stKeys().filter(syncable).forEach(k=>{ data[k]=stGet(k); }); const meta=J(META,{}); Object.keys(data).forEach(k=>{ if(!meta[k]) meta[k]=1; }); return {app:'TacTech',kind:'sync',version:1,savedAt:new Date().toISOString(),data,meta,tomb:J(TOMB,{}),teamTomb:J(TTOMB,{})}; }
+  function mergeTeams(la,ra,tombL,tombR){ const tomb=Object.assign({},tombR||{}); Object.keys(tombL||{}).forEach(id=>{ tomb[id]=Math.max(tomb[id]||0,tombL[id]); });
+    const by={}; [].concat(la||[],ra||[]).forEach(t=>{ if(!t||!t.id) return; const c=by[t.id]; if(!c||(t.updatedAt||0)>(c.updatedAt||0)) by[t.id]=t; });
+    return {list:Object.values(by).filter(t=>!(tomb[t.id]&&tomb[t.id]>=(t.updatedAt||0))),tomb}; }
+  // Yerel ve Drive'daki veriyi birleştir: her kayıtta son değiştirilen kazanır
+  function merge(L,R){
+    const out={data:{},meta:{},tomb:{},teamTomb:{}};
+    const keys=new Set([].concat(Object.keys(L.data),Object.keys(R.data||{}),Object.keys(L.tomb),Object.keys(R.tomb||{})));
+    keys.forEach(k=>{
+      if(!syncable(k)) return;
+      if(TEAMKEYS.indexOf(k)>=0){
+        let la=[],ra=[]; try{ la=JSON.parse(L.data[k]||'[]'); }catch(e){} try{ ra=JSON.parse((R.data||{})[k]||'[]'); }catch(e){}
+        const m=mergeTeams(la,ra,(L.teamTomb||{})[k],(R.teamTomb||{})[k]); out.teamTomb[k]=m.tomb;
+        out.data[k]=JSON.stringify(m.list); out.meta[k]=Math.max(L.meta[k]||0,(R.meta||{})[k]||0,1); return;
+      }
+      const ev=[['L',L.meta[k]||0,L.data[k]],['LT',L.tomb[k]||0,null],['R',(R.meta||{})[k]||0,(R.data||{})[k]],['RT',(R.tomb||{})[k]||0,null]]
+        .filter(e=>e[1]>0 && (e[0].length===2 || e[2]!=null)).sort((a,b)=>b[1]-a[1]);
+      const w=ev[0]; if(!w) return;
+      if(w[0].length===2) out.tomb[k]=w[1]; else { out.data[k]=w[2]; out.meta[k]=w[1]; }
+    });
+    return out;
+  }
+  function applyLocal(M){
+    Object.keys(M.data).forEach(k=>{ if(stGet(k)!==M.data[k]) rawSet(k,M.data[k]); });
+    Object.keys(M.tomb).forEach(k=>{ if(stGet(k)!=null) rawDel(k); });
+    rawSet(META,JSON.stringify(M.meta)); rawSet(TOMB,JSON.stringify(M.tomb)); rawSet(TTOMB,JSON.stringify(M.teamTomb));
+  }
+  async function api(url,opts){ const r=await G().fetch(url,opts); if(!r.ok){ const e=new Error(r.status===0?'İnternet bağlantısı yok':(r.status===401||r.status===403?'Google izni yenilenmeli':'Drive hatası ('+r.status+')')); e.status=r.status; throw e; } return r.text; }
+  async function findFile(){ const q=encodeURIComponent("name='"+FILE+"'"); const t=await api(API+'/drive/v3/files?spaces=appDataFolder&fields=files(id,modifiedTime)&q='+q); const f=(JSON.parse(t).files||[])[0]; return f?f.id:null; }
+  async function syncNow(){
+    if(!G()||!state.signedIn) return;
+    if(running){ again=true; return; }
+    running=true; setStatus('syncing');
+    try{
+      let id=await findFile(), remote={data:{},meta:{},tomb:{},teamTomb:{}};
+      if(id){ try{ const t=await api(API+'/drive/v3/files/'+id+'?alt=media'); const o=JSON.parse(t); if(o&&o.app==='TacTech') remote=o; }catch(e){ if(e.status) throw e; } }
+      const M=merge(snapshot(),remote); applyLocal(M);
+      const body=JSON.stringify({app:'TacTech',kind:'sync',version:1,savedAt:new Date().toISOString(),data:M.data,meta:M.meta,tomb:M.tomb,teamTomb:M.teamTomb});
+      if(!id){ const t=await api(API+'/drive/v3/files?fields=id',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:FILE,parents:['appDataFolder']})}); id=JSON.parse(t).id; }
+      await api(API+'/upload/drive/v3/files/'+id+'?uploadType=media',{method:'PATCH',headers:{'Content-Type':'application/json'},body});
+      rawSet(LAST,String(Date.now())); setStatus('ok');
+      if(window.mmRefresh) mmRefresh();
+    }catch(e){ console.error('Eşitleme:',e); setStatus(e.status===0?'offline':'error',String(e.message||e)); }
+    finally{ running=false; if(again){ again=false; syncSoon(); } }
+  }
+  function syncSoon(){ if(!state.signedIn) return; clearTimeout(timer); timer=setTimeout(syncNow,5000); }
+  function setStatus(st,msg){ state.status=st; state.msg=msg||''; renderAccount(); }
+  // ---- Arayüz ----
+  const initials=u=>{ const n=(u&&(u.name||u.email)||'?').trim(); const p=n.split(/[\s@.]+/).filter(Boolean); return ((p[0]||'?')[0]+((p[1]||'')[0]||'')).toUpperCase(); };
+  function renderAccount(){
+    const btn=document.getElementById('mm-google'); if(btn){
+      if(state.signedIn){ const ic={syncing:'↻',ok:'✓',offline:'⚠',error:'!'}[state.status]||'✓';
+        btn.className='mm-ib mm-acc'; btn.title=(state.user&&state.user.email||'')+' · '+({syncing:'Eşitleniyor',ok:'Drive ile eşitlendi',offline:'Çevrimdışı, internet gelince eşitlenecek',error:'Eşitleme hatası: '+state.msg}[state.status]||'');
+        btn.innerHTML='<span class="mm-av">'+initials(state.user)+'</span><span class="mm-badge mm-b-'+state.status+'">'+ic+'</span>'; }
+      else { btn.className='mm-ib mm-gbtn'; btn.title='Google hesabınla giriş yap; verilerin Google Drive\'ında saklanır'; btn.textContent='Google ile giriş'; }
+    }
+    const box=document.getElementById('set-account'); if(!box) return;
+    if(!G()){ box.innerHTML='<span style="font-size:12px;color:#7a9a7c">Google ile giriş Windows ve Android uygulamasında çalışır.</span>'; return; }
+    if(!state.signedIn){ box.innerHTML='<button class="tm-btn" onclick="ttGoogleSignIn()">Google ile giriş</button><span style="font-size:12px;color:#7a9a7c">Giriş yapınca bütün kayıtların Google Drive\'ına kaydedilir ve cihazların arasında eşitlenir.</span>'; return; }
+    const last=+stGet(LAST)||0; const lt=last?new Date(last).toLocaleString('tr-TR'):'henüz yok';
+    const st={syncing:'↻ Eşitleniyor...',ok:'✓ Eşitlendi',offline:'⚠ Çevrimdışı, internet gelince eşitlenecek',error:'❌ '+state.msg}[state.status]||'';
+    box.innerHTML='<div style="font-size:14px"><b></b><br><span style="font-size:12px;color:#7a9a7c"></span></div><span style="font-size:12px"></span><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="tm-btn" onclick="ttSyncNow()">↻ Şimdi eşitle</button><button class="tm-btn" onclick="ttGoogleSignOut()" style="color:#e06060">Çıkış yap</button></div>';
+    box.querySelector('b').textContent=(state.user&&state.user.name)||'';
+    box.querySelector('div span').textContent=(state.user&&state.user.email)||'';
+    box.children[1].textContent=st+' · Son eşitleme: '+lt;
+  }
+  window.ttSyncNow=function(){ clearTimeout(timer); syncNow(); };
+  window.ttGoogleSignIn=async function(){
+    if(!G()){ if(window.mmToast) mmToast('Google ile giriş Windows ve Android uygulamasında çalışır'); return; }
+    if(window.mmToast) mmToast(G().platform==='windows'?'Tarayıcıda Google girişi açılıyor...':'Google girişi açılıyor...');
+    const r=await G().signIn();
+    if(!r||!r.ok){ if(window.mmToast) mmToast('Giriş yapılamadı'+(r&&r.error?': '+r.error:'')); return; }
+    state.signedIn=true; state.user=r.user; renderAccount(); if(window.mmToast) mmToast('Giriş yapıldı: '+(r.user&&r.user.email||'')); syncNow();
+  };
+  window.ttGoogleSignOut=async function(){ if(G()) await G().signOut(); state.signedIn=false; state.user=null; state.status='off'; renderAccount(); if(window.mmToast) mmToast('Çıkış yapıldı. Kayıtların bu cihazda duruyor.'); };
+  window.ttAccountClick=function(){ if(state.signedIn) openSettings(); else ttGoogleSignIn(); };
+  window.ttAccountRender=renderAccount;
+  window.addEventListener('load',async function(){
+    renderAccount();
+    if(!G()) return;
+    try{ const s=await G().status(); if(s&&s.signedIn){ state.signedIn=true; state.user=s.user; renderAccount(); setTimeout(syncNow,3000); } }catch(e){}
+  });
+  window.addEventListener('online',()=>{ if(state.signedIn) syncSoon(); });
+})();
+</script>
+<style>
+.mm-gbtn{background:#fff!important;color:#1f1f1f!important;font-weight:600}
+.mm-acc{position:relative;padding:0!important;width:56px}
+.mm-av{width:38px;height:38px;border-radius:50%;background:#2f7de1;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px}
+.mm-badge{position:absolute;right:4px;bottom:4px;width:18px;height:18px;border-radius:50%;border:2px solid #0f1a10;font-size:11px;display:flex;align-items:center;justify-content:center;color:#0e1f10;background:#7fff5a}
+.mm-b-syncing{background:#ffdd57}.mm-b-offline{background:#ffdd57}.mm-b-error{background:#e84040;color:#fff}
+</style>
 </body>
 </html>

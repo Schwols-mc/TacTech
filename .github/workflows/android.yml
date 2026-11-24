@@ -85,6 +85,14 @@ jobs:
           npm ci
           npm run app
 
+      - name: Google giriş bilgilerini yerleştir
+        env:
+          GID: ${{ secrets.GOOGLE_DESKTOP_CLIENT_ID }}
+          GSEC: ${{ secrets.GOOGLE_DESKTOP_CLIENT_SECRET }}
+        run: |
+          if [ -z "$GID" ] || [ -z "$GSEC" ]; then echo "::warning::Google giriş bilgileri (secrets) eksik; Windows'ta Google girişi çalışmaz"; exit 0; fi
+          node -e "const f='main.js',fs=require('fs');fs.writeFileSync(f,fs.readFileSync(f,'utf8').replace('__G_DESKTOP_CLIENT_ID__',process.env.GID).replace('__G_DESKTOP_CLIENT_SECRET__',process.env.GSEC))"
+
       - name: Electron paketini derle
         run: |
           npx electron-builder --win --x64 --dir
