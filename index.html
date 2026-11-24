@@ -1770,6 +1770,12 @@ function openLoadPanel() {
 
 // Seçim paneli için geçici state
 let _pickState = null;
+// Mevki sırası: kale, stoper, bekler, kanat bekler, DOS, OS, OOS, kanatlar, santrafor
+const POS_ORDER=['GK','CB','RB','LB','RWB','LWB','DM','CM','AM','RW','LW','ST'];
+function sortByPos(list){
+  const rank=pl=>{ const r=POS_ORDER.indexOf(pl&&pl.pos); return r<0?POS_ORDER.length:r; };
+  return (list||[]).map((pl,i)=>({pl,i})).sort((a,b)=>rank(a.pl)-rank(b.pl)||a.i-b.i).map(o=>o.pl);
+}
 
 function applySquad(key) {
   let state;
@@ -1789,7 +1795,8 @@ function applySquad(key) {
 }
 
 function openPickPanel(state) {
-  const players = state.players || [];
+  state.players = sortByPos(state.players);
+  const players = state.players;
   const list = document.getElementById('pick-list');
   list.innerHTML = '';
   const cfg = state;
@@ -1891,8 +1898,8 @@ function applySquadState(state) {
   if(cb) cb.checked = mFmQuickActive;
   document.getElementById('fm-quick-wrap').classList.toggle('active', mFmQuickActive);
   buildFmQuickGrid();
-  buildPlayersTable(mFormation, state.players || []);
-  buildSubsTable(state.subs || []);
+  buildPlayersTable(mFormation, sortByPos(state.players || []));
+  buildSubsTable(sortByPos(state.subs || []));
 }
 
 
@@ -1988,11 +1995,14 @@ function importPlayerList(list, teamName, source, style){
   if(list.length>11){
     _pickState=state;
     openPickPanel(state);
+    list=state.players; // mevkiye göre sıralanmış liste
     // İlk kaleci + sıradaki 10 oyuncuyu ön-seç
     const items=[...document.querySelectorAll('#pick-list .pick-item')];
-    const gkIdx=list.findIndex(p=>p.pos==='GK');
-    const pre=[]; if(gkIdx>=0) pre.push(gkIdx);
-    for(let i=0;i<list.length && pre.length<11;i++){ if(i!==gkIdx && list[i].pos!=='GK') pre.push(i); }
+    // Dengeli bir ön seçim (4-3-3): her mevkiden ilk oyuncu, eksik kalırsa sıradaki oyuncular
+    const QUOTA={GK:1,CB:2,RB:1,LB:1,DM:1,CM:1,AM:1,RW:1,LW:1,ST:1};
+    const pre=[], got={};
+    list.forEach((p,i)=>{ const q=QUOTA[p.pos]||0; if(pre.length<11 && (got[p.pos]||0)<q){ pre.push(i); got[p.pos]=(got[p.pos]||0)+1; } });
+    for(let i=0;i<list.length && pre.length<11;i++){ if(!pre.includes(i) && list[i].pos!=='GK') pre.push(i); }
     pre.forEach(i=>items[i]&&items[i].classList.add('selected'));
     updatePickCount();
     impMsg('✅ '+list.length+' oyuncu bulundu'+(source?' ('+source+')':'')+'. İlk 11\'i seç, kalanlar yedeğe geçer.','#60d090');
@@ -2679,6 +2689,26 @@ function confirmSetup() {
     const alt=o.alts.find(free);
     take(o.i, alt || (o.pl.pos||'CM'));
   });
+
+  // Adım 2a: Kanat dengesi. Bir tarafta kanat/bek varken öbür taraf boşsa,
+  // kalabalık bir mevkideki (en az 2 kişi) ve yan mevkisi o boş taraf olan oyuncu oraya geçer.
+  // Örnek: sağ kanat Yamal, iki santrafor Rafinha + Jesus → Rafinha'nın yan mevkisi sol kanat → sol kanada.
+  {
+    const MIRROR=[['RW','LW'],['RB','LB'],['RWB','LWB']];
+    const cnt = posId => placementPos.filter(x=>x===posId).length;
+    MIRROR.forEach(([a,b])=>{
+      [[a,b],[b,a]].forEach(([have,need])=>{
+        if(cnt(have)<1 || cnt(need)>0) return;
+        const cand = order.find(o=>{
+          const cur=placementPos[o.i];
+          if(cur===have || cur==='GK' || cnt(cur)<2) return false;
+          const opts=[o.pl.pos||'CM', ...o.alts];
+          return opts.includes(need);
+        });
+        if(cand){ used[placementPos[cand.i]]--; take(cand.i,need); }
+      });
+    });
+  }
 
   // Adım 2b: Orta sahada birer DM, CM ve AM varsa üçü tek hizaya dizilmesin.
   // İkinci mevkilere bakarak şu dizilişlerden birine çevrilir:
