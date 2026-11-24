@@ -122,7 +122,7 @@ body{background:var(--ui-bg);font-family:'Times New Roman',serif;color:var(--tex
 .ctx-item.del:hover{background:rgba(232,64,64,0.1);color:#e84040;}
 
 /* STATUS */
-.status-bar{padding:4px 16px;background:var(--ui-panel);border-top:1px solid var(--ui-border);font-size:0.69rem;color:#4a6a4c;display:flex;gap:16px;flex-shrink:0;}
+.status-bar{display:none!important;padding:4px 16px;background:var(--ui-panel);border-top:1px solid var(--ui-border);font-size:0.69rem;color:#4a6a4c;display:flex;gap:16px;flex-shrink:0;}
 .status-bar span{color:var(--text);}
 
 /* ===== TEAM MODAL ===== */
@@ -554,6 +554,7 @@ function tactechToast(msg){
     <div class="tp-sep"></div>
     <button class="tp-btn" id="btn-equip" onclick="toggleEqPal(event)" title="Malzemeler (koni, kale, merdiven...)">🧰</button>
     <button class="tp-btn" onclick="exportPNG()" title="PNG İndir">📤</button>
+    <button class="tp-btn tp-home" id="btn-main-menu" onclick="openScreen('menu')" title="Ana menü" aria-label="Ana menü"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"></path><path d="M5 10v10h14V10"></path></svg></button>
   </div>
 </div>
 
@@ -922,6 +923,7 @@ const _ttLogoImg=new Image(); _ttLogoImg.src=TT_LOGO;
 
 // pitch
 let pitchW=0, pitchH=0;
+function stMsg(t){ const e=document.getElementById('st-anim'); if(e) e.textContent=t; if(window.mmToast) mmToast(t); }
 let players=[];
 let allPaths=[];
 let tool='select';
@@ -1124,6 +1126,7 @@ function lightenDarken(hex, amount) {
 // MODAL
 // ============================================================
 function openModal(side) {
+  setTimeout(()=>{ const o=document.getElementById('modal-overlay'); if(o) o.scrollTop=0; },0);
   mSide = side;
   const cfg = TC[side];
   mColor = cfg.color; mSecColor = cfg.secColor||'#ffffff'; mGKColor = cfg.gkColor;
@@ -1779,9 +1782,23 @@ function openLoadPanel() {
   const overlay = document.getElementById('load-panel-overlay');
   const list    = document.getElementById('load-panel-list');
   list.innerHTML = '';
+  // Takımlarım (menüden eklenen kendi takımların)
+  try{ let any=false;
+    [['own','TAKIMLARIM','#7fff5a'],['saved','KAYITLI TAKIMLAR','#ffdd57']].forEach(([kind,title,col])=>{
+      const L=(typeof teamsAll==='function')?teamsAll(kind):[]; if(!L.length) return; any=true;
+      const h=document.createElement('div'); h.style.cssText='font-size:0.7rem;letter-spacing:1.5px;padding:6px 4px 0;color:'+col; h.textContent=title; list.appendChild(h);
+      L.forEach(t=>{ const item=document.createElement('div'); item.className='load-item';
+        item.innerHTML='<div class="load-item-jersey">'+makeJerseySVG(t.color||'#888',t.gkColor||'#f5bc30',t.jerseyStyle||'solid',false,32,t.secColor||null)+'</div><div class="load-item-info"><div class="load-item-name"></div><div class="load-item-meta"></div></div><div class="load-item-actions"><button class="load-btn-apply">Yükle</button></div>';
+        item.querySelector('.load-item-name').textContent=t.name||'İsimsiz';
+        item.querySelector('.load-item-meta').textContent=(t.players||[]).length+' oyuncu';
+        item.querySelector('.load-btn-apply').onclick=()=>tmLoadIntoModal(t.id,kind);
+        list.appendChild(item); });
+    });
+    if(any){ const h2=document.createElement('div'); h2.style.cssText='font-size:0.7rem;letter-spacing:1.5px;color:#7a9a7c;padding:8px 4px 0'; h2.textContent='ESKİ KAYITLI KADROLAR'; list.appendChild(h2); }
+  }catch(e){ console.error(e); }
 
   if(squads.length === 0) {
-    list.innerHTML = '<div style="color:#5a7a5c;font-size:0.82rem;padding:16px;text-align:center;">Henüz kayıtlı kadro yok.</div>';
+    list.insertAdjacentHTML('beforeend','<div style="color:#5a7a5c;font-size:0.82rem;padding:16px;text-align:center;">Henüz kayıtlı kadro yok.</div>');
   } else {
     squads.forEach(({key, state}) => {
       const item = document.createElement('div');
@@ -1831,6 +1848,16 @@ function applySquad(key) {
   }
 }
 
+// Dengeli bir ön seçim (4-3-3): her mevkiden ilk oyuncu, eksik kalırsa sıradaki oyuncular
+function pickPreselect(list){
+  const items=[...document.querySelectorAll('#pick-list .pick-item')];
+  const QUOTA={GK:1,CB:2,RB:1,LB:1,DM:1,CM:1,AM:1,RW:1,LW:1,ST:1};
+  const pre=[], got={};
+  list.forEach((p,i)=>{ const q=QUOTA[p.pos]||0; if(pre.length<11 && (got[p.pos]||0)<q){ pre.push(i); got[p.pos]=(got[p.pos]||0)+1; } });
+  for(let i=0;i<list.length && pre.length<11;i++){ if(!pre.includes(i) && list[i].pos!=='GK') pre.push(i); }
+  pre.forEach(i=>items[i]&&items[i].classList.add('selected'));
+  updatePickCount();
+}
 function openPickPanel(state) {
   state.players = sortByPos(state.players);
   const players = state.players;
@@ -2034,14 +2061,7 @@ function importPlayerList(list, teamName, source, style){
     openPickPanel(state);
     list=state.players; // mevkiye göre sıralanmış liste
     // İlk kaleci + sıradaki 10 oyuncuyu ön-seç
-    const items=[...document.querySelectorAll('#pick-list .pick-item')];
-    // Dengeli bir ön seçim (4-3-3): her mevkiden ilk oyuncu, eksik kalırsa sıradaki oyuncular
-    const QUOTA={GK:1,CB:2,RB:1,LB:1,DM:1,CM:1,AM:1,RW:1,LW:1,ST:1};
-    const pre=[], got={};
-    list.forEach((p,i)=>{ const q=QUOTA[p.pos]||0; if(pre.length<11 && (got[p.pos]||0)<q){ pre.push(i); got[p.pos]=(got[p.pos]||0)+1; } });
-    for(let i=0;i<list.length && pre.length<11;i++){ if(!pre.includes(i) && list[i].pos!=='GK') pre.push(i); }
-    pre.forEach(i=>items[i]&&items[i].classList.add('selected'));
-    updatePickCount();
+    pickPreselect(list);
     impMsg('✅ '+list.length+' oyuncu bulundu'+(source?' ('+source+')':'')+'. İlk 11\'i seç, kalanlar yedeğe geçer.','#60d090');
   } else {
     applySquadState(state);
@@ -2592,7 +2612,7 @@ function showSaveMsg(text, color) {
   el._t = setTimeout(() => { el.style.opacity = '0'; }, 2500);
 }
 
-function closeModal() { document.getElementById('modal-overlay').classList.remove('show'); }
+function closeModal() { document.getElementById('modal-overlay').classList.remove('show'); if(window.currentScreen==='menu' && window.mmRefresh) mmRefresh(); }
 
 // ============================================================
 // PLACE PLAYERS — position-aware
@@ -3455,7 +3475,7 @@ async function exportPNG() {
     else alertPNG(out.toDataURL('image/png'));
   } catch(err) {
     console.error(err);
-    document.getElementById('st-anim').textContent='PNG hatası: '+err.message;
+    stMsg('PNG hatası: '+err.message);
   }
 }
 // İndirmeyi desteklemeyen tarayıcılar (iOS vb.) için: görüntüyü yeni sekmede aç
@@ -3523,7 +3543,7 @@ function animGo(d){
 function animAddFrame(){
   if(animPlaying) return;
   animSettle();
-  if(animFrames.length>=60){ document.getElementById('st-anim').textContent='En fazla 60 kare eklenebilir.'; return; }
+  if(animFrames.length>=60){ stMsg('En fazla 60 kare eklenebilir.'); return; }
   animFrames.splice(animCur+1,0,_snap()); animCur++;
   animUpdateUI(); renderPlayers();
 }
@@ -3563,7 +3583,7 @@ function _setInterp(seg,t){
 }
 function animTogglePlay(){ if(animPlaying) animPauseNow(); else animPlay(); }
 function animPlay(){
-  if(animFrames.length<2){ document.getElementById('st-anim').textContent='Oynatmak için en az 2 kare gerekli. ➕ ile kare ekle.'; return; }
+  if(animFrames.length<2){ stMsg('Oynatmak için en az 2 kare gerekli. ➕ ile kare ekle.'); return; }
   let seg, startT;
   if(animPause){ seg=animPause.seg; startT=animPause.t; }
   else { seg = animCur>=animFrames.length-1 ? 0 : animCur; startT=0; }
@@ -3658,7 +3678,7 @@ function _expSize(){
 }
 function openAnimExport(){
   if(animPlaying) animPauseNow();
-  if(animFrames.length<2){ document.getElementById('st-anim').textContent='Dışa aktarmak için en az 2 kare gerekli. ➕ ile kare ekle.'; return; }
+  if(animFrames.length<2){ stMsg('Dışa aktarmak için en az 2 kare gerekli. ➕ ile kare ekle.'); return; }
   const {total}=_expTimeline();
   document.getElementById('exp-info').textContent=animFrames.length+' kare · yaklaşık '+(total/1000).toFixed(1)+' sn · hız '+animSpeed+'x';
   document.getElementById('exp-msg').textContent=''; document.getElementById('exp-bar-fill').style.width='0';
@@ -3843,7 +3863,7 @@ function animLoad(k){
   closeAnimIO();
   if(!animMode) toggleAnim(); else { animUpdateUI(); renderPlayers(); }
   updateStatus();
-  document.getElementById('st-anim').textContent='📂 Yüklendi: '+(d.name||'')+' — ▶️ ile oynat';
+  stMsg('📂 Yüklendi: '+(d.name||'')+' — ▶️ ile oynat');
 }
 
 function updateStatus(){document.getElementById('st-count').textContent=players.length;}
@@ -3854,6 +3874,419 @@ init();
 if('serviceWorker' in navigator && location.protocol.startsWith('http') && !window.TACTECH_ANDROID){
   window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 }
+</script>
+
+<!-- ANA MENÜ (tahtanın önünde ayrı ekran; tahta hiç değişmez, sadece arkada kalır) -->
+<style>
+#screen-menu{position:fixed;inset:0;z-index:2500;background:#0f1a10;color:#c8e6c9;font-family:'DM Sans',sans-serif;display:none;flex-direction:column}
+#screen-menu.show{display:flex}
+.mm-head{min-height:84px;box-sizing:border-box;padding:12px 32px;display:flex;align-items:center;gap:20px;background:#182019;border-bottom:1px solid #2a3d2b;flex-wrap:wrap}
+.mm-brand{display:flex;align-items:center;gap:12px;flex:1;min-width:180px}
+.mm-brand svg{width:84px;height:auto}
+.mm-brand b{font-family:'Times New Roman',serif;font-size:30px;letter-spacing:1px}
+.mm-team{height:56px;border-radius:14px;border:1.5px solid #2a3d2b;background:#0f1a10;display:flex;overflow:hidden}
+.mm-team button{background:none;border:none;color:#fff;font-family:inherit;cursor:pointer}
+.mm-tname{padding:0 16px 0 10px;display:flex;align-items:center;gap:12px;font-size:17px;text-align:left}
+.mm-tname img{width:38px;height:38px;object-fit:contain;border-radius:50%}
+.mm-tname small{display:block;font-size:13px;color:#8fb592}
+.mm-arrow{width:52px;border-left:1.5px solid #2a3d2b!important;background:#182019!important;color:#c8e6c9!important;font-size:18px}
+.mm-add{height:56px;padding:0 22px 0 12px;border-radius:14px;border:2px dashed #7fff5a;background:#16241a;color:#fff;font:600 18px 'DM Sans',sans-serif;display:flex;align-items:center;gap:12px;cursor:pointer}
+.mm-add span{width:36px;height:36px;border-radius:50%;background:#7fff5a;color:#0e1f10;display:flex;align-items:center;justify-content:center;font-size:24px;line-height:1}
+.mm-right{flex:1;display:flex;justify-content:flex-end;gap:12px;min-width:180px}
+.mm-ib{height:56px;min-width:56px;padding:0 14px;white-space:nowrap;border-radius:14px;border:1.5px solid #2a3d2b;background:#0f1a10;color:#c8e6c9;display:flex;align-items:center;justify-content:center;gap:8px;font:15px 'DM Sans',sans-serif;cursor:pointer}
+.mm-ib:hover,.mm-card.mm-on:hover{border-color:#7fff5a}
+.mm-grid{flex:1;box-sizing:border-box;padding:28px 32px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:minmax(150px,1fr);gap:20px;overflow-y:auto}
+.mm-card{position:relative;border-radius:20px;padding:24px;display:flex;flex-direction:column;align-items:flex-start;gap:10px;text-align:left;font-family:inherit;cursor:pointer}
+.mm-on{background:#1d2d1f;border:2px solid #7fff5a;color:#c8e6c9}
+.mm-soon{background:#141e15;border:1.5px dashed #2a3d2b;color:#7d9c80}
+.mm-ic{width:64px;height:64px;border-radius:16px;display:flex;align-items:center;justify-content:center;background:#1b261c}
+.mm-on .mm-ic{background:#7fff5a;color:#0e1f10}
+.mm-tt{font-size:22px;font-weight:700;margin-top:auto;color:#b9d3bb}
+.mm-on .mm-tt{color:#fff}
+.mm-ds{font-size:15px}
+.mm-on .mm-ds{color:#a3c4a6}
+.mm-tag{position:absolute;top:18px;right:18px;font-size:12px;font-weight:600;letter-spacing:1px;color:#ffdd57;border:1px solid #5c5220;border-radius:99px;padding:4px 10px}
+.mm-toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:#182019;border:1px solid #7fff5a;color:#fff;padding:12px 18px;border-radius:10px;font:15px 'DM Sans',sans-serif;z-index:6000;opacity:0;transition:opacity .2s;pointer-events:none}
+.mm-toast.show{opacity:1}
+@media (max-width:760px){.mm-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.mm-head{padding:12px 16px}.mm-grid{padding:16px}}
+.tp-btn.tp-home{margin-top:auto;color:#7fff5a;border-color:#7fff5a;flex-shrink:0}
+.anim-tools.show ~ .tp-home{display:none}
+</style>
+<section id="screen-menu" aria-label="Ana menü">
+<header class="mm-head">
+<div class="mm-brand"><svg viewBox="60 130 390 255" role="img" aria-label="TacTech logosu"><path fill-rule="evenodd" fill="#639267" d="M162.2 373.8 L159.1 373.5 L156.7 371.2 L152.0 363.0 L133.9 337.5 L132.4 332.2 L133.0 330.2 L134.8 328.7 L148.0 332.1 L150.2 331.3 L151.5 329.0 L152.0 230.2 L153.1 220.8 L158.2 204.0 L166.2 190.5 L171.8 186.0 L178.9 178.0 L183.0 174.5 L197.0 166.7 L212.8 164.3 L220.5 161.8 L240.0 162.0 L249.0 160.7 L250.0 159.2 L249.8 155.8 L245.9 145.0 L247.5 142.0 L249.5 141.6 L259.9 147.5 L279.5 163.3 L284.7 166.5 L285.9 170.0 L285.8 174.0 L284.9 175.8 L255.8 198.0 L249.0 201.2 L246.2 200.6 L245.4 199.0 L249.6 188.2 L250.4 181.5 L249.0 179.5 L227.0 178.8 L210.8 180.6 L203.8 182.9 L193.5 188.4 L179.2 198.9 L174.5 211.7 L170.5 219.5 L169.2 234.2 L169.6 328.8 L171.0 331.2 L174.8 332.5 L179.0 330.0 L185.5 328.2 L188.0 333.5 L187.0 337.5 L182.2 341.8 L180.0 347.9 L173.8 355.5 L164.0 372.2 L162.2 373.8Z"/><path fill-rule="evenodd" fill="#639267" d="M109.8 214.5 L73.8 214.5 L70.8 213.6 L68.3 211.5 L66.6 208.8 L65.7 204.2 L66.2 169.0 L67.5 165.7 L72.8 162.2 L79.8 161.8 L151.8 161.3 L179.4 162.8 L178.5 164.5 L172.5 167.5 L162.0 178.2 L159.2 179.8 L146.5 178.8 L117.0 178.8 L104.8 179.9 L92.0 179.0 L85.2 180.6 L83.5 183.0 L82.0 189.5 L83.8 195.2 L86.0 196.7 L109.0 197.9 L115.0 197.2 L143.8 197.2 L147.7 198.2 L145.5 207.0 L142.5 211.5 L130.8 214.0 L116.0 213.6 L109.8 214.5Z"/><path fill-rule="evenodd" fill="#639267" d="M352.8 375.3 L350.8 375.0 L349.1 373.5 L346.4 368.0 L341.8 361.8 L338.1 353.5 L330.5 345.5 L325.6 337.2 L324.9 332.8 L326.5 327.7 L330.8 328.7 L336.5 331.8 L341.2 331.2 L342.7 329.2 L343.7 319.5 L343.1 309.5 L343.4 238.0 L344.7 232.8 L345.6 221.5 L349.8 212.8 L356.6 205.5 L360.2 203.1 L366.8 199.9 L373.8 198.3 L386.2 197.8 L387.3 198.2 L387.6 199.8 L386.4 206.5 L384.4 212.0 L381.2 214.1 L370.8 215.9 L367.2 217.9 L362.0 226.0 L360.8 231.0 L360.8 320.8 L361.6 329.2 L362.5 330.7 L364.5 331.1 L378.2 328.5 L380.5 330.2 L380.9 332.8 L378.3 338.8 L374.2 343.2 L355.1 373.5 L352.8 375.3Z"/><path fill-rule="evenodd" fill="#639267" d="M330.0 377.0 L312.8 375.8 L308.7 373.8 L307.3 354.5 L308.4 344.2 L310.2 340.8 L313.5 340.4 L315.8 341.9 L320.1 350.2 L324.5 355.5 L328.7 363.8 L334.5 370.7 L335.6 373.5 L335.4 375.0 L330.0 377.0Z"/><path fill-rule="evenodd" fill="#ffffff" d="M324.2 314.0 L321.4 313.8 L309.2 309.2 L307.4 306.2 L307.5 226.5 L307.9 219.0 L310.4 209.0 L314.7 199.2 L321.8 188.2 L332.4 177.5 L345.8 169.0 L356.5 164.5 L366.8 162.2 L405.1 161.0 L405.7 159.2 L404.9 155.2 L399.0 137.8 L399.1 135.8 L400.5 135.6 L441.2 166.4 L445.3 169.8 L445.7 171.8 L400.2 206.9 L399.0 206.1 L399.4 203.0 L405.5 183.5 L405.4 181.0 L403.8 179.9 L373.5 179.8 L362.2 181.7 L348.7 188.0 L342.0 193.2 L336.5 199.1 L332.0 205.3 L329.6 210.2 L326.7 218.8 L325.5 225.5 L325.4 312.0 L324.2 314.0Z"/><path fill-rule="evenodd" fill="#ffffff" d="M314.8 179.8 L299.5 179.5 L299.7 177.5 L306.2 172.7 L307.2 171.0 L306.2 169.2 L298.6 163.2 L298.6 162.0 L333.0 161.4 L335.2 162.1 L334.8 163.8 L324.0 171.6 L316.8 178.8 L314.8 179.8Z"/><path fill-rule="evenodd" fill="#ffffff" d="M190.5 314.1 L188.2 313.8 L187.5 312.0 L187.4 232.2 L188.8 223.0 L195.2 211.0 L199.3 206.2 L205.8 201.4 L210.5 199.3 L218.8 197.3 L232.3 197.0 L233.5 198.2 L233.4 200.5 L228.5 214.1 L217.2 216.4 L212.5 218.7 L208.4 223.5 L206.1 228.2 L205.4 232.8 L205.2 307.2 L203.8 309.2 L190.5 314.1Z"/><path fill-rule="evenodd" fill="#ffffff" d="M296.2 215.0 L255.8 215.0 L253.5 213.8 L269.0 201.0 L275.2 197.1 L302.2 197.1 L303.3 199.2 L300.5 208.2 L298.4 213.8 L296.2 215.0Z"/><path fill-rule="evenodd" fill="#ffffff" d="M203.5 377.8 L177.2 378.0 L175.7 377.5 L175.0 376.2 L201.4 333.8 L204.5 330.7 L205.4 332.5 L205.5 375.2 L204.9 377.0 L203.5 377.8Z"/></svg><b><span style="color:#7fff5a">Tac</span><span style="color:#fff">Tech</span></b></div>
+<div id="mm-teamslot"></div>
+<div class="mm-right">
+<button type="button" class="mm-ib" data-act="saved" title="Kayıtlı Takımlar (rakip ve diğer takımlar)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z"></path><path d="M8.5 9l3 6 3-6"></path></svg>Kayıtlı Takımlar</button>
+<button type="button" class="mm-ib" data-soon="Google ile giriş" style="background:#fff;color:#1f1f1f;font-weight:600">Google ile giriş</button>
+<button type="button" class="mm-ib" data-act="settings" aria-label="Ayarlar"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"></path></svg></button>
+</div>
+</header>
+<div class="mm-grid"><button type="button" class="mm-card mm-on" data-go="tahta"><span class="mm-ic"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="1"></rect><path d="M12 4v16"></path><circle cx="12" cy="12" r="3"></circle><path d="M2 9h3v6H2"></path><path d="M22 9h-3v6h3"></path></svg></span><span class="mm-tt">Taktik Tahtası</span><span class="mm-ds">Diziliş, çizim ve animasyon</span></button><button type="button" class="mm-card mm-soon" data-soon="Antrenman Planlayıcı"><span class="mm-tag">YAKINDA</span><span class="mm-ic"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.5" width="18" height="16" rx="2"></rect><path d="M3 9.5h18"></path><path d="M8 2.5v4"></path><path d="M16 2.5v4"></path><path d="M7.5 14h3"></path><path d="M13.5 14h3"></path><path d="M7.5 17.5h3"></path></svg></span><span class="mm-tt">Antrenman Planlayıcı</span><span class="mm-ds">Drill, seans, yoklama</span></button><button type="button" class="mm-card mm-soon" data-soon="Maç Günü"><span class="mm-tag">YAKINDA</span><span class="mm-ic"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2.5 2"></path><path d="M10 2.5h4"></path></svg></span><span class="mm-tt">Maç Günü</span><span class="mm-ds">Kadro görseli, olaylar, dakika</span></button><button type="button" class="mm-card mm-soon" data-soon="Rakip ve Scout"><span class="mm-tag">YAKINDA</span><span class="mm-ic"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="M16 16l5 5"></path><path d="M8.5 11h5"></path></svg></span><span class="mm-tt">Rakip ve Scout</span><span class="mm-ds">Rapor şablonları, PDF</span></button><button type="button" class="mm-card mm-soon" data-soon="Fiziksel Testler"><span class="mm-tag">YAKINDA</span><span class="mm-ic"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h3.5l2.5-6 4 12 2.5-6H21"></path></svg></span><span class="mm-tt">Fiziksel Testler</span><span class="mm-ds">Sprint, sıçrama, asimetri</span></button><button type="button" class="mm-card mm-soon" data-soon="Video Analiz"><span class="mm-tag">YAKINDA</span><span class="mm-ic"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="5.5" width="13" height="13" rx="2"></rect><path d="M15.5 10l6-3.5v11l-6-3.5"></path></svg></span><span class="mm-tt">Video Analiz</span><span class="mm-ds">Etiketleme ve klipler</span></button></div>
+</section>
+<div class="qedit-overlay" id="settings-overlay" onclick="if(event.target===this)closeSettings()">
+  <div class="qedit-box" style="min-width:300px">
+    <h3>Ayarlar</h3>
+    <label style="display:flex;align-items:center;justify-content:space-between;gap:16px;font:15px 'DM Sans',sans-serif;cursor:pointer">Açılış animasyonu <input type="checkbox" id="set-splash" style="width:22px;height:22px;accent-color:#7fff5a"></label>
+    <div style="border-top:1px solid var(--ui-border);padding-top:10px;display:flex;flex-direction:column;gap:8px;font:14px 'DM Sans',sans-serif">
+      <b style="color:#7fff5a;font-size:13px;letter-spacing:1px">YEDEK</b>
+      <span style="font-size:12px;color:#7a9a7c">Takımlar, kayıtlı takımlar, kadrolar, animasyonlar ve ayarlar tek dosyaya kaydedilir. Dosyayı WhatsApp ya da USB ile diğer cihaza taşıyıp orada geri yükleyebilirsin.</span>
+      <button class="tm-btn" onclick="bkExport()">⬇️ Yedek dosyası oluştur</button>
+      <button class="tm-btn" onclick="bkPick('merge')">⬆️ Yedekten geri yükle (birleştir)</button>
+      <button class="tm-btn" id="bk-over" onclick="bkPick('replace',this)" style="color:#e06060">⬆️ Yedekten geri yükle (her şeyi değiştir)</button>
+      <input type="file" id="bk-file" accept=".json,application/json" style="display:none">
+      <span id="bk-msg" style="font-size:12px;color:#7a9a7c"></span>
+      <span style="font-size:12px;color:#7a9a7c">Google hesabıyla eşitleme ileride burada olacak.</span>
+    </div>
+    <button class="qe-confirm" onclick="closeSettings()">Kapat</button>
+  </div>
+</div>
+<div class="mm-toast" id="mm-toast"></div>
+<script>
+// ---- Ekran yönetimi: menü tahtanın önünde ayrı katman. Hata olursa menü kapanır, tahta açık kalır. ----
+(function(){
+  var menu=document.getElementById('screen-menu');
+  var tt=null;
+  window.mmToast=function(msg){ var t=document.getElementById('mm-toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(tt); tt=setTimeout(function(){t.classList.remove('show');},1800); };
+  window.openScreen=function(name){
+    try{
+      if(name==='menu'){ renderMenuTeam(); menu.classList.add('show'); }
+      else { menu.classList.remove('show'); if(typeof resizePitch==='function') setTimeout(resizePitch,0); }
+      window.currentScreen=name;
+    }catch(e){ console.error('Menü hatası, tahta açılıyor:',e); menu.classList.remove('show'); window.currentScreen='tahta'; }
+  };
+  function renderMenuTeam(){
+    var slot=document.getElementById('mm-teamslot'); var tc=(typeof teamActive==='function'&&teamActive())||null;
+    var has=!!tc;
+    slot.innerHTML='';
+    if(!has){
+      var b=document.createElement('button'); b.type='button'; b.className='mm-add'; b.innerHTML='<span>+</span>Takımını ekle';
+      b.onclick=function(){ tmOpenList('own'); }; slot.appendChild(b); return;
+    }
+    var w=document.createElement('div'); w.className='mm-team';
+    var n=document.createElement('button'); n.type='button'; n.className='mm-tname'; n.title='Kadro yönetimini aç';
+    if(tc.logo){ var im=document.createElement('img'); im.src=tc.logo; im.alt=''; n.appendChild(im); }
+    var tx=document.createElement('span'); tx.textContent=tc.name||'Takımım'; var sm=document.createElement('small'); sm.textContent=(tc.players||[]).length+' oyuncu · Kadroyu aç'; tx.appendChild(sm); n.appendChild(tx);
+    n.onclick=function(){ tmKind='own'; tmEdit(tc.id); };
+    var a=document.createElement('button'); a.type='button'; a.className='mm-arrow'; a.setAttribute('aria-label','Takım değiştir'); a.textContent='▾';
+    a.onclick=function(){ tmOpenList('own'); };
+    w.appendChild(n); w.appendChild(a); slot.appendChild(w);
+  }
+  menu.addEventListener('click',function(e){
+    var g=e.target.closest('[data-go]'); if(g){ openScreen(g.getAttribute('data-go')); return; }
+    var ac=e.target.closest('[data-act]');
+    if(ac){ var k=ac.getAttribute('data-act');
+      if(k==='saved'){ tmOpenList('saved'); }
+      else if(k==='settings'){ openSettings(); }
+      return; }
+    var s=e.target.closest('[data-soon]'); if(s){ mmToast(s.getAttribute('data-soon')+' — yakında'); }
+  });
+  // Açılışta menüyü göster (sayfa tamamen yüklenince; hata olursa tahta kalır)
+  // Alt çubuk kaldırıldı: animasyon mesajları kısa bildirim olarak gösterilir
+
+  window.mmRefresh=function(){ try{ renderMenuTeam(); }catch(e){} };
+  // ---- Ayarlar ----
+  window.openSettings=function(){
+    var on=true; try{ on=localStorage.getItem('tactech_splash_off')!=='1'; }catch(e){}
+    document.getElementById('set-splash').checked=on;
+    document.getElementById('settings-overlay').classList.add('show');
+  };
+  // ---- Yedek: tactech_* ve taktik_squad_* kayıtları tek JSON dosyasında ----
+  const bkKeys=()=>stKeys().filter(k=>k && (k.indexOf('tactech_')===0 || k.indexOf('taktik_squad_')===0));
+  const bkMsg=(t,c)=>{ const e=document.getElementById('bk-msg'); e.textContent=t; e.style.color=c||'#7a9a7c'; };
+  window.bkExport=function(){
+    const data={}; bkKeys().forEach(k=>{ data[k]=stGet(k); });
+    const file={app:'TacTech',kind:'backup',version:1,createdAt:new Date().toISOString(),data};
+    const blob=new Blob([JSON.stringify(file)],{type:'application/json'});
+    downloadBlob(blob,'TacTech-yedek-'+_stamp()+'.json');
+    bkMsg('✅ Yedek oluşturuldu ('+Object.keys(data).length+' kayıt).','#60d090');
+  };
+  let bkMode='merge';
+  window.bkPick=function(mode,btn){
+    if(mode==='replace' && btn && !btn.dataset.armed){ btn.dataset.armed='1'; btn.textContent='Emin misin? Bu cihazdaki veriler silinir. Tekrar bas'; setTimeout(()=>{ if(btn.isConnected){ delete btn.dataset.armed; btn.textContent='⬆️ Yedekten geri yükle (her şeyi değiştir)'; } },4000); return; }
+    if(btn){ delete btn.dataset.armed; btn.textContent='⬆️ Yedekten geri yükle (her şeyi değiştir)'; }
+    bkMode=mode; document.getElementById('bk-file').click();
+  };
+  const mergeTeams=(key,incoming)=>{
+    let cur=[],inc=[]; try{ cur=JSON.parse(stGet(key)||'[]'); }catch(e){} try{ inc=JSON.parse(incoming||'[]'); }catch(e){}
+    if(!Array.isArray(cur)) cur=[]; if(!Array.isArray(inc)) return;
+    inc.forEach(t=>{ const i=cur.findIndex(x=>x.id===t.id); if(i<0) cur.push(t); else if((t.updatedAt||0)>=(cur[i].updatedAt||0)) cur[i]=t; }); // son değiştirilen kazanır
+    stSet(key,JSON.stringify(cur));
+  };
+  document.getElementById('bk-file').addEventListener('change',function(){
+    const f=this.files&&this.files[0]; this.value=''; if(!f) return;
+    const rd=new FileReader();
+    rd.onload=()=>{
+      let file; try{ file=JSON.parse(rd.result); }catch(e){ bkMsg('❌ Dosya okunamadı.','#e84040'); return; }
+      if(!file||file.app!=='TacTech'||!file.data||typeof file.data!=='object'){ bkMsg('❌ Bu bir TacTech yedek dosyası değil.','#e84040'); return; }
+      const keys=Object.keys(file.data).filter(k=>k.indexOf('tactech_')===0||k.indexOf('taktik_squad_')===0);
+      if(bkMode==='replace'){ bkKeys().forEach(k=>stDel(k)); keys.forEach(k=>stSet(k,file.data[k])); }
+      else keys.forEach(k=>{
+        if(k===TEAMS_KEY||k===SAVED_TEAMS_KEY) mergeTeams(k,file.data[k]);
+        else if(stGet(k)==null) stSet(k,file.data[k]);
+      });
+      bkMsg('✅ Yedek yüklendi ('+keys.length+' kayıt, '+(bkMode==='replace'?'her şey değiştirildi':'birleştirildi')+').','#60d090');
+      if(window.mmRefresh) mmRefresh();
+    };
+    rd.readAsText(f);
+  });
+  window.closeSettings=function(){ document.getElementById('settings-overlay').classList.remove('show'); };
+  document.getElementById('set-splash').addEventListener('change',function(){ tactechSplash(this.checked); mmToast(this.checked?'Açılış animasyonu açık':'Açılış animasyonu kapalı'); });
+  window.addEventListener('load',function(){ if(/[?&]nomenu\b/.test(location.search)) return; openScreen('menu'); }); // ?nomenu: testler için
+})();
+</script>
+
+<!-- TAKIMLARIM: kendi takımların ve kadroları (ilk 11 / yedek ayrımı yok) -->
+<style>
+.tm-ov{position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:3500;display:none;align-items:flex-start;justify-content:center;overflow-y:auto;padding:16px;box-sizing:border-box}
+.tm-ov.show{display:flex}
+.tm-box{background:var(--ui-panel);border:1.5px solid var(--ui-border);border-radius:16px;width:100%;max-width:760px;margin:auto;box-shadow:var(--shadow);font-family:'DM Sans',sans-serif;color:var(--text)}
+.tm-hd{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--ui-border)}
+.tm-hd h3{flex:1;margin:0;font-family:'Times New Roman',serif;font-size:1.3rem;letter-spacing:1px;color:var(--accent)}
+.tm-bd{padding:16px 20px;display:flex;flex-direction:column;gap:12px}
+.tm-ft{display:flex;gap:10px;justify-content:flex-end;padding:14px 20px;border-top:1px solid var(--ui-border)}
+.tm-btn{background:var(--ui-bg);color:var(--text);border:1.5px solid var(--ui-border);border-radius:10px;padding:9px 16px;font:600 0.88rem 'DM Sans',sans-serif;cursor:pointer}
+.tm-btn:hover{border-color:var(--accent)}
+.tm-pri{background:var(--accent);color:#0e1f10;border-color:var(--accent)}
+.tm-x{background:none;border:none;color:#7a9a7c;font-size:22px;cursor:pointer;padding:4px 8px}
+.tm-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1.5px solid var(--ui-border);border-radius:12px;cursor:pointer}
+.tm-item:hover,.tm-item.on{border-color:var(--accent)}
+.tm-item img,.tm-item .tm-noimg{width:40px;height:40px;object-fit:contain;border-radius:50%;flex-shrink:0}
+.tm-noimg{display:flex;align-items:center;justify-content:center;background:#243a27;color:var(--accent);font-weight:700}
+.tm-item b{display:block;font-size:1rem}
+.tm-item small{color:#7a9a7c;font-size:0.78rem}
+.tm-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.tm-lbl{font-size:0.72rem;letter-spacing:1.5px;color:#7a9a7c;text-transform:uppercase}
+.tm-in{background:var(--ui-bg);border:1.5px solid var(--ui-border);border-radius:8px;color:var(--text);padding:8px 10px;font:0.9rem 'DM Sans',sans-serif}
+.tm-logo{width:84px;height:84px;border:1.5px dashed var(--ui-border);border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#7a9a7c;font-size:0.72rem;text-align:center;overflow:hidden;flex-shrink:0}
+.tm-logo img{width:100%;height:100%;object-fit:contain}
+.tm-sw{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.tm-sw span{width:26px;height:26px;border-radius:50%;border:2px solid rgba(255,255,255,.2);cursor:pointer}
+.tm-sw span.on{border-color:#fff}
+.tm-sw input[type=color]{width:30px;height:30px;border:none;background:none;padding:0;cursor:pointer}
+.tm-styles{display:flex;gap:6px;flex-wrap:wrap}
+.tm-styles button{background:var(--ui-bg);border:1.5px solid var(--ui-border);border-radius:8px;padding:4px;cursor:pointer;display:flex;flex-direction:column;align-items:center;font-size:0.62rem;color:var(--text);width:62px}
+.tm-styles button.on{border-color:var(--accent2)}
+.tm-tbl{width:100%;border-collapse:collapse}
+.tm-tbl th{font-size:0.66rem;letter-spacing:1.5px;color:#7a9a7c;text-align:left;padding:4px}
+.tm-tbl td{padding:3px 4px}
+.tm-tbl input,.tm-tbl select{width:100%;box-sizing:border-box}
+.tm-del{background:none;border:1.5px solid var(--ui-border);border-radius:8px;color:#c05050;cursor:pointer;padding:6px 10px}
+.tm-empty{color:#7a9a7c;text-align:center;padding:20px;font-size:0.9rem}
+@media (pointer:coarse){.tm-box{zoom:1.3;max-width:min(760px,calc((100vw - 32px)/1.3))}}
+</style>
+<div class="tm-ov" id="tm-list-ov" onclick="if(event.target===this)tmCloseList()">
+ <div class="tm-box" style="max-width:560px">
+  <div class="tm-hd"><h3 id="tm-list-title">Takımların</h3><button class="tm-btn tm-pri" onclick="tmEdit(null)">+ Takım ekle</button><button class="tm-x" onclick="tmCloseList()" aria-label="Kapat">✕</button></div>
+  <div class="tm-bd" id="tm-list"></div>
+ </div>
+</div>
+<div class="tm-ov" id="tm-edit-ov">
+ <div class="tm-box">
+  <div class="tm-hd"><h3 id="tm-edit-title">Takım ekle</h3><button class="tm-x" onclick="tmCloseEdit()" aria-label="Kapat">✕</button></div>
+  <div class="tm-bd">
+   <div class="tm-row" style="align-items:flex-start">
+    <label class="tm-logo" id="tm-logo" title="Logo yükle"><span>📁<br>Logo yükle</span><input type="file" accept="image/*" id="tm-logo-in" style="display:none"></label>
+    <div style="flex:1;display:flex;flex-direction:column;gap:6px;min-width:200px">
+     <span class="tm-lbl">Takım adı</span>
+     <input class="tm-in" id="tm-name" placeholder="Artvin 1921 SK U-18">
+     <button class="tm-btn" id="tm-logo-del" style="align-self:flex-start;display:none" onclick="tmCur.logo='';tmDrawLogo()">Logoyu kaldır</button>
+    </div>
+    <div id="tm-preview" style="width:64px;height:64px"></div>
+   </div>
+   <span class="tm-lbl">Forma rengi</span><div class="tm-sw" id="tm-c1"></div>
+   <span class="tm-lbl">İkinci renk (desen)</span><div class="tm-sw" id="tm-c2"></div>
+   <span class="tm-lbl">Kaleci forması</span><div class="tm-sw" id="tm-c3"></div>
+   <span class="tm-lbl">Forma deseni</span><div class="tm-styles" id="tm-styles"></div>
+   <span class="tm-lbl" style="margin-top:6px">Kadro (<span id="tm-count">0</span> oyuncu)</span>
+   <table class="tm-tbl"><thead><tr><th style="width:70px">No</th><th>İsim soyisim</th><th style="width:150px">Mevki</th><th style="width:150px">2. mevki</th><th style="width:44px"></th></tr></thead><tbody id="tm-players"></tbody></table>
+   <button class="tm-btn" style="align-self:flex-start" onclick="tmAddRow()">+ Oyuncu ekle</button>
+   <div id="tm-import-slot"></div>
+  </div>
+  <div class="tm-ft"><button class="tm-btn" id="tm-del-team" style="margin-right:auto;color:#e06060" onclick="tmDeleteCur(this)">Takımı sil</button><button class="tm-btn" onclick="tmCloseEdit()">İptal</button><button class="tm-btn tm-pri" onclick="tmSave()">Kaydet</button></div>
+ </div>
+</div>
+<script>
+// ---- Takımlarım veri katmanı ----
+const TEAMS_KEY='tactech_teams_v1', ACTIVE_TEAM_KEY='tactech_activeTeam_v1';
+// İki ayrı liste: 'own' = Takımlarım, 'saved' = Kayıtlı Takımlar (rakip ve diğer takımlar). Birbirine karışmaz.
+const SAVED_TEAMS_KEY='tactech_savedTeams_v1';
+let tmKind='own';
+function _tKey(kind){ return (kind||'own')==='saved'?SAVED_TEAMS_KEY:TEAMS_KEY; }
+function teamsAll(kind){ try{ const a=JSON.parse(stGet(_tKey(kind))||'[]'); return Array.isArray(a)?a:[]; }catch(e){ return []; } }
+function teamsSave(a,kind){ return stSet(_tKey(kind), JSON.stringify(a)); }
+function teamActive(){ const a=teamsAll(); const id=stGet(ACTIVE_TEAM_KEY); return a.find(t=>t.id===id)||a[0]||null; }
+function teamSetActive(id){ stSet(ACTIVE_TEAM_KEY,id); }
+let tmCur=null;
+function tmOpenList(kind){ tmKind=kind==='saved'?'saved':'own'; document.getElementById('tm-list-title').textContent=tmKind==='saved'?'Kayıtlı Takımlar':'Takımların'; tmRenderList(); document.getElementById('tm-list-ov').classList.add('show'); }
+function tmCloseList(){ document.getElementById('tm-list-ov').classList.remove('show'); if(window.mmRefresh) mmRefresh(); }
+function tmRenderList(){
+  const own=tmKind==='own', box=document.getElementById('tm-list'), a=teamsAll(tmKind), act=own?teamActive():null;
+  box.innerHTML='';
+  if(!a.length){ box.innerHTML=own?'<div class="tm-empty">Henüz takımın yok. Yukarıdaki <b>+ Takım ekle</b> ile ilk takımını oluştur.</div>':'<div class="tm-empty">Henüz kayıtlı takım yok. Rakip takımları <b>+ Takım ekle</b> ile ekle.</div>'; return; }
+  a.forEach(t=>{
+    const it=document.createElement('div'); it.className='tm-item'+(act&&act.id===t.id?' on':'');
+    const lg=t.logo?Object.assign(document.createElement('img'),{src:t.logo,alt:''}):Object.assign(document.createElement('span'),{className:'tm-noimg',textContent:(t.name||'?').slice(0,2).toUpperCase()});
+    const tx=document.createElement('div'); tx.style.flex='1';
+    const b=document.createElement('b'); b.textContent=t.name||'İsimsiz takım';
+    const sm=document.createElement('small'); sm.textContent=(t.players||[]).length+' oyuncu'+(act&&act.id===t.id?' · aktif takım':'');
+    tx.append(b,sm);
+    const ed=document.createElement('button'); ed.className='tm-btn'; ed.textContent='Düzenle';
+    ed.onclick=e=>{ e.stopPropagation(); tmEdit(t.id); };
+    it.onclick=()=>{ if(!own){ tmEdit(t.id); return; } teamSetActive(t.id); tmRenderList(); if(window.mmToast) mmToast((t.name||'Takım')+' aktif takım oldu'); };
+    it.append(lg,tx,ed); box.appendChild(it);
+  });
+}
+function tmEdit(id){
+  const t=id?teamsAll(tmKind).find(x=>x.id===id):null;
+  tmCur=t?JSON.parse(JSON.stringify(t)):{id:'t'+Date.now().toString(36),name:'',logo:'',color:'#e02020',secColor:'#ffffff',gkColor:'#f5d000',jerseyStyle:'solid',players:[]};
+  tmCur._new=!t;
+  document.getElementById('tm-edit-title').textContent=t?'Takımı düzenle':'Takım ekle';
+  document.getElementById('tm-del-team').style.display=t?'':'none';
+  document.getElementById('tm-name').value=tmCur.name||'';
+  tmDrawLogo(); tmDrawColors(); tmDrawRows();
+  if(!tmCur.players.length) for(let i=0;i<3;i++) tmAddRow();
+  tmImportMount(true);
+  document.getElementById('tm-edit-ov').classList.add('show'); document.getElementById('tm-edit-ov').scrollTop=0;
+}
+function tmCloseEdit(){ document.getElementById('tm-edit-ov').classList.remove('show'); tmCur=null; tmImportMount(false); }
+// Kadro penceresindeki "İçe aktar" bölümü (Excel, yapıştır, İnternetten ara) düzenleme açıkken buraya taşınır, kapanınca geri döner
+let _impHome=null;
+function tmImportMount(on){
+  const box=document.getElementById('imp-msg'); const sec=box&&box.closest('.sec-box'); if(!sec) return;
+  if(on){ if(!_impHome) _impHome={parent:sec.parentNode,next:sec.nextSibling}; document.getElementById('tm-import-slot').appendChild(sec); const m=document.getElementById('imp-msg'); if(m) m.textContent=''; const r=document.getElementById('wiki-results'); if(r) r.innerHTML=''; }
+  else if(_impHome){ _impHome.parent.insertBefore(sec,_impHome.next); _impHome=null; }
+}
+// İçe aktarılan oyuncular, düzenleme açıkken kadro penceresine değil bu takıma yazılır (ilk 11 / yedek ayrımı yok)
+(function(){
+  const orig=importPlayerList;
+  importPlayerList=function(list,teamName,source,style){
+    if(!tmCur || !document.getElementById('tm-edit-ov').classList.contains('show')) return orig.apply(this,arguments);
+    if(!list||!list.length){ impMsg('❌ Oyuncu bulunamadı.','#e84040'); return; }
+    if(teamName && !document.getElementById('tm-name').value.trim()) document.getElementById('tm-name').value=teamName;
+    if(style){ ['color','secColor','gkColor','jerseyStyle','logo'].forEach(k=>{ if(style[k]) tmCur[k]=style[k]; }); tmDrawLogo(); tmDrawColors(); }
+    tmCur.players=sortByPos(list).map(p=>({num:p.num||'',name:p.name||'',pos:p.pos||'CM',pos2:p.pos2||'',gen:p.gen||''}));
+    tmDrawRows();
+    impMsg('✅ '+list.length+' oyuncu aktarıldı'+(source?' ('+source+')':'')+'. Kontrol edip Kaydet\'e bas.','#60d090');
+  };
+})();
+function tmDrawLogo(){
+  const el=document.getElementById('tm-logo'); const inp=document.getElementById('tm-logo-in');
+  el.querySelectorAll('img,span').forEach(n=>n.remove());
+  if(tmCur.logo){ const im=document.createElement('img'); im.src=tmCur.logo; im.alt=''; el.insertBefore(im,inp); }
+  else { const sp=document.createElement('span'); sp.innerHTML='📁<br>Logo yükle'; el.insertBefore(sp,inp); }
+  document.getElementById('tm-logo-del').style.display=tmCur.logo?'':'none';
+}
+document.getElementById('tm-logo-in').addEventListener('change',function(){
+  const f=this.files&&this.files[0]; this.value=''; if(!f) return;
+  const rd=new FileReader(); rd.onload=()=>{ const im=new Image(); im.onload=()=>{
+    const m=160, k=Math.min(1,m/Math.max(im.width,im.height)); const c=document.createElement('canvas'); c.width=Math.round(im.width*k); c.height=Math.round(im.height*k);
+    c.getContext('2d').drawImage(im,0,0,c.width,c.height); tmCur.logo=c.toDataURL('image/png'); tmDrawLogo(); }; im.src=rd.result; }; rd.readAsDataURL(f);
+});
+function tmSw(boxId,list,key){
+  const box=document.getElementById(boxId); box.innerHTML='';
+  list.forEach(c=>{ const d=document.createElement('span'); d.style.background=c; if((tmCur[key]||'').toLowerCase()===c.toLowerCase()) d.className='on'; d.onclick=()=>{ tmCur[key]=c; tmDrawColors(); }; box.appendChild(d); });
+  const ci=document.createElement('input'); ci.type='color'; ci.value=tmCur[key]||'#888888'; ci.title='Özel renk'; ci.oninput=()=>{ tmCur[key]=ci.value; tmDrawPreview(); }; ci.onchange=()=>tmDrawColors(); box.appendChild(ci);
+}
+function tmDrawColors(){
+  tmSw('tm-c1',PALETTE_COLORS,'color'); tmSw('tm-c2',SEC_PALETTE,'secColor'); tmSw('tm-c3',GK_PALETTE,'gkColor');
+  const st=document.getElementById('tm-styles'); st.innerHTML='';
+  JERSEY_STYLES.forEach(s=>{ const b=document.createElement('button'); b.type='button'; if(tmCur.jerseyStyle===s.id) b.className='on';
+    b.innerHTML=makeJerseySVG(tmCur.color,tmCur.gkColor,s.id,false,34,tmCur.secColor); const l=document.createElement('span'); l.textContent=s.label; b.appendChild(l);
+    b.onclick=()=>{ tmCur.jerseyStyle=s.id; tmDrawColors(); }; st.appendChild(b); });
+  tmDrawPreview();
+}
+function tmDrawPreview(){ document.getElementById('tm-preview').innerHTML=makeJerseySVG(tmCur.color,tmCur.gkColor,tmCur.jerseyStyle||'solid',false,64,tmCur.secColor); }
+function tmPosOpts(sel,empty){ return (empty?'<option value="">—</option>':'')+POSITIONS.map(p=>'<option value="'+p.id+'"'+(p.id===sel?' selected':'')+'>'+p.label+'</option>').join(''); }
+function tmRowEl(pl){
+  const tr=document.createElement('tr');
+  tr.innerHTML='<td><input class="tm-in" type="number" min="1" max="99" data-k="num"></td><td><input class="tm-in" data-k="name" placeholder="Oyuncu adı"></td><td><select class="tm-in" data-k="pos">'+tmPosOpts(pl.pos||'CM',false)+'</select></td><td><select class="tm-in" data-k="pos2">'+tmPosOpts(pl.pos2||'',true)+'</select></td><td><button class="tm-del" title="Oyuncuyu sil" aria-label="Oyuncuyu sil">✕</button></td>';
+  tr.querySelector('[data-k=num]').value=pl.num||''; tr.querySelector('[data-k=name]').value=pl.name||'';
+  tr.querySelector('.tm-del').onclick=()=>{ tr.remove(); tmCount(); };
+  return tr;
+}
+function tmDrawRows(){ const tb=document.getElementById('tm-players'); tb.innerHTML=''; (tmCur.players||[]).forEach(p=>tb.appendChild(tmRowEl(p))); tmCount(); }
+function tmAddRow(){ const tb=document.getElementById('tm-players'); const used=[...tb.querySelectorAll('[data-k=num]')].map(i=>+i.value); let n=1; while(used.includes(n)) n++; const tr=tmRowEl({num:n,pos:tb.children.length?'CM':'GK'}); tb.appendChild(tr); tmCount(); tr.querySelector('[data-k=name]').focus(); }
+function tmCount(){ document.getElementById('tm-count').textContent=document.getElementById('tm-players').children.length; }
+function tmReadRows(){
+  return [...document.querySelectorAll('#tm-players tr')].map(tr=>{ const g=k=>tr.querySelector('[data-k='+k+']').value;
+    const pos=g('pos')||'CM', p2=g('pos2'); return {num:parseInt(g('num'))||'', name:g('name').trim(), pos, pos2:p2&&p2!==pos?p2:'', gen:''}; })
+    .filter(p=>p.name||p.num);
+}
+function tmSave(){
+  tmCur.name=document.getElementById('tm-name').value.trim();
+  if(!tmCur.name){ document.getElementById('tm-name').focus(); if(window.mmToast) mmToast('Takım adını yaz'); return; }
+  tmCur.players=tmReadRows(); tmCur.updatedAt=Date.now(); const isNew=tmCur._new; delete tmCur._new;
+  const a=teamsAll(tmKind); const i=a.findIndex(t=>t.id===tmCur.id); if(i>=0) a[i]=tmCur; else a.push(tmCur);
+  const ok=teamsSave(a,tmKind); if(tmKind==='own'&&(isNew||!teamActive())) teamSetActive(tmCur.id);
+  if(window.mmToast) mmToast(ok?'Kaydedildi: '+tmCur.name:'Kaydedildi (bu tarayıcı kalıcı kayda izin vermiyor)');
+  tmCloseEdit(); tmRenderList(); if(window.mmRefresh) mmRefresh();
+}
+function tmDeleteCur(btn){
+  if(!btn.dataset.armed){ btn.dataset.armed='1'; btn.textContent='Emin misin? Tekrar bas'; setTimeout(()=>{ if(btn.isConnected){ delete btn.dataset.armed; btn.textContent='Takımı sil'; } },3000); return; }
+  delete btn.dataset.armed; btn.textContent='Takımı sil';
+  teamsSave(teamsAll(tmKind).filter(t=>t.id!==tmCur.id),tmKind); tmCloseEdit(); tmRenderList(); if(window.mmRefresh) mmRefresh();
+}
+// Tahtadaki kadro penceresine takım yükle (ev sahibi ya da misafir; 11'den fazlaysa ilk 11 seçtirilir)
+function tmLoadIntoModal(id,kind){
+  const t=teamsAll(kind).find(x=>x.id===id); if(!t) return;
+  const st={name:t.name,color:t.color,secColor:t.secColor,gkColor:t.gkColor,jerseyStyle:t.jerseyStyle,logo:t.logo,players:JSON.parse(JSON.stringify(t.players||[])),subs:[],savedName:t.name};
+  if(t.logo){ TC[mSide].logo=t.logo; updateBadge(mSide); const lw=document.getElementById('logo-hint'); }
+  document.getElementById('load-panel-overlay').classList.remove('show');
+  if(st.players.length>11){ _pickState=st; openPickPanel(st); pickPreselect(st.players); }
+  else { applySquadState(st); }
+  if(typeof showSaveMsg==='function') showSaveMsg('📂 Yüklendi: '+t.name,'#60a8ff');
+}
+</script>
+
+<!-- GERİ TUŞU (Android) ve Esc (bilgisayar) -->
+<div class="qedit-overlay" id="exit-overlay" style="z-index:7000" onclick="if(event.target===this)this.classList.remove('show')">
+  <div class="qedit-box" style="min-width:280px">
+    <h3>Uygulamadan çık?</h3>
+    <div style="display:flex;gap:10px;justify-content:flex-end">
+      <button class="tm-btn" onclick="document.getElementById('exit-overlay').classList.remove('show')">Vazgeç</button>
+      <button class="tm-btn tm-pri" onclick="ttExitApp()">Çık</button>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  const isOpen=id=>{ const e=$(id); return !!(e && e.classList.contains('show')); };
+  window.ttExitApp=function(){ try{ const A=window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.App; if(A&&A.exitApp){ A.exitApp(); return; } }catch(e){} $('exit-overlay').classList.remove('show'); };
+  // En üstteki açık şeyi kapatır. Kapatacak bir şey yoksa false döner.
+  window.ttGoBack=function(fromHardware){
+    try{
+      if($('tt-splash')) return true;                                   // açılış animasyonu: yok say
+      if(isOpen('exit-overlay')){ $('exit-overlay').classList.remove('show'); return true; }
+      if(isOpen('ctx-menu')){ $('ctx-menu').classList.remove('show'); return true; }
+      if(isOpen('eq-menu')){ eqHideMenu(); return true; }
+      if(isOpen('eq-pal')){ $('eq-pal').classList.remove('show'); return true; }
+      if(isOpen('anim-exp-overlay')){ closeAnimExport(); return true; }
+      if(isOpen('save-name-overlay')){ if(typeof closeSaveDialog==='function') closeSaveDialog(); else $('save-name-overlay').classList.remove('show'); return true; }
+      if(isOpen('anim-io-overlay')){ closeAnimIO(); return true; }
+      if(isOpen('qedit-overlay')){ $('qedit-overlay').classList.remove('show'); return true; }
+      if(isOpen('pick-overlay')){ $('pick-overlay').classList.remove('show'); return true; }
+      if(isOpen('load-panel-overlay')){ $('load-panel-overlay').classList.remove('show'); return true; }
+      if(isOpen('tm-edit-ov')){ tmCloseEdit(); return true; }
+      if(isOpen('tm-list-ov')){ tmCloseList(); return true; }
+      if(isOpen('settings-overlay')){ closeSettings(); return true; }
+      if(isOpen('modal-overlay')){ closeModal(); return true; }
+      if(window.currentScreen!=='menu'){ openScreen('menu'); return true; }
+      if(fromHardware){ $('exit-overlay').classList.add('show'); return true; }   // menüde: çıkış onayı
+      return false;
+    }catch(e){ console.error('Geri tuşu hatası:',e); return false; }
+  };
+  // Bilgisayar: Esc (yazı kutusundaki kendi Esc'leri önce çalışır)
+  document.addEventListener('keydown',function(e){
+    if(e.key!=='Escape' || e.defaultPrevented) return;
+    if(e.target && (e.target.id==='anim-name-input' || e.target.id==='save-name-input')) return; // kendi Esc'leri var
+    if(ttGoBack(false)) e.preventDefault();
+  });
+  // Android: donanım geri tuşu
+  try{ const A=window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform()&&Capacitor.Plugins&&Capacitor.Plugins.App;
+    if(A&&A.addListener) A.addListener('backButton',function(){ ttGoBack(true); }); }catch(e){}
+})();
 </script>
 </body>
 </html>
