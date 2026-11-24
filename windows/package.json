@@ -1,7 +1,7 @@
 {
   "name": "tactech",
   "productName": "TacTech",
-  "version": "1.4.0",
+  "version": "0.5.0",
   "description": "TacTech — futbol taktik tahtası (Windows)",
   "author": "Mehmet Can Biçer",
   "main": "main.js",

@@ -44,15 +44,15 @@ jobs:
         run: |
           chmod +x gradlew
           ./gradlew assembleRelease --no-daemon
-          cp app/build/outputs/apk/release/app-release.apk ../TacTech.apk
+          cp app/build/outputs/apk/release/app-release.apk ../TacTech_AndTab.apk
 
       - name: Sürüm olarak yayınla
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.4.${{ github.run_number }}
-          name: TacTech 1.4.${{ github.run_number }}
+          tag_name: v0.5.${{ github.run_number }}
+          name: TacTech 0.5.${{ github.run_number }}
           body: Tablete indirip kurun. Önceki sürümün üzerine güncelleme olarak kurulur.
-          files: TacTech.apk
+          files: TacTech_AndTab.apk
           make_latest: true
 
   # Windows kurulum dosyası: APK ile aynı sürüme eklenir.
@@ -90,5 +90,5 @@ jobs:
       - name: Sürüme ekle
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.4.${{ github.run_number }}
-          files: windows/dist/TacTech-Kurulum.exe
+          tag_name: v0.5.${{ github.run_number }}
+          files: windows/dist/TacTech_win.exe
