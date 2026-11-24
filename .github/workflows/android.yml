@@ -85,7 +85,7 @@ jobs:
         run: |
           MAKENSIS="/c/Program Files (x86)/NSIS/makensis.exe"
           if [ ! -f "$MAKENSIS" ]; then choco install nsis -y --no-progress; fi
-          "$MAKENSIS" installer.nsi
+          "$MAKENSIS" //INPUTCHARSET UTF8 installer.nsi
 
       - name: Sürüme ekle
         uses: softprops/action-gh-release@v2

@@ -1,7 +1,7 @@
 Unicode true
 !include "MUI2.nsh"
 Name "TacTech"
-OutFile "dist/TacTech-Kurulum.exe"
+OutFile "dist\TacTech-Kurulum.exe"
 InstallDir "$LOCALAPPDATA\Programs\TacTech"
 InstallDirRegKey HKCU "Software\TacTech" "InstallDir"
 RequestExecutionLevel user
@@ -13,8 +13,8 @@ VIAddVersionKey /LANG=1055 "CompanyName" "Mehmet Can Biçer"
 VIAddVersionKey /LANG=1055 "FileVersion" "1.4.0"
 VIAddVersionKey /LANG=1055 "LegalCopyright" "Mehmet Can Biçer"
 
-!define MUI_ICON "build/icon.ico"
-!define MUI_UNICON "build/icon.ico"
+!define MUI_ICON "build\icon.ico"
+!define MUI_UNICON "build\icon.ico"
 !define MUI_ABORTWARNING
 !define MUI_FINISHPAGE_RUN "$INSTDIR\TacTech.exe"
 !define MUI_FINISHPAGE_RUN_TEXT "TacTech'i şimdi başlat"
@@ -31,8 +31,8 @@ Section "TacTech"
   ; Uygulama açıksa kapat
   nsExec::Exec 'taskkill /F /IM TacTech.exe'
   SetOutPath "$INSTDIR"
-  File /r "dist/win-unpacked/*.*"
-  File "build/icon.ico"
+  File /r "dist\win-unpacked\*.*"
+  File "build\icon.ico"
   WriteRegStr HKCU "Software\TacTech" "InstallDir" "$INSTDIR"
   WriteUninstaller "$INSTDIR\Kaldir.exe"
   CreateShortcut "$DESKTOP\TacTech.lnk" "$INSTDIR\TacTech.exe" "" "$INSTDIR\icon.ico"
