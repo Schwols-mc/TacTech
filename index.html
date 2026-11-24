@@ -1755,13 +1755,38 @@ function confirmSaveSquad() {
   const state = collectModalState();
   state.savedName = squadName.trim() || 'İsimsiz Kadro';
   state.savedAt   = new Date().toLocaleString('tr-TR');
-  const key = 'taktik_squad_' + Date.now();
+  // Tahtadan kaydedilen kadro, ana menüdeki Kayıtlı Takımlar'a yazılır (aynı adlı takım varsa güncellenir)
   let persisted;
-  try { persisted = stSet(key, JSON.stringify(state)); }
-  catch(e) { showSaveMsg('❌ Kayıt başarısız', '#e84040'); return; }
-  if(persisted) showSaveMsg('✅ Kaydedildi: ' + state.savedName, '#60d090');
+  try { persisted = squadToSavedTeam(state, state.savedName, (TC[mSide]||{}).logo||''); }
+  catch(e) { console.error(e); showSaveMsg('❌ Kayıt başarısız', '#e84040'); return; }
+  if(persisted) showSaveMsg('✅ Kayıtlı Takımlar\'a kaydedildi: ' + state.savedName, '#60d090');
   else showSaveMsg('⚠️ Kaydedildi (bu tarayıcı kalıcı kayda izin vermiyor, sayfa kapanınca silinir)', '#ffdd57');
 }
+
+// Kadro penceresindeki durumu (ilk 11 + yedekler) tek kadrolu bir Kayıtlı Takım'a çevirir
+function squadToSavedTeam(state, name, logo){
+  const seen=new Set(), players=[];
+  [].concat(state.players||[], state.subs||[]).forEach(p=>{
+    if(!p) return; const nm=(p.name||'').trim(); if(!nm) return; // boş satırlar (sadece numara) alınmaz
+    const k=nm.toLowerCase()+'|'+(p.num||''); if(seen.has(k)) return; seen.add(k);
+    players.push({num:parseInt(p.num)||'', name:nm, pos:p.pos||'CM', pos2:p.pos2&&p.pos2!==p.pos?p.pos2:'', gen:p.gen||''});
+  });
+  const list=teamsAll('saved'); const nm=(name||state.name||'İsimsiz takım').trim();
+  let t=list.find(x=>(x.name||'').trim().toLowerCase()===nm.toLowerCase());
+  if(!t){ t={id:'t'+Date.now().toString(36)+Math.random().toString(36).slice(2,5)}; list.push(t); }
+  Object.assign(t,{name:nm, logo:logo||t.logo||'', color:state.color||t.color||'#e02020', secColor:state.secColor||t.secColor||'#ffffff', gkColor:state.gkColor||t.gkColor||'#f5d000', jerseyStyle:state.jerseyStyle||t.jerseyStyle||'solid', players:sortByPos(players), updatedAt:Date.now()});
+  return teamsSave(list,'saved');
+}
+// Eski "kayıtlı kadrolar" bir kez Kayıtlı Takımlar'a taşınır
+function migrateOldSquads(){
+  try{
+    if(stGet('tactech_mig_squads_v1')) return;
+    const keys=stKeys().filter(k=>k&&k.indexOf('taktik_squad_')===0).sort();
+    keys.forEach(k=>{ try{ const st=JSON.parse(stGet(k)); if(st) squadToSavedTeam(st, st.savedName||st.name, st.logo||''); stDel(k); }catch(e){} });
+    stSet('tactech_mig_squads_v1','1');
+  }catch(e){ console.error('Kadro taşıma:',e); }
+}
+window.addEventListener('load',()=>setTimeout(migrateOldSquads,0));
 
 function loadSquad() {
   openLoadPanel();
@@ -1792,13 +1817,17 @@ function openLoadPanel() {
         item.querySelector('.load-item-name').textContent=t.name||'İsimsiz';
         item.querySelector('.load-item-meta').textContent=(t.players||[]).length+' oyuncu';
         item.querySelector('.load-btn-apply').onclick=()=>tmLoadIntoModal(t.id,kind);
+        if(kind==='saved'){ const del=document.createElement('button'); del.className='load-btn-del'; del.textContent='✕'; del.title='Sil';
+          del.onclick=()=>{ if(!del.dataset.armed){ del.dataset.armed='1'; del.textContent='Sil?'; setTimeout(()=>{ if(del.isConnected){ delete del.dataset.armed; del.textContent='✕'; } },3000); return; }
+            teamsSave(teamsAll('saved').filter(x=>x.id!==t.id),'saved'); openLoadPanel(); };
+          item.querySelector('.load-item-actions').appendChild(del); }
         list.appendChild(item); });
     });
-    if(any){ const h2=document.createElement('div'); h2.style.cssText='font-size:0.7rem;letter-spacing:1.5px;color:#7a9a7c;padding:8px 4px 0'; h2.textContent='ESKİ KAYITLI KADROLAR'; list.appendChild(h2); }
+    if(any && squads.length){ const h2=document.createElement('div'); h2.style.cssText='font-size:0.7rem;letter-spacing:1.5px;color:#7a9a7c;padding:8px 4px 0'; h2.textContent='ESKİ KAYITLI KADROLAR'; list.appendChild(h2); }
   }catch(e){ console.error(e); }
 
   if(squads.length === 0) {
-    list.insertAdjacentHTML('beforeend','<div style="color:#5a7a5c;font-size:0.82rem;padding:16px;text-align:center;">Henüz kayıtlı kadro yok.</div>');
+    if(!list.children.length) list.insertAdjacentHTML('beforeend','<div style="color:#5a7a5c;font-size:0.82rem;padding:16px;text-align:center;">Henüz kayıtlı takım yok. Kadro penceresinde Kaydet\'e basınca burada ve menüdeki Kayıtlı Takımlar\'da görünür.</div>');
   } else {
     squads.forEach(({key, state}) => {
       const item = document.createElement('div');
@@ -3919,14 +3948,14 @@ if('serviceWorker' in navigator && location.protocol.startsWith('http') && !wind
 <div class="mm-right">
 <button type="button" class="mm-ib" data-act="saved" title="Kayıtlı Takımlar (rakip ve diğer takımlar)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z"></path><path d="M8.5 9l3 6 3-6"></path></svg>Kayıtlı Takımlar</button>
 <button type="button" class="mm-ib mm-gbtn" id="mm-google" onclick="ttAccountClick()">Google ile giriş</button>
-<button type="button" class="mm-ib" data-act="settings" aria-label="Ayarlar"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"></path></svg></button>
+
 </div>
 </header>
 <div class="mm-grid"><button type="button" class="mm-card mm-on" data-go="tahta"><span class="mm-ic"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="1"></rect><path d="M12 4v16"></path><circle cx="12" cy="12" r="3"></circle><path d="M2 9h3v6H2"></path><path d="M22 9h-3v6h3"></path></svg></span><span class="mm-tt">Taktik Tahtası</span><span class="mm-ds">Diziliş, çizim ve animasyon</span></button><button type="button" class="mm-card mm-soon" data-soon="Antrenman Planlayıcı"><span class="mm-tag">YAKINDA</span><span class="mm-ic"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.5" width="18" height="16" rx="2"></rect><path d="M3 9.5h18"></path><path d="M8 2.5v4"></path><path d="M16 2.5v4"></path><path d="M7.5 14h3"></path><path d="M13.5 14h3"></path><path d="M7.5 17.5h3"></path></svg></span><span class="mm-tt">Antrenman Planlayıcı</span><span class="mm-ds">Drill, seans, yoklama</span></button><button type="button" class="mm-card mm-soon" data-soon="Maç Günü"><span class="mm-tag">YAKINDA</span><span class="mm-ic"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2.5 2"></path><path d="M10 2.5h4"></path></svg></span><span class="mm-tt">Maç Günü</span><span class="mm-ds">Kadro görseli, olaylar, dakika</span></button><button type="button" class="mm-card mm-soon" data-soon="Rakip ve Scout"><span class="mm-tag">YAKINDA</span><span class="mm-ic"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="M16 16l5 5"></path><path d="M8.5 11h5"></path></svg></span><span class="mm-tt">Rakip ve Scout</span><span class="mm-ds">Rapor şablonları, PDF</span></button><button type="button" class="mm-card mm-soon" data-soon="Fiziksel Testler"><span class="mm-tag">YAKINDA</span><span class="mm-ic"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h3.5l2.5-6 4 12 2.5-6H21"></path></svg></span><span class="mm-tt">Fiziksel Testler</span><span class="mm-ds">Sprint, sıçrama, asimetri</span></button><button type="button" class="mm-card mm-soon" data-soon="Video Analiz"><span class="mm-tag">YAKINDA</span><span class="mm-ic"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="5.5" width="13" height="13" rx="2"></rect><path d="M15.5 10l6-3.5v11l-6-3.5"></path></svg></span><span class="mm-tt">Video Analiz</span><span class="mm-ds">Etiketleme ve klipler</span></button></div>
 </section>
 <div class="qedit-overlay" id="settings-overlay" onclick="if(event.target===this)closeSettings()">
   <div class="qedit-box" style="min-width:300px">
-    <h3>Ayarlar</h3>
+    <h3>Hesap ve Ayarlar</h3>
     <div style="display:flex;flex-direction:column;gap:8px;font:14px 'DM Sans',sans-serif"><b style="color:#7fff5a;font-size:13px;letter-spacing:1px">GOOGLE HESABI VE DRIVE</b><div id="set-account" style="display:flex;flex-direction:column;gap:8px"></div></div>
     <label style="display:flex;align-items:center;justify-content:space-between;gap:16px;font:15px 'DM Sans',sans-serif;cursor:pointer;border-top:1px solid var(--ui-border);padding-top:10px">Açılış animasyonu <input type="checkbox" id="set-splash" style="width:22px;height:22px;accent-color:#7fff5a"></label>
     <div style="border-top:1px solid var(--ui-border);padding-top:10px;display:flex;flex-direction:column;gap:8px;font:14px 'DM Sans',sans-serif">
@@ -3967,7 +3996,7 @@ if('serviceWorker' in navigator && location.protocol.startsWith('http') && !wind
     var w=document.createElement('div'); w.className='mm-team';
     var n=document.createElement('button'); n.type='button'; n.className='mm-tname'; n.title='Kadro yönetimini aç';
     if(tc.logo){ var im=document.createElement('img'); im.src=tc.logo; im.alt=''; n.appendChild(im); }
-    var tx=document.createElement('span'); tx.textContent=tc.name||'Takımım'; var sm=document.createElement('small'); sm.textContent=(tc.players||[]).length+' oyuncu · Kadroyu aç'; tx.appendChild(sm); n.appendChild(tx);
+    var tx=document.createElement('span'); tx.textContent=tc.name||'Takımım'; var sm=document.createElement('small'); sm.textContent=(tc.season?tc.season+' · ':'')+(tc.players||[]).length+' oyuncu · Kadroyu aç'; tx.appendChild(sm); n.appendChild(tx);
     n.onclick=function(){ tmKind='own'; tmEdit(tc.id); };
     var a=document.createElement('button'); a.type='button'; a.className='mm-arrow'; a.setAttribute('aria-label','Takım değiştir'); a.textContent='▾';
     a.onclick=function(){ tmOpenList('own'); };
@@ -4091,6 +4120,8 @@ if('serviceWorker' in navigator && location.protocol.startsWith('http') && !wind
     <div style="flex:1;display:flex;flex-direction:column;gap:6px;min-width:200px">
      <span class="tm-lbl">Takım adı</span>
      <input class="tm-in" id="tm-name" placeholder="Artvin 1921 SK U-18">
+     <span class="tm-lbl">Sezon</span>
+     <input class="tm-in" id="tm-season" placeholder="2026–27" style="max-width:160px">
      <button class="tm-btn" id="tm-logo-del" style="align-self:flex-start;display:none" onclick="tmCur.logo='';tmDrawLogo()">Logoyu kaldır</button>
     </div>
     <div id="tm-preview" style="width:64px;height:64px"></div>
@@ -4102,6 +4133,7 @@ if('serviceWorker' in navigator && location.protocol.startsWith('http') && !wind
    <span class="tm-lbl" style="margin-top:6px">Kadro (<span id="tm-count">0</span> oyuncu)</span>
    <table class="tm-tbl"><thead><tr><th style="width:70px">No</th><th>İsim soyisim</th><th style="width:150px">Mevki</th><th style="width:150px">2. mevki</th><th style="width:44px"></th></tr></thead><tbody id="tm-players"></tbody></table>
    <button class="tm-btn" style="align-self:flex-start" onclick="tmAddRow()">+ Oyuncu ekle</button>
+   <details id="tm-left-box" style="display:none;border:1px solid var(--ui-border);border-radius:10px;padding:8px 12px"><summary style="cursor:pointer;font-size:0.85rem;color:#7a9a7c">Ayrılan oyuncular (<span id="tm-left-count">0</span>) · bilgileri saklanır</summary><div id="tm-left" style="display:flex;flex-direction:column;gap:6px;margin-top:8px"></div></details>
    <div id="tm-import-slot"></div>
   </div>
   <div class="tm-ft"><button class="tm-btn" id="tm-del-team" style="margin-right:auto;color:#e06060" onclick="tmDeleteCur(this)">Takımı sil</button><button class="tm-btn" onclick="tmCloseEdit()">İptal</button><button class="tm-btn tm-pri" onclick="tmSave()">Kaydet</button></div>
@@ -4125,12 +4157,12 @@ function tmRenderList(){
   const own=tmKind==='own', box=document.getElementById('tm-list'), a=teamsAll(tmKind), act=own?teamActive():null;
   box.innerHTML='';
   if(!a.length){ box.innerHTML=own?'<div class="tm-empty">Henüz takımın yok. Yukarıdaki <b>+ Takım ekle</b> ile ilk takımını oluştur.</div>':'<div class="tm-empty">Henüz kayıtlı takım yok. Rakip takımları <b>+ Takım ekle</b> ile ekle.</div>'; return; }
-  a.forEach(t=>{
+  a.slice().sort((x,y)=>(y.createdAt||y.updatedAt||0)-(x.createdAt||x.updatedAt||0)).forEach(t=>{ // yeniler en üstte
     const it=document.createElement('div'); it.className='tm-item'+(act&&act.id===t.id?' on':'');
     const lg=t.logo?Object.assign(document.createElement('img'),{src:t.logo,alt:''}):Object.assign(document.createElement('span'),{className:'tm-noimg',textContent:(t.name||'?').slice(0,2).toUpperCase()});
     const tx=document.createElement('div'); tx.style.flex='1';
     const b=document.createElement('b'); b.textContent=t.name||'İsimsiz takım';
-    const sm=document.createElement('small'); sm.textContent=(t.players||[]).length+' oyuncu'+(act&&act.id===t.id?' · aktif takım':'');
+    const sm=document.createElement('small'); sm.textContent=(t.season?t.season+' · ':'')+(t.players||[]).length+' oyuncu'+((t.left||[]).length?' · '+t.left.length+' ayrılan':'')+(act&&act.id===t.id?' · aktif takım':'');
     tx.append(b,sm);
     const ed=document.createElement('button'); ed.className='tm-btn'; ed.textContent='Düzenle';
     ed.onclick=e=>{ e.stopPropagation(); tmEdit(t.id); };
@@ -4144,7 +4176,7 @@ function tmEdit(id){
   tmCur._new=!t;
   document.getElementById('tm-edit-title').textContent=t?'Takımı düzenle':'Takım ekle';
   document.getElementById('tm-del-team').style.display=t?'':'none';
-  document.getElementById('tm-name').value=tmCur.name||'';
+  document.getElementById('tm-name').value=tmCur.name||''; document.getElementById('tm-season').value=tmCur.season||'';
   tmDrawLogo(); tmDrawColors(); tmDrawRows();
   if(!tmCur.players.length) for(let i=0;i<3;i++) tmAddRow();
   tmImportMount(true);
@@ -4166,9 +4198,17 @@ function tmImportMount(on){
     if(!list||!list.length){ impMsg('❌ Oyuncu bulunamadı.','#e84040'); return; }
     if(teamName && !document.getElementById('tm-name').value.trim()) document.getElementById('tm-name').value=teamName;
     if(style){ ['color','secColor','gkColor','jerseyStyle','logo'].forEach(k=>{ if(style[k]) tmCur[k]=style[k]; }); tmDrawLogo(); tmDrawColors(); }
-    tmCur.players=sortByPos(list).map(p=>({num:p.num||'',name:p.name||'',pos:p.pos||'CM',pos2:p.pos2||'',gen:p.gen||''}));
+    // Yeni listede olmayan mevcut oyuncular silinmez, "Ayrılan oyuncular"a taşınır; kalanlar kimliğini korur
+    const cur=document.getElementById('tm-players').children.length?tmReadRows():(tmCur.players||[]);
+    const key=n=>(n||'').trim().toLocaleLowerCase('tr');
+    const byName={}; cur.forEach(p=>{ if(p.name) byName[key(p.name)]=p; });
+    const incoming=sortByPos(list).map(p=>{ const old=byName[key(p.name)]; return Object.assign({},old||{},{num:p.num||'',name:p.name||'',pos:p.pos||'CM',pos2:p.pos2||'',gen:p.gen||''}); });
+    const inSet=new Set(incoming.map(p=>key(p.name)));
+    const gone=cur.filter(p=>p.name && !inSet.has(key(p.name))).map(p=>Object.assign({},p,{leftAt:Date.now()}));
+    tmCur.left=gone.concat((tmCur.left||[]).filter(p=>!inSet.has(key(p.name))));
+    tmCur.players=incoming;
     tmDrawRows();
-    impMsg('✅ '+list.length+' oyuncu aktarıldı'+(source?' ('+source+')':'')+'. Kontrol edip Kaydet\'e bas.','#60d090');
+    impMsg('✅ '+list.length+' oyuncu aktarıldı'+(source?' ('+source+')':'')+(gone.length?'; listede olmayan '+gone.length+' oyuncu ayrılanlara taşındı':'')+'. Kontrol edip Kaydet\'e bas.','#60d090');
   };
 })();
 function tmDrawLogo(){
@@ -4201,23 +4241,36 @@ function tmDrawPreview(){ document.getElementById('tm-preview').innerHTML=makeJe
 function tmPosOpts(sel,empty){ return (empty?'<option value="">—</option>':'')+POSITIONS.map(p=>'<option value="'+p.id+'"'+(p.id===sel?' selected':'')+'>'+p.label+'</option>').join(''); }
 function tmRowEl(pl){
   const tr=document.createElement('tr');
-  tr.innerHTML='<td><input class="tm-in" type="number" min="1" max="99" data-k="num"></td><td><input class="tm-in" data-k="name" placeholder="Oyuncu adı"></td><td><select class="tm-in" data-k="pos">'+tmPosOpts(pl.pos||'CM',false)+'</select></td><td><select class="tm-in" data-k="pos2">'+tmPosOpts(pl.pos2||'',true)+'</select></td><td><button class="tm-del" title="Oyuncuyu sil" aria-label="Oyuncuyu sil">✕</button></td>';
+  tr.innerHTML='<td><input class="tm-in" type="number" min="1" max="99" data-k="num"></td><td><input class="tm-in" data-k="name" placeholder="Oyuncu adı"></td><td><select class="tm-in" data-k="pos">'+tmPosOpts(pl.pos||'CM',false)+'</select></td><td><select class="tm-in" data-k="pos2">'+tmPosOpts(pl.pos2||'',true)+'</select></td><td><button class="tm-del" title="Takımdan ayrıldı (bilgileri saklanır)" aria-label="Takımdan ayrıldı">Ayrıldı</button></td>';
   tr.querySelector('[data-k=num]').value=pl.num||''; tr.querySelector('[data-k=name]').value=pl.name||'';
-  tr.querySelector('.tm-del').onclick=()=>{ tr.remove(); tmCount(); };
+  tr.dataset.pid=pl.pid||('p'+Date.now().toString(36)+Math.random().toString(36).slice(2,6));
+  tr.dataset.extra=JSON.stringify(Object.fromEntries(Object.entries(pl).filter(([k])=>['num','name','pos','pos2','gen','pid'].indexOf(k)<0)));
+  tr.querySelector('.tm-del').onclick=()=>{
+    const row=tmRowData(tr); tr.remove(); tmCount();
+    if(row.name){ tmCur.left=tmCur.left||[]; row.leftAt=Date.now(); tmCur.left.unshift(row); tmDrawLeft(); if(window.mmToast) mmToast(row.name+' ayrılanlara taşındı'); }
+  };
   return tr;
 }
-function tmDrawRows(){ const tb=document.getElementById('tm-players'); tb.innerHTML=''; (tmCur.players||[]).forEach(p=>tb.appendChild(tmRowEl(p))); tmCount(); }
-function tmAddRow(){ const tb=document.getElementById('tm-players'); const used=[...tb.querySelectorAll('[data-k=num]')].map(i=>+i.value); let n=1; while(used.includes(n)) n++; const tr=tmRowEl({num:n,pos:tb.children.length?'CM':'GK'}); tb.appendChild(tr); tmCount(); tr.querySelector('[data-k=name]').focus(); }
-function tmCount(){ document.getElementById('tm-count').textContent=document.getElementById('tm-players').children.length; }
-function tmReadRows(){
-  return [...document.querySelectorAll('#tm-players tr')].map(tr=>{ const g=k=>tr.querySelector('[data-k='+k+']').value;
-    const pos=g('pos')||'CM', p2=g('pos2'); return {num:parseInt(g('num'))||'', name:g('name').trim(), pos, pos2:p2&&p2!==pos?p2:'', gen:''}; })
-    .filter(p=>p.name||p.num);
+function tmDrawRows(){ const tb=document.getElementById('tm-players'); tb.innerHTML=''; (tmCur.players||[]).forEach(p=>tb.appendChild(tmRowEl(p))); tmCount(); tmDrawLeft(); }
+// Yeni oyuncu her zaman listenin en üstüne eklenir
+function tmAddRow(){ const tb=document.getElementById('tm-players'); const used=[...tb.querySelectorAll('[data-k=num]')].map(i=>+i.value); let n=1; while(used.includes(n)) n++; const tr=tmRowEl({num:n,pos:tb.children.length?'CM':'GK',addedAt:Date.now()}); tb.insertBefore(tr,tb.firstChild); tmCount(); tr.querySelector('[data-k=name]').focus(); }
+function tmRowData(tr){ const g=k=>tr.querySelector('[data-k='+k+']').value; const pos=g('pos')||'CM', p2=g('pos2'); let ex={}; try{ ex=JSON.parse(tr.dataset.extra||'{}'); }catch(e){}
+  return Object.assign(ex,{pid:tr.dataset.pid, num:parseInt(g('num'))||'', name:g('name').trim(), pos, pos2:p2&&p2!==pos?p2:'', gen:''}); }
+function tmDrawLeft(){
+  const L=(tmCur&&tmCur.left)||[], box=document.getElementById('tm-left'), wrap=document.getElementById('tm-left-box');
+  wrap.style.display=L.length?'':'none'; document.getElementById('tm-left-count').textContent=L.length; box.innerHTML='';
+  L.forEach((p,i)=>{ const r=document.createElement('div'); r.style.cssText='display:flex;align-items:center;gap:10px;font-size:0.85rem';
+    const t=document.createElement('span'); t.style.flex='1'; t.textContent=(p.num?p.num+' · ':'')+p.name+' · '+((POSITIONS.find(x=>x.id===p.pos)||{}).label||p.pos)+(p.leftAt?' · ayrıldı: '+new Date(p.leftAt).toLocaleDateString('tr-TR'):'');
+    const b=document.createElement('button'); b.className='tm-btn'; b.textContent='Geri al'; b.onclick=()=>{ tmCur.left.splice(i,1); const q=Object.assign({},p); delete q.leftAt; const tb=document.getElementById('tm-players'); tb.insertBefore(tmRowEl(q),tb.firstChild); tmCount(); tmDrawLeft(); };
+    r.append(t,b); box.appendChild(r); });
 }
+function tmCount(){ document.getElementById('tm-count').textContent=document.getElementById('tm-players').children.length; }
+function tmReadRows(){ return [...document.querySelectorAll('#tm-players tr')].map(tmRowData).filter(p=>p.name); }
 function tmSave(){
   tmCur.name=document.getElementById('tm-name').value.trim();
+  tmCur.season=document.getElementById('tm-season').value.trim();
   if(!tmCur.name){ document.getElementById('tm-name').focus(); if(window.mmToast) mmToast('Takım adını yaz'); return; }
-  tmCur.players=tmReadRows(); tmCur.updatedAt=Date.now(); const isNew=tmCur._new; delete tmCur._new;
+  tmCur.players=tmReadRows(); tmCur.updatedAt=Date.now(); const isNew=tmCur._new; delete tmCur._new; if(isNew) tmCur.createdAt=Date.now();
   const a=teamsAll(tmKind); const i=a.findIndex(t=>t.id===tmCur.id); if(i>=0) a[i]=tmCur; else a.push(tmCur);
   const ok=teamsSave(a,tmKind); if(tmKind==='own'&&(isNew||!teamActive())) teamSetActive(tmCur.id);
   if(window.mmToast) mmToast(ok?'Kaydedildi: '+tmCur.name:'Kaydedildi (bu tarayıcı kalıcı kayda izin vermiyor)');
@@ -4330,7 +4383,7 @@ function tmLoadIntoModal(id,kind){
   const META='tactech_sync_meta', TOMB='tactech_sync_tomb', TTOMB='tactech_sync_teamtomb', LAST='tactech_sync_last';
   const TEAMKEYS=[TEAMS_KEY,SAVED_TEAMS_KEY];
   // Eşitlenmeyen, cihaza özel kayıtlar
-  const syncable=k=>!!k && (k.indexOf('tactech_')===0||k.indexOf('taktik_squad_')===0) && k.indexOf('tactech_sync_')!==0 && k.indexOf('tactech_g_')!==0 && k!=='tactech_splash_off' && k!==ACTIVE_TEAM_KEY;
+  const syncable=k=>!!k && (k.indexOf('tactech_')===0||k.indexOf('taktik_squad_')===0) && k.indexOf('tactech_sync_')!==0 && k.indexOf('tactech_g_')!==0 && k.indexOf('tactech_mig_')!==0 && k!=='tactech_splash_off' && k!==ACTIVE_TEAM_KEY;
   const J=(k,d)=>{ try{ return JSON.parse(stGet(k)||'')||d; }catch(e){ return d; } };
   const rawSet=stSet, rawDel=stDel;
   let state={signedIn:false,user:null,status:'off',msg:''}, timer=null, running=false, again=false;
@@ -4415,7 +4468,7 @@ function tmLoadIntoModal(id,kind){
     state.signedIn=true; state.user=r.user; renderAccount(); if(window.mmToast) mmToast('Giriş yapıldı: '+(r.user&&r.user.email||'')); syncNow();
   };
   window.ttGoogleSignOut=async function(){ if(G()) await G().signOut(); state.signedIn=false; state.user=null; state.status='off'; renderAccount(); if(window.mmToast) mmToast('Çıkış yapıldı. Kayıtların bu cihazda duruyor.'); };
-  window.ttAccountClick=function(){ if(state.signedIn) openSettings(); else ttGoogleSignIn(); };
+  window.ttAccountClick=function(){ openSettings(); }; // hesap ve ayarlar tek pencerede
   window.ttAccountRender=renderAccount;
   window.addEventListener('load',async function(){
     renderAccount();
