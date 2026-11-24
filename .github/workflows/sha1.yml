@@ -1,0 +1,22 @@
+name: Android imza parmak izi (SHA-1)
+
+# Google girişi için gereken SHA-1 parmak izini gösterir. Elle çalıştırılır, sürüm oluşturmaz.
+on:
+  workflow_dispatch:
+
+jobs:
+  sha1:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Parmak izini yaz
+        env:
+          KS_B64: ${{ secrets.ANDROID_KEYSTORE_B64 }}
+          KS_PASS: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+        run: |
+          echo "$KS_B64" | base64 -d > ks.jks
+          keytool -list -v -keystore ks.jks -alias tactech -storepass "$KS_PASS" | grep -E "SHA1:|SHA256:"
+          rm ks.jks
