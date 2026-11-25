@@ -55,7 +55,7 @@ jobs:
         with:
           tag_name: v${{ env.APP_VERSION }}
           name: TacTech ${{ env.APP_VERSION }}
-          body: Tablete indirip kurun. Önceki sürümün üzerine güncelleme olarak kurulur.
+          body_path: RELEASE_NOTES.md
           files: TacTech_AndTab.apk
           make_latest: true
 
@@ -108,4 +108,5 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ env.APP_VERSION }}
+          body_path: RELEASE_NOTES.md
           files: windows/dist/TacTech_win.exe

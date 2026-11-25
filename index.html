@@ -412,6 +412,7 @@ tr.modal-drag-over td{border-top:2px solid var(--accent);}
   .eq-item{min-height:64px;}
   .eq-colors span{width:32px;height:32px;}
 }
+#drc-panel,#drc-ball,#drc-people,#as-panel{display:none} /* drill oluşturucu: yalnızca drill kipinde görünür */
 </style>
 <script id="xlsx-lib">/*! xlsx.js (C) 2013-present SheetJS -- http://sheetjs.com */
 var XLSX={};function make_xlsx_lib(e){e.version="0.18.5";var r=1200,t=1252;var a=[874,932,936,949,950,1250,1251,1252,1253,1254,1255,1256,1257,1258,1e4];var n={0:1252,1:65001,2:65001,77:1e4,128:932,129:949,130:1361,134:936,136:950,161:1253,162:1254,163:1258,177:1255,178:1256,186:1257,204:1251,222:874,238:1250,255:1252,69:6969};var i=function(e){if(a.indexOf(e)==-1)return;t=n[0]=e};function s(){i(1252)}var l=function(e){r=e;i(e)};function o(){l(1200);s()}function c(e){var r=[];for(var t=0,a=e.length;t<a;++t)r[t]=e.charCodeAt(t);return r}function f(e){var r=[];for(var t=0;t<e.length>>1;++t)r[t]=String.fromCharCode(e.charCodeAt(2*t)+(e.charCodeAt(2*t+1)<<8));return r.join("")}function u(e){var r=[];for(var t=0;t<e.length>>1;++t)r[t]=String.fromCharCode(e.charCodeAt(2*t+1)+(e.charCodeAt(2*t)<<8));return r.join("")}var h=function(e){var r=e.charCodeAt(0),t=e.charCodeAt(1);if(r==255&&t==254)return f(e.slice(2));if(r==254&&t==255)return u(e.slice(2));if(r==65279)return e.slice(1);return e};var p=function xc(e){return String.fromCharCode(e)};var d=function Sc(e){return String.fromCharCode(e)};var m=null;var v=true;var g="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";function b(e){var r="";var t=0,a=0,n=0,i=0,s=0,l=0,o=0;for(var c=0;c<e.length;){t=e.charCodeAt(c++);i=t>>2;a=e.charCodeAt(c++);s=(t&3)<<4|a>>4;n=e.charCodeAt(c++);l=(a&15)<<2|n>>6;o=n&63;if(isNaN(a)){l=o=64}else if(isNaN(n)){o=64}r+=g.charAt(i)+g.charAt(s)+g.charAt(l)+g.charAt(o)}return r}function w(e){var r="";var t=0,a=0,n=0,i=0,s=0,l=0,o=0;e=e.replace(/[^\w\+\/\=]/g,"");for(var c=0;c<e.length;){i=g.indexOf(e.charAt(c++));s=g.indexOf(e.charAt(c++));t=i<<2|s>>4;r+=String.fromCharCode(t);l=g.indexOf(e.charAt(c++));a=(s&15)<<4|l>>2;if(l!==64){r+=String.fromCharCode(a)}o=g.indexOf(e.charAt(c++));n=(l&3)<<6|o;if(o!==64){r+=String.fromCharCode(n)}}return r}var y=function(){return typeof Buffer!=="undefined"&&typeof undefined!=="undefined"&&typeof{}!=="undefined"&&!!{}.node}();var k=function(){if(typeof Buffer!=="undefined"){var e=!Buffer.from;if(!e)try{Buffer.from("foo","utf8")}catch(r){e=true}return e?function(e,r){return r?new Buffer(e,r):new Buffer(e)}:Buffer.from.bind(Buffer)}return function(){}}();function x(e){if(y)return Buffer.alloc?Buffer.alloc(e):new Buffer(e);return typeof Uint8Array!="undefined"?new Uint8Array(e):new Array(e)}function S(e){if(y)return Buffer.allocUnsafe?Buffer.allocUnsafe(e):new Buffer(e);return typeof Uint8Array!="undefined"?new Uint8Array(e):new Array(e)}var C=function Cc(e){if(y)return k(e,"binary");return e.split("").map(function(e){return e.charCodeAt(0)&255})};function _(e){if(typeof ArrayBuffer==="undefined")return C(e);var r=new ArrayBuffer(e.length),t=new Uint8Array(r);for(var a=0;a!=e.length;++a)t[a]=e.charCodeAt(a)&255;return r}function A(e){if(Array.isArray(e))return e.map(function(e){return String.fromCharCode(e)}).join("");var r=[];for(var t=0;t<e.length;++t)r[t]=String.fromCharCode(e[t]);return r.join("")}function T(e){if(typeof Uint8Array==="undefined")throw new Error("Unsupported");return new Uint8Array(e)}function E(e){if(typeof ArrayBuffer=="undefined")throw new Error("Unsupported");if(e instanceof ArrayBuffer)return E(new Uint8Array(e));var r=new Array(e.length);for(var t=0;t<e.length;++t)r[t]=e[t];return r}var F=y?function(e){return Buffer.concat(e.map(function(e){return Buffer.isBuffer(e)?e:k(e)}))}:function(e){if(typeof Uint8Array!=="undefined"){var r=0,t=0;for(r=0;r<e.length;++r)t+=e[r].length;var a=new Uint8Array(t);var n=0;for(r=0,t=0;r<e.length;t+=n,++r){n=e[r].length;if(e[r]instanceof Uint8Array)a.set(e[r],t);else if(typeof e[r]=="string"){throw"wtf"}else a.set(new Uint8Array(e[r]),t)}return a}return[].concat.apply([],e.map(function(e){return Array.isArray(e)?e:[].slice.call(e)}))};function D(e){var r=[],t=0,a=e.length+250;var n=x(e.length+255);for(var i=0;i<e.length;++i){var s=e.charCodeAt(i);if(s<128)n[t++]=s;else if(s<2048){n[t++]=192|s>>6&31;n[t++]=128|s&63}else if(s>=55296&&s<57344){s=(s&1023)+64;var l=e.charCodeAt(++i)&1023;n[t++]=240|s>>8&7;n[t++]=128|s>>2&63;n[t++]=128|l>>6&15|(s&3)<<4;n[t++]=128|l&63}else{n[t++]=224|s>>12&15;n[t++]=128|s>>6&63;n[t++]=128|s&63}if(t>a){r.push(n.slice(0,t));t=0;n=x(65535);a=65530}}r.push(n.slice(0,t));return F(r)}var O=/\u0000/g,M=/[\u0001-\u0006]/g;function N(e){var r="",t=e.length-1;while(t>=0)r+=e.charAt(t--);return r}function P(e,r){var t=""+e;return t.length>=r?t:br("0",r-t.length)+t}function I(e,r){var t=""+e;return t.length>=r?t:br(" ",r-t.length)+t}function R(e,r){var t=""+e;return t.length>=r?t:t+br(" ",r-t.length)}function L(e,r){var t=""+Math.round(e);return t.length>=r?t:br("0",r-t.length)+t}function B(e,r){var t=""+e;return t.length>=r?t:br("0",r-t.length)+t}var z=Math.pow(2,32);function U(e,r){if(e>z||e<-z)return L(e,r);var t=Math.round(e);return B(t,r)}function W(e,r){r=r||0;return e.length>=7+r&&(e.charCodeAt(r)|32)===103&&(e.charCodeAt(r+1)|32)===101&&(e.charCodeAt(r+2)|32)===110&&(e.charCodeAt(r+3)|32)===101&&(e.charCodeAt(r+4)|32)===114&&(e.charCodeAt(r+5)|32)===97&&(e.charCodeAt(r+6)|32)===108}var j=[["Sun","Sunday"],["Mon","Monday"],["Tue","Tuesday"],["Wed","Wednesday"],["Thu","Thursday"],["Fri","Friday"],["Sat","Saturday"]];var H=[["J","Jan","January"],["F","Feb","February"],["M","Mar","March"],["A","Apr","April"],["M","May","May"],["J","Jun","June"],["J","Jul","July"],["A","Aug","August"],["S","Sep","September"],["O","Oct","October"],["N","Nov","November"],["D","Dec","December"]];function V(e){if(!e)e={};e[0]="General";e[1]="0";e[2]="0.00";e[3]="#,##0";e[4]="#,##0.00";e[9]="0%";e[10]="0.00%";e[11]="0.00E+00";e[12]="# ?/?";e[13]="# ??/??";e[14]="m/d/yy";e[15]="d-mmm-yy";e[16]="d-mmm";e[17]="mmm-yy";e[18]="h:mm AM/PM";e[19]="h:mm:ss AM/PM";e[20]="h:mm";e[21]="h:mm:ss";e[22]="m/d/yy h:mm";e[37]="#,##0 ;(#,##0)";e[38]="#,##0 ;[Red](#,##0)";e[39]="#,##0.00;(#,##0.00)";e[40]="#,##0.00;[Red](#,##0.00)";e[45]="mm:ss";e[46]="[h]:mm:ss";e[47]="mmss.0";e[48]="##0.0E+0";e[49]="@";e[56]='"上午/下午 "hh"時"mm"分"ss"秒 "';return e}var X={0:"General",1:"0",2:"0.00",3:"#,##0",4:"#,##0.00",9:"0%",10:"0.00%",11:"0.00E+00",12:"# ?/?",13:"# ??/??",14:"m/d/yy",15:"d-mmm-yy",16:"d-mmm",17:"mmm-yy",18:"h:mm AM/PM",19:"h:mm:ss AM/PM",20:"h:mm",21:"h:mm:ss",22:"m/d/yy h:mm",37:"#,##0 ;(#,##0)",38:"#,##0 ;[Red](#,##0)",39:"#,##0.00;(#,##0.00)",40:"#,##0.00;[Red](#,##0.00)",45:"mm:ss",46:"[h]:mm:ss",47:"mmss.0",48:"##0.0E+0",49:"@",56:'"上午/下午 "hh"時"mm"分"ss"秒 "'};var G={5:37,6:38,7:39,8:40,23:0,24:0,25:0,26:0,27:14,28:14,29:14,30:14,31:14,50:14,51:14,52:14,53:14,54:14,55:14,56:14,57:14,58:14,59:1,60:2,61:3,62:4,67:9,68:10,69:12,70:13,71:14,72:14,73:15,74:16,75:17,76:20,77:21,78:22,79:45,80:46,81:47,82:0};var Y={5:'"$"#,##0_);\\("$"#,##0\\)',63:'"$"#,##0_);\\("$"#,##0\\)',6:'"$"#,##0_);[Red]\\("$"#,##0\\)',64:'"$"#,##0_);[Red]\\("$"#,##0\\)',7:'"$"#,##0.00_);\\("$"#,##0.00\\)',65:'"$"#,##0.00_);\\("$"#,##0.00\\)',8:'"$"#,##0.00_);[Red]\\("$"#,##0.00\\)',66:'"$"#,##0.00_);[Red]\\("$"#,##0.00\\)',41:'_(* #,##0_);_(* \\(#,##0\\);_(* "-"_);_(@_)',42:'_("$"* #,##0_);_("$"* \\(#,##0\\);_("$"* "-"_);_(@_)',43:'_(* #,##0.00_);_(* \\(#,##0.00\\);_(* "-"??_);_(@_)',44:'_("$"* #,##0.00_);_("$"* \\(#,##0.00\\);_("$"* "-"??_);_(@_)'};function J(e,r,t){var a=e<0?-1:1;var n=e*a;var i=0,s=1,l=0;var o=1,c=0,f=0;var u=Math.floor(n);while(c<r){u=Math.floor(n);l=u*s+i;f=u*c+o;if(n-u<5e-8)break;n=1/(n-u);i=s;s=l;o=c;c=f}if(f>r){if(c>r){f=o;l=i}else{f=c;l=s}}if(!t)return[0,a*l,f];var h=Math.floor(a*l/f);return[h,a*l-h*f,f]}function K(e,r,t){if(e>2958465||e<0)return null;var a=e|0,n=Math.floor(86400*(e-a)),i=0;var s=[];var l={D:a,T:n,u:86400*(e-a)-n,y:0,m:0,d:0,H:0,M:0,S:0,q:0};if(Math.abs(l.u)<1e-6)l.u=0;if(r&&r.date1904)a+=1462;if(l.u>.9999){l.u=0;if(++n==86400){l.T=n=0;++a;++l.D}}if(a===60){s=t?[1317,10,29]:[1900,2,29];i=3}else if(a===0){s=t?[1317,8,29]:[1900,1,0];i=6}else{if(a>60)--a;var o=new Date(1900,0,1);o.setDate(o.getDate()+a-1);s=[o.getFullYear(),o.getMonth()+1,o.getDate()];i=o.getDay();if(a<60)i=(i+6)%7;if(t)i=le(o,s)}l.y=s[0];l.m=s[1];l.d=s[2];l.S=n%60;n=Math.floor(n/60);l.M=n%60;n=Math.floor(n/60);l.H=n;l.q=i;return l}var q=new Date(1899,11,31,0,0,0);var Z=q.getTime();var Q=new Date(1900,2,1,0,0,0);function ee(e,r){var t=e.getTime();if(r)t-=1461*24*60*60*1e3;else if(e>=Q)t+=24*60*60*1e3;return(t-(Z+(e.getTimezoneOffset()-q.getTimezoneOffset())*6e4))/(24*60*60*1e3)}function re(e){return e.indexOf(".")==-1?e:e.replace(/(?:\.0*|(\.\d*[1-9])0+)$/,"$1")}function te(e){if(e.indexOf("E")==-1)return e;return e.replace(/(?:\.0*|(\.\d*[1-9])0+)[Ee]/,"$1E").replace(/(E[+-])(\d)$/,"$10$2")}function ae(e){var r=e<0?12:11;var t=re(e.toFixed(12));if(t.length<=r)return t;t=e.toPrecision(10);if(t.length<=r)return t;return e.toExponential(5)}function ne(e){var r=re(e.toFixed(11));return r.length>(e<0?12:11)||r==="0"||r==="-0"?e.toPrecision(6):r}function ie(e){var r=Math.floor(Math.log(Math.abs(e))*Math.LOG10E),t;if(r>=-4&&r<=-1)t=e.toPrecision(10+r);else if(Math.abs(r)<=9)t=ae(e);else if(r===10)t=e.toFixed(10).substr(0,12);else t=ne(e);return re(te(t.toUpperCase()))}function se(e,r){switch(typeof e){case"string":return e;case"boolean":return e?"TRUE":"FALSE";case"number":return(e|0)===e?e.toString(10):ie(e);case"undefined":return"";case"object":if(e==null)return"";if(e instanceof Date)return Be(14,ee(e,r&&r.date1904),r);}throw new Error("unsupported value in General format: "+e)}function le(e,r){r[0]-=581;var t=e.getDay();if(e<60)t=(t+6)%7;return t}function oe(e,r,t,a){var n="",i=0,s=0,l=t.y,o,c=0;switch(e){case 98:l=t.y+543;case 121:switch(r.length){case 1:;case 2:o=l%100;c=2;break;default:o=l%1e4;c=4;break;}break;case 109:switch(r.length){case 1:;case 2:o=t.m;c=r.length;break;case 3:return H[t.m-1][1];case 5:return H[t.m-1][0];default:return H[t.m-1][2];}break;case 100:switch(r.length){case 1:;case 2:o=t.d;c=r.length;break;case 3:return j[t.q][0];default:return j[t.q][1];}break;case 104:switch(r.length){case 1:;case 2:o=1+(t.H+11)%12;c=r.length;break;default:throw"bad hour format: "+r;}break;case 72:switch(r.length){case 1:;case 2:o=t.H;c=r.length;break;default:throw"bad hour format: "+r;}break;case 77:switch(r.length){case 1:;case 2:o=t.M;c=r.length;break;default:throw"bad minute format: "+r;}break;case 115:if(r!="s"&&r!="ss"&&r!=".0"&&r!=".00"&&r!=".000")throw"bad second format: "+r;if(t.u===0&&(r=="s"||r=="ss"))return P(t.S,r.length);if(a>=2)s=a===3?1e3:100;else s=a===1?10:1;i=Math.round(s*(t.S+t.u));if(i>=60*s)i=0;if(r==="s")return i===0?"0":""+i/s;n=P(i,2+a);if(r==="ss")return n.substr(0,2);return"."+n.substr(2,r.length-1);case 90:switch(r){case"[h]":;case"[hh]":o=t.D*24+t.H;break;case"[m]":;case"[mm]":o=(t.D*24+t.H)*60+t.M;break;case"[s]":;case"[ss]":o=((t.D*24+t.H)*60+t.M)*60+Math.round(t.S+t.u);break;default:throw"bad abstime format: "+r;}c=r.length===3?1:2;break;case 101:o=l;c=1;break;}var f=c>0?P(o,c):"";return f}function ce(e){var r=3;if(e.length<=r)return e;var t=e.length%r,a=e.substr(0,t);for(;t!=e.length;t+=r)a+=(a.length>0?",":"")+e.substr(t,r);return a}var fe=/%/g;function ue(e,r,t){var a=r.replace(fe,""),n=r.length-a.length;return De(e,a,t*Math.pow(10,2*n))+br("%",n)}function he(e,r,t){var a=r.length-1;while(r.charCodeAt(a-1)===44)--a;return De(e,r.substr(0,a),t/Math.pow(10,3*(r.length-a)))}function pe(e,r){var t;var a=e.indexOf("E")-e.indexOf(".")-1;if(e.match(/^#+0.0E\+0$/)){if(r==0)return"0.0E+0";else if(r<0)return"-"+pe(e,-r);var n=e.indexOf(".");if(n===-1)n=e.indexOf("E");var i=Math.floor(Math.log(r)*Math.LOG10E)%n;if(i<0)i+=n;t=(r/Math.pow(10,i)).toPrecision(a+1+(n+i)%n);if(t.indexOf("e")===-1){var s=Math.floor(Math.log(r)*Math.LOG10E);if(t.indexOf(".")===-1)t=t.charAt(0)+"."+t.substr(1)+"E+"+(s-t.length+i);else t+="E+"+(s-i);while(t.substr(0,2)==="0."){t=t.charAt(0)+t.substr(2,n)+"."+t.substr(2+n);t=t.replace(/^0+([1-9])/,"$1").replace(/^0+\./,"0.")}t=t.replace(/\+-/,"-")}t=t.replace(/^([+-]?)(\d*)\.(\d*)[Ee]/,function(e,r,t,a){return r+t+a.substr(0,(n+i)%n)+"."+a.substr(i)+"E"})}else t=r.toExponential(a);if(e.match(/E\+00$/)&&t.match(/e[+-]\d$/))t=t.substr(0,t.length-1)+"0"+t.charAt(t.length-1);if(e.match(/E\-/)&&t.match(/e\+/))t=t.replace(/e\+/,"e");return t.replace("e","E")}var de=/# (\?+)( ?)\/( ?)(\d+)/;function me(e,r,t){var a=parseInt(e[4],10),n=Math.round(r*a),i=Math.floor(n/a);var s=n-i*a,l=a;return t+(i===0?"":""+i)+" "+(s===0?br(" ",e[1].length+1+e[4].length):I(s,e[1].length)+e[2]+"/"+e[3]+P(l,e[4].length))}function ve(e,r,t){return t+(r===0?"":""+r)+br(" ",e[1].length+2+e[4].length)}var ge=/^#*0*\.([0#]+)/;var be=/\).*[0#]/;var we=/\(###\) ###\\?-####/;function ye(e){var r="",t;for(var a=0;a!=e.length;++a)switch(t=e.charCodeAt(a)){case 35:break;case 63:r+=" ";break;case 48:r+="0";break;default:r+=String.fromCharCode(t);}return r}function ke(e,r){var t=Math.pow(10,r);return""+Math.round(e*t)/t}function xe(e,r){var t=e-Math.floor(e),a=Math.pow(10,r);if(r<(""+Math.round(t*a)).length)return 0;return Math.round(t*a)}function Se(e,r){if(r<(""+Math.round((e-Math.floor(e))*Math.pow(10,r))).length){return 1}return 0}function Ce(e){if(e<2147483647&&e>-2147483648)return""+(e>=0?e|0:e-1|0);return""+Math.floor(e)}function _e(e,r,t){if(e.charCodeAt(0)===40&&!r.match(be)){var a=r.replace(/\( */,"").replace(/ \)/,"").replace(/\)/,"");if(t>=0)return _e("n",a,t);return"("+_e("n",a,-t)+")"}if(r.charCodeAt(r.length-1)===44)return he(e,r,t);if(r.indexOf("%")!==-1)return ue(e,r,t);if(r.indexOf("E")!==-1)return pe(r,t);if(r.charCodeAt(0)===36)return"$"+_e(e,r.substr(r.charAt(1)==" "?2:1),t);var n;var i,s,l,o=Math.abs(t),c=t<0?"-":"";if(r.match(/^00+$/))return c+U(o,r.length);if(r.match(/^[#?]+$/)){n=U(t,0);if(n==="0")n="";return n.length>r.length?n:ye(r.substr(0,r.length-n.length))+n}if(i=r.match(de))return me(i,o,c);if(r.match(/^#+0+$/))return c+U(o,r.length-r.indexOf("0"));if(i=r.match(ge)){n=ke(t,i[1].length).replace(/^([^\.]+)$/,"$1."+ye(i[1])).replace(/\.$/,"."+ye(i[1])).replace(/\.(\d*)$/,function(e,r){return"."+r+br("0",ye(i[1]).length-r.length)});return r.indexOf("0.")!==-1?n:n.replace(/^0\./,".")}r=r.replace(/^#+([0.])/,"$1");if(i=r.match(/^(0*)\.(#*)$/)){return c+ke(o,i[2].length).replace(/\.(\d*[1-9])0*$/,".$1").replace(/^(-?\d*)$/,"$1.").replace(/^0\./,i[1].length?"0.":".")}if(i=r.match(/^#{1,3},##0(\.?)$/))return c+ce(U(o,0));if(i=r.match(/^#,##0\.([#0]*0)$/)){return t<0?"-"+_e(e,r,-t):ce(""+(Math.floor(t)+Se(t,i[1].length)))+"."+P(xe(t,i[1].length),i[1].length)}if(i=r.match(/^#,#*,#0/))return _e(e,r.replace(/^#,#*,/,""),t);if(i=r.match(/^([0#]+)(\\?-([0#]+))+$/)){n=N(_e(e,r.replace(/[\\-]/g,""),t));s=0;return N(N(r.replace(/\\/g,"")).replace(/[0#]/g,function(e){return s<n.length?n.charAt(s++):e==="0"?"0":""}))}if(r.match(we)){n=_e(e,"##########",t);return"("+n.substr(0,3)+") "+n.substr(3,3)+"-"+n.substr(6)}var f="";if(i=r.match(/^([#0?]+)( ?)\/( ?)([#0?]+)/)){s=Math.min(i[4].length,7);l=J(o,Math.pow(10,s)-1,false);n=""+c;f=De("n",i[1],l[1]);if(f.charAt(f.length-1)==" ")f=f.substr(0,f.length-1)+"0";n+=f+i[2]+"/"+i[3];f=R(l[2],s);if(f.length<i[4].length)f=ye(i[4].substr(i[4].length-f.length))+f;n+=f;return n}if(i=r.match(/^# ([#0?]+)( ?)\/( ?)([#0?]+)/)){s=Math.min(Math.max(i[1].length,i[4].length),7);l=J(o,Math.pow(10,s)-1,true);return c+(l[0]||(l[1]?"":"0"))+" "+(l[1]?I(l[1],s)+i[2]+"/"+i[3]+R(l[2],s):br(" ",2*s+1+i[2].length+i[3].length))}if(i=r.match(/^[#0?]+$/)){n=U(t,0);if(r.length<=n.length)return n;return ye(r.substr(0,r.length-n.length))+n}if(i=r.match(/^([#0?]+)\.([#0]+)$/)){n=""+t.toFixed(Math.min(i[2].length,10)).replace(/([^0])0+$/,"$1");s=n.indexOf(".");var u=r.indexOf(".")-s,h=r.length-n.length-u;return ye(r.substr(0,u)+n+r.substr(r.length-h))}if(i=r.match(/^00,000\.([#0]*0)$/)){s=xe(t,i[1].length);return t<0?"-"+_e(e,r,-t):ce(Ce(t)).replace(/^\d,\d{3}$/,"0$&").replace(/^\d*$/,function(e){return"00,"+(e.length<3?P(0,3-e.length):"")+e})+"."+P(s,i[1].length)}switch(r){case"###,##0.00":return _e(e,"#,##0.00",t);case"###,###":;case"##,###":;case"#,###":var p=ce(U(o,0));return p!=="0"?c+p:"";case"###,###.00":return _e(e,"###,##0.00",t).replace(/^0\./,".");case"#,###.00":return _e(e,"#,##0.00",t).replace(/^0\./,".");default:;}throw new Error("unsupported format |"+r+"|")}function Ae(e,r,t){var a=r.length-1;while(r.charCodeAt(a-1)===44)--a;return De(e,r.substr(0,a),t/Math.pow(10,3*(r.length-a)))}function Te(e,r,t){var a=r.replace(fe,""),n=r.length-a.length;return De(e,a,t*Math.pow(10,2*n))+br("%",n)}function Ee(e,r){var t;var a=e.indexOf("E")-e.indexOf(".")-1;if(e.match(/^#+0.0E\+0$/)){if(r==0)return"0.0E+0";else if(r<0)return"-"+Ee(e,-r);var n=e.indexOf(".");if(n===-1)n=e.indexOf("E");var i=Math.floor(Math.log(r)*Math.LOG10E)%n;if(i<0)i+=n;t=(r/Math.pow(10,i)).toPrecision(a+1+(n+i)%n);if(!t.match(/[Ee]/)){var s=Math.floor(Math.log(r)*Math.LOG10E);if(t.indexOf(".")===-1)t=t.charAt(0)+"."+t.substr(1)+"E+"+(s-t.length+i);else t+="E+"+(s-i);t=t.replace(/\+-/,"-")}t=t.replace(/^([+-]?)(\d*)\.(\d*)[Ee]/,function(e,r,t,a){return r+t+a.substr(0,(n+i)%n)+"."+a.substr(i)+"E"})}else t=r.toExponential(a);if(e.match(/E\+00$/)&&t.match(/e[+-]\d$/))t=t.substr(0,t.length-1)+"0"+t.charAt(t.length-1);if(e.match(/E\-/)&&t.match(/e\+/))t=t.replace(/e\+/,"e");return t.replace("e","E")}function Fe(e,r,t){if(e.charCodeAt(0)===40&&!r.match(be)){var a=r.replace(/\( */,"").replace(/ \)/,"").replace(/\)/,"");if(t>=0)return Fe("n",a,t);return"("+Fe("n",a,-t)+")"}if(r.charCodeAt(r.length-1)===44)return Ae(e,r,t);if(r.indexOf("%")!==-1)return Te(e,r,t);if(r.indexOf("E")!==-1)return Ee(r,t);if(r.charCodeAt(0)===36)return"$"+Fe(e,r.substr(r.charAt(1)==" "?2:1),t);var n;var i,s,l,o=Math.abs(t),c=t<0?"-":"";if(r.match(/^00+$/))return c+P(o,r.length);if(r.match(/^[#?]+$/)){n=""+t;if(t===0)n="";return n.length>r.length?n:ye(r.substr(0,r.length-n.length))+n}if(i=r.match(de))return ve(i,o,c);if(r.match(/^#+0+$/))return c+P(o,r.length-r.indexOf("0"));if(i=r.match(ge)){n=(""+t).replace(/^([^\.]+)$/,"$1."+ye(i[1])).replace(/\.$/,"."+ye(i[1]));n=n.replace(/\.(\d*)$/,function(e,r){return"."+r+br("0",ye(i[1]).length-r.length)});return r.indexOf("0.")!==-1?n:n.replace(/^0\./,".")}r=r.replace(/^#+([0.])/,"$1");if(i=r.match(/^(0*)\.(#*)$/)){return c+(""+o).replace(/\.(\d*[1-9])0*$/,".$1").replace(/^(-?\d*)$/,"$1.").replace(/^0\./,i[1].length?"0.":".")}if(i=r.match(/^#{1,3},##0(\.?)$/))return c+ce(""+o);if(i=r.match(/^#,##0\.([#0]*0)$/)){return t<0?"-"+Fe(e,r,-t):ce(""+t)+"."+br("0",i[1].length)}if(i=r.match(/^#,#*,#0/))return Fe(e,r.replace(/^#,#*,/,""),t);if(i=r.match(/^([0#]+)(\\?-([0#]+))+$/)){n=N(Fe(e,r.replace(/[\\-]/g,""),t));s=0;return N(N(r.replace(/\\/g,"")).replace(/[0#]/g,function(e){return s<n.length?n.charAt(s++):e==="0"?"0":""}))}if(r.match(we)){n=Fe(e,"##########",t);return"("+n.substr(0,3)+") "+n.substr(3,3)+"-"+n.substr(6)}var f="";if(i=r.match(/^([#0?]+)( ?)\/( ?)([#0?]+)/)){s=Math.min(i[4].length,7);l=J(o,Math.pow(10,s)-1,false);n=""+c;f=De("n",i[1],l[1]);if(f.charAt(f.length-1)==" ")f=f.substr(0,f.length-1)+"0";n+=f+i[2]+"/"+i[3];f=R(l[2],s);if(f.length<i[4].length)f=ye(i[4].substr(i[4].length-f.length))+f;n+=f;return n}if(i=r.match(/^# ([#0?]+)( ?)\/( ?)([#0?]+)/)){s=Math.min(Math.max(i[1].length,i[4].length),7);l=J(o,Math.pow(10,s)-1,true);return c+(l[0]||(l[1]?"":"0"))+" "+(l[1]?I(l[1],s)+i[2]+"/"+i[3]+R(l[2],s):br(" ",2*s+1+i[2].length+i[3].length))}if(i=r.match(/^[#0?]+$/)){n=""+t;if(r.length<=n.length)return n;return ye(r.substr(0,r.length-n.length))+n}if(i=r.match(/^([#0]+)\.([#0]+)$/)){n=""+t.toFixed(Math.min(i[2].length,10)).replace(/([^0])0+$/,"$1");s=n.indexOf(".");var u=r.indexOf(".")-s,h=r.length-n.length-u;return ye(r.substr(0,u)+n+r.substr(r.length-h))}if(i=r.match(/^00,000\.([#0]*0)$/)){return t<0?"-"+Fe(e,r,-t):ce(""+t).replace(/^\d,\d{3}$/,"0$&").replace(/^\d*$/,function(e){return"00,"+(e.length<3?P(0,3-e.length):"")+e})+"."+P(0,i[1].length)}switch(r){case"###,###":;case"##,###":;case"#,###":var p=ce(""+o);return p!=="0"?c+p:"";default:if(r.match(/\.[0#?]*$/))return Fe(e,r.slice(0,r.lastIndexOf(".")),t)+ye(r.slice(r.lastIndexOf(".")));}throw new Error("unsupported format |"+r+"|")}function De(e,r,t){return(t|0)===t?Fe(e,r,t):_e(e,r,t)}function Oe(e){var r=[];var t=false;for(var a=0,n=0;a<e.length;++a)switch(e.charCodeAt(a)){case 34:t=!t;break;case 95:;case 42:;case 92:++a;break;case 59:r[r.length]=e.substr(n,a-n);n=a+1;}r[r.length]=e.substr(n);if(t===true)throw new Error("Format |"+e+"| unterminated string ");return r}var Me=/\[[HhMmSs\u0E0A\u0E19\u0E17]*\]/;function Ne(e){var r=0,t="",a="";while(r<e.length){switch(t=e.charAt(r)){case"G":if(W(e,r))r+=6;r++;break;case'"':for(;e.charCodeAt(++r)!==34&&r<e.length;){}++r;break;case"\\":r+=2;break;case"_":r+=2;break;case"@":++r;break;case"B":;case"b":if(e.charAt(r+1)==="1"||e.charAt(r+1)==="2")return true;case"M":;case"D":;case"Y":;case"H":;case"S":;case"E":;case"m":;case"d":;case"y":;case"h":;case"s":;case"e":;case"g":return true;case"A":;case"a":;case"上":if(e.substr(r,3).toUpperCase()==="A/P")return true;if(e.substr(r,5).toUpperCase()==="AM/PM")return true;if(e.substr(r,5).toUpperCase()==="上午/下午")return true;++r;break;case"[":a=t;while(e.charAt(r++)!=="]"&&r<e.length)a+=e.charAt(r);if(a.match(Me))return true;break;case".":;case"0":;case"#":while(r<e.length&&("0#?.,E+-%".indexOf(t=e.charAt(++r))>-1||t=="\\"&&e.charAt(r+1)=="-"&&"0#".indexOf(e.charAt(r+2))>-1)){}break;case"?":while(e.charAt(++r)===t){}break;case"*":++r;if(e.charAt(r)==" "||e.charAt(r)=="*")++r;break;case"(":;case")":++r;break;case"1":;case"2":;case"3":;case"4":;case"5":;case"6":;case"7":;case"8":;case"9":while(r<e.length&&"0123456789".indexOf(e.charAt(++r))>-1){}break;case" ":++r;break;default:++r;break;}}return false}function Pe(e,r,t,a){var n=[],i="",s=0,l="",o="t",c,f,u;var h="H";while(s<e.length){switch(l=e.charAt(s)){case"G":if(!W(e,s))throw new Error("unrecognized character "+l+" in "+e);n[n.length]={t:"G",v:"General"};s+=7;break;case'"':for(i="";(u=e.charCodeAt(++s))!==34&&s<e.length;)i+=String.fromCharCode(u);n[n.length]={t:"t",v:i};++s;break;case"\\":var p=e.charAt(++s),d=p==="("||p===")"?p:"t";n[n.length]={t:d,v:p};++s;break;case"_":n[n.length]={t:"t",v:" "};s+=2;break;case"@":n[n.length]={t:"T",v:r};++s;break;case"B":;case"b":if(e.charAt(s+1)==="1"||e.charAt(s+1)==="2"){if(c==null){c=K(r,t,e.charAt(s+1)==="2");if(c==null)return""}n[n.length]={t:"X",v:e.substr(s,2)};o=l;s+=2;break};case"M":;case"D":;case"Y":;case"H":;case"S":;case"E":l=l.toLowerCase();case"m":;case"d":;case"y":;case"h":;case"s":;case"e":;case"g":if(r<0)return"";if(c==null){c=K(r,t);if(c==null)return""}i=l;while(++s<e.length&&e.charAt(s).toLowerCase()===l)i+=l;if(l==="m"&&o.toLowerCase()==="h")l="M";if(l==="h")l=h;n[n.length]={t:l,v:i};o=l;break;case"A":;case"a":;case"上":var m={t:l,v:l};if(c==null)c=K(r,t);if(e.substr(s,3).toUpperCase()==="A/P"){if(c!=null)m.v=c.H>=12?"P":"A";m.t="T";h="h";s+=3}else if(e.substr(s,5).toUpperCase()==="AM/PM"){if(c!=null)m.v=c.H>=12?"PM":"AM";m.t="T";s+=5;h="h"}else if(e.substr(s,5).toUpperCase()==="上午/下午"){if(c!=null)m.v=c.H>=12?"下午":"上午";m.t="T";s+=5;h="h"}else{m.t="t";++s}if(c==null&&m.t==="T")return"";n[n.length]=m;o=l;break;case"[":i=l;while(e.charAt(s++)!=="]"&&s<e.length)i+=e.charAt(s);if(i.slice(-1)!=="]")throw'unterminated "[" block: |'+i+"|";if(i.match(Me)){if(c==null){c=K(r,t);if(c==null)return""}n[n.length]={t:"Z",v:i.toLowerCase()};o=i.charAt(1)}else if(i.indexOf("$")>-1){i=(i.match(/\$([^-\[\]]*)/)||[])[1]||"$";if(!Ne(e))n[n.length]={t:"t",v:i}}break;case".":if(c!=null){i=l;while(++s<e.length&&(l=e.charAt(s))==="0")i+=l;n[n.length]={t:"s",v:i};break};case"0":;case"#":i=l;while(++s<e.length&&"0#?.,E+-%".indexOf(l=e.charAt(s))>-1)i+=l;n[n.length]={t:"n",v:i};break;case"?":i=l;while(e.charAt(++s)===l)i+=l;n[n.length]={t:l,v:i};o=l;break;case"*":++s;if(e.charAt(s)==" "||e.charAt(s)=="*")++s;break;case"(":;case")":n[n.length]={t:a===1?"t":l,v:l};++s;break;case"1":;case"2":;case"3":;case"4":;case"5":;case"6":;case"7":;case"8":;case"9":i=l;while(s<e.length&&"0123456789".indexOf(e.charAt(++s))>-1)i+=e.charAt(s);n[n.length]={t:"D",v:i};break;case" ":n[n.length]={t:l,v:l};++s;break;case"$":n[n.length]={t:"t",v:"$"};++s;break;default:if(",$-+/():!^&'~{}<>=€acfijklopqrtuvwxzP".indexOf(l)===-1)throw new Error("unrecognized character "+l+" in "+e);n[n.length]={t:"t",v:l};++s;break;}}var v=0,g=0,b;for(s=n.length-1,o="t";s>=0;--s){switch(n[s].t){case"h":;case"H":n[s].t=h;o="h";if(v<1)v=1;break;case"s":if(b=n[s].v.match(/\.0+$/))g=Math.max(g,b[0].length-1);if(v<3)v=3;case"d":;case"y":;case"M":;case"e":o=n[s].t;break;case"m":if(o==="s"){n[s].t="M";if(v<2)v=2}break;case"X":break;case"Z":if(v<1&&n[s].v.match(/[Hh]/))v=1;if(v<2&&n[s].v.match(/[Mm]/))v=2;if(v<3&&n[s].v.match(/[Ss]/))v=3;}}switch(v){case 0:break;case 1:if(c.u>=.5){c.u=0;++c.S}if(c.S>=60){c.S=0;++c.M}if(c.M>=60){c.M=0;++c.H}break;case 2:if(c.u>=.5){c.u=0;++c.S}if(c.S>=60){c.S=0;++c.M}break;}var w="",y;for(s=0;s<n.length;++s){switch(n[s].t){case"t":;case"T":;case" ":;case"D":break;case"X":n[s].v="";n[s].t=";";break;case"d":;case"m":;case"y":;case"h":;case"H":;case"M":;case"s":;case"e":;case"b":;case"Z":n[s].v=oe(n[s].t.charCodeAt(0),n[s].v,c,g);n[s].t="t";break;case"n":;case"?":y=s+1;while(n[y]!=null&&((l=n[y].t)==="?"||l==="D"||(l===" "||l==="t")&&n[y+1]!=null&&(n[y+1].t==="?"||n[y+1].t==="t"&&n[y+1].v==="/")||n[s].t==="("&&(l===" "||l==="n"||l===")")||l==="t"&&(n[y].v==="/"||n[y].v===" "&&n[y+1]!=null&&n[y+1].t=="?"))){n[s].v+=n[y].v;n[y]={v:"",t:";"};++y}w+=n[s].v;s=y-1;break;case"G":n[s].t="t";n[s].v=se(r,t);break;}}var k="",x,S;if(w.length>0){if(w.charCodeAt(0)==40){x=r<0&&w.charCodeAt(0)===45?-r:r;S=De("n",w,x)}else{x=r<0&&a>1?-r:r;S=De("n",w,x);if(x<0&&n[0]&&n[0].t=="t"){S=S.substr(1);n[0].v="-"+n[0].v}}y=S.length-1;var C=n.length;for(s=0;s<n.length;++s)if(n[s]!=null&&n[s].t!="t"&&n[s].v.indexOf(".")>-1){C=s;break}var _=n.length;if(C===n.length&&S.indexOf("E")===-1){for(s=n.length-1;s>=0;--s){if(n[s]==null||"n?".indexOf(n[s].t)===-1)continue;if(y>=n[s].v.length-1){y-=n[s].v.length;n[s].v=S.substr(y+1,n[s].v.length)}else if(y<0)n[s].v="";else{n[s].v=S.substr(0,y+1);y=-1}n[s].t="t";_=s}if(y>=0&&_<n.length)n[_].v=S.substr(0,y+1)+n[_].v}else if(C!==n.length&&S.indexOf("E")===-1){y=S.indexOf(".")-1;for(s=C;s>=0;--s){if(n[s]==null||"n?".indexOf(n[s].t)===-1)continue;f=n[s].v.indexOf(".")>-1&&s===C?n[s].v.indexOf(".")-1:n[s].v.length-1;k=n[s].v.substr(f+1);for(;f>=0;--f){if(y>=0&&(n[s].v.charAt(f)==="0"||n[s].v.charAt(f)==="#"))k=S.charAt(y--)+k}n[s].v=k;n[s].t="t";_=s}if(y>=0&&_<n.length)n[_].v=S.substr(0,y+1)+n[_].v;y=S.indexOf(".")+1;for(s=C;s<n.length;++s){if(n[s]==null||"n?(".indexOf(n[s].t)===-1&&s!==C)continue;f=n[s].v.indexOf(".")>-1&&s===C?n[s].v.indexOf(".")+1:0;k=n[s].v.substr(0,f);for(;f<n[s].v.length;++f){if(y<S.length)k+=S.charAt(y++)}n[s].v=k;n[s].t="t";_=s}}}for(s=0;s<n.length;++s)if(n[s]!=null&&"n?".indexOf(n[s].t)>-1){x=a>1&&r<0&&s>0&&n[s-1].v==="-"?-r:r;n[s].v=De(n[s].t,n[s].v,x);n[s].t="t"}var A="";for(s=0;s!==n.length;++s)if(n[s]!=null)A+=n[s].v;return A}var Ie=/\[(=|>[=]?|<[>=]?)(-?\d+(?:\.\d*)?)\]/;function Re(e,r){if(r==null)return false;var t=parseFloat(r[2]);switch(r[1]){case"=":if(e==t)return true;break;case">":if(e>t)return true;break;case"<":if(e<t)return true;break;case"<>":if(e!=t)return true;break;case">=":if(e>=t)return true;break;case"<=":if(e<=t)return true;break;}return false}function Le(e,r){var t=Oe(e);var a=t.length,n=t[a-1].indexOf("@");if(a<4&&n>-1)--a;if(t.length>4)throw new Error("cannot find right format for |"+t.join("|")+"|");if(typeof r!=="number")return[4,t.length===4||n>-1?t[t.length-1]:"@"];switch(t.length){case 1:t=n>-1?["General","General","General",t[0]]:[t[0],t[0],t[0],"@"];break;case 2:t=n>-1?[t[0],t[0],t[0],t[1]]:[t[0],t[1],t[0],"@"];break;case 3:t=n>-1?[t[0],t[1],t[0],t[2]]:[t[0],t[1],t[2],"@"];break;case 4:break;}var i=r>0?t[0]:r<0?t[1]:t[2];if(t[0].indexOf("[")===-1&&t[1].indexOf("[")===-1)return[a,i];if(t[0].match(/\[[=<>]/)!=null||t[1].match(/\[[=<>]/)!=null){var s=t[0].match(Ie);var l=t[1].match(Ie);return Re(r,s)?[a,t[0]]:Re(r,l)?[a,t[1]]:[a,t[s!=null&&l!=null?2:1]]}return[a,i]}function Be(e,r,t){if(t==null)t={};var a="";switch(typeof e){case"string":if(e=="m/d/yy"&&t.dateNF)a=t.dateNF;else a=e;break;case"number":if(e==14&&t.dateNF)a=t.dateNF;else a=(t.table!=null?t.table:X)[e];if(a==null)a=t.table&&t.table[G[e]]||X[G[e]];if(a==null)a=Y[e]||"General";break;}if(W(a,0))return se(r,t);if(r instanceof Date)r=ee(r,t.date1904);var n=Le(a,r);if(W(n[1]))return se(r,t);if(r===true)r="TRUE";else if(r===false)r="FALSE";else if(r===""||r==null)return"";return Pe(n[1],r,t,n[0])}function $e(e,r){if(typeof r!="number"){r=+r||-1;for(var t=0;t<392;++t){if(X[t]==undefined){if(r<0)r=t;continue}if(X[t]==e){r=t;break}}if(r<0)r=391}X[r]=e;return r}function ze(e){for(var r=0;r!=392;++r)if(e[r]!==undefined)$e(e[r],r)}function Ue(){X=V()}var We={format:Be,load:$e,_table:X,load_table:ze,parse_date_code:K,is_date:Ne,get_table:function _c(){return We._table=X}};var je={5:'"$"#,##0_);\\("$"#,##0\\)',6:'"$"#,##0_);[Red]\\("$"#,##0\\)',7:'"$"#,##0.00_);\\("$"#,##0.00\\)',8:'"$"#,##0.00_);[Red]\\("$"#,##0.00\\)',23:"General",24:"General",25:"General",26:"General",27:"m/d/yy",28:"m/d/yy",29:"m/d/yy",30:"m/d/yy",31:"m/d/yy",32:"h:mm:ss",33:"h:mm:ss",34:"h:mm:ss",35:"h:mm:ss",36:"m/d/yy",41:'_(* #,##0_);_(* (#,##0);_(* "-"_);_(@_)',42:'_("$"* #,##0_);_("$"* (#,##0);_("$"* "-"_);_(@_)',43:'_(* #,##0.00_);_(* (#,##0.00);_(* "-"??_);_(@_)',44:'_("$"* #,##0.00_);_("$"* (#,##0.00);_("$"* "-"??_);_(@_)',50:"m/d/yy",51:"m/d/yy",52:"m/d/yy",53:"m/d/yy",54:"m/d/yy",55:"m/d/yy",56:"m/d/yy",57:"m/d/yy",58:"m/d/yy",59:"0",60:"0.00",61:"#,##0",62:"#,##0.00",63:'"$"#,##0_);\\("$"#,##0\\)',64:'"$"#,##0_);[Red]\\("$"#,##0\\)',65:'"$"#,##0.00_);\\("$"#,##0.00\\)',66:'"$"#,##0.00_);[Red]\\("$"#,##0.00\\)',67:"0%",68:"0.00%",69:"# ?/?",70:"# ??/??",71:"m/d/yy",72:"m/d/yy",73:"d-mmm-yy",74:"d-mmm",75:"mmm-yy",76:"h:mm",77:"h:mm:ss",78:"m/d/yy h:mm",79:"mm:ss",80:"[h]:mm:ss",81:"mmss.0"};var He=/[dD]+|[mM]+|[yYeE]+|[Hh]+|[Ss]+/g;function Ve(e){var r=typeof e=="number"?X[e]:e;r=r.replace(He,"(\\d+)");return new RegExp("^"+r+"$")}function Xe(e,r,t){var a=-1,n=-1,i=-1,s=-1,l=-1,o=-1;(r.match(He)||[]).forEach(function(e,r){var c=parseInt(t[r+1],10);switch(e.toLowerCase().charAt(0)){case"y":a=c;break;case"d":i=c;break;case"h":s=c;break;case"s":o=c;break;case"m":if(s>=0)l=c;else n=c;break;}});if(o>=0&&l==-1&&n>=0){l=n;n=-1}var c=(""+(a>=0?a:(new Date).getFullYear())).slice(-4)+"-"+("00"+(n>=1?n:1)).slice(-2)+"-"+("00"+(i>=1?i:1)).slice(-2);if(c.length==7)c="0"+c;if(c.length==8)c="20"+c;var f=("00"+(s>=0?s:0)).slice(-2)+":"+("00"+(l>=0?l:0)).slice(-2)+":"+("00"+(o>=0?o:0)).slice(-2);if(s==-1&&l==-1&&o==-1)return c;if(a==-1&&n==-1&&i==-1)return f;return c+"T"+f}var Ge=function(){var e={};e.version="1.2.0";function r(){var e=0,r=new Array(256);for(var t=0;t!=256;++t){e=t;e=e&1?-306674912^e>>>1:e>>>1;e=e&1?-306674912^e>>>1:e>>>1;e=e&1?-306674912^e>>>1:e>>>1;e=e&1?-306674912^e>>>1:e>>>1;e=e&1?-306674912^e>>>1:e>>>1;e=e&1?-306674912^e>>>1:e>>>1;e=e&1?-306674912^e>>>1:e>>>1;e=e&1?-306674912^e>>>1:e>>>1;r[t]=e}return typeof Int32Array!=="undefined"?new Int32Array(r):r}var t=r();function a(e){var r=0,t=0,a=0,n=typeof Int32Array!=="undefined"?new Int32Array(4096):new Array(4096);for(a=0;a!=256;++a)n[a]=e[a];for(a=0;a!=256;++a){t=e[a];for(r=256+a;r<4096;r+=256)t=n[r]=t>>>8^e[t&255]}var i=[];for(a=1;a!=16;++a)i[a-1]=typeof Int32Array!=="undefined"?n.subarray(a*256,a*256+256):n.slice(a*256,a*256+256);return i}var n=a(t);var i=n[0],s=n[1],l=n[2],o=n[3],c=n[4];var f=n[5],u=n[6],h=n[7],p=n[8],d=n[9];var m=n[10],v=n[11],g=n[12],b=n[13],w=n[14];function y(e,r){var a=r^-1;for(var n=0,i=e.length;n<i;)a=a>>>8^t[(a^e.charCodeAt(n++))&255];return~a}function k(e,r){var a=r^-1,n=e.length-15,y=0;for(;y<n;)a=w[e[y++]^a&255]^b[e[y++]^a>>8&255]^g[e[y++]^a>>16&255]^v[e[y++]^a>>>24]^m[e[y++]]^d[e[y++]]^p[e[y++]]^h[e[y++]]^u[e[y++]]^f[e[y++]]^c[e[y++]]^o[e[y++]]^l[e[y++]]^s[e[y++]]^i[e[y++]]^t[e[y++]];n+=15;while(y<n)a=a>>>8^t[(a^e[y++])&255];return~a}function x(e,r){var a=r^-1;for(var n=0,i=e.length,s=0,l=0;n<i;){
@@ -556,6 +557,30 @@ function tactechToast(msg){
       <div id="players-layer"></div>
     </div>
   </div>
+  <aside id="drc-panel" aria-label="Drill bilgileri">
+    <div class="drc-banner">Bu antrenman için düzenleniyor</div>
+    <div class="drc-top"><b id="drc-title">Yeni drill</b><button type="button" class="drc-fold" id="drc-fold" aria-label="Paneli daralt" title="Paneli daralt">›</button></div>
+    <div class="drc-body">
+      <label class="drc-l">SAHA</label>
+      <div class="drc-seg" id="drc-field" role="group" aria-label="Saha"><button type="button" data-f="full">Tam saha</button><button type="button" data-f="half">Yarım saha</button><button type="button" data-f="empty">Boş</button></div>
+      <label class="drc-l" for="drc-name">DRİLL ADI</label>
+      <input type="text" id="drc-name" maxlength="80" placeholder="Örn. Rondo 4v2" autocomplete="off">
+      <label class="drc-l" for="drc-desc">AÇIKLAMA</label>
+      <textarea id="drc-desc" rows="5" placeholder="Kurallar, amaç, koçluk notları"></textarea>
+      <label class="drc-l">ETİKET</label>
+      <div class="drc-tags" id="drc-tags"></div>
+      <label class="drc-l" for="drc-folder">KLASÖR</label>
+      <select id="drc-folder"></select>
+      <div class="drc-err" id="drc-err"></div>
+    </div>
+    <div class="drc-act"><button type="button" class="drc-b" id="drc-cancel">İptal</button><button type="button" class="drc-b pri" id="drc-save">Kaydet</button></div>
+  </aside>
+  <aside id="as-panel" aria-label="Oyuncu atama">
+    <div class="as-top"><b id="as-title"></b><small id="as-sub"></small></div>
+    <div class="as-hint" id="as-hint"></div>
+    <div class="as-list" id="as-list"></div>
+    <div class="as-act"><button type="button" class="drc-b" id="as-clear">Atamaları temizle</button><button type="button" class="drc-b" id="as-edit">Drill'i düzenle</button><button type="button" class="drc-b pri" id="as-done">Bitti</button></div>
+  </aside>
   <div class="bench-panel away" id="bench-away">
     <div class="bench-title">✈️ Yedekler</div>
     <div class="bench-list" id="bench-list-away"></div>
@@ -582,11 +607,13 @@ function tactechToast(msg){
       <div class="tp-label">Hız <span id="anim-speed-lbl">1x</span></div>
       <input type="range" id="anim-speed" class="tp-slider" min="0.5" max="3" step="0.25" value="1" title="Oynatma hızı" oninput="animSpeed=+this.value;document.getElementById('anim-speed-lbl').textContent=this.value+'x'">
       <button class="tp-btn small" id="anim-ball" onclick="toggleBall()" title="Top ekle / kaldır">⚽</button>
-      <button class="tp-btn small" onclick="openAnimIO()" title="Animasyonu kaydet / yükle">💾</button>
-      <button class="tp-btn small" onclick="openAnimExport()" title="GIF olarak dışa aktar">🎞️</button>
-      <button class="tp-btn small" onclick="animReset()" title="Tüm kareleri sil, baştan başla" style="color:#c05050;">↺</button>
+      <button class="tp-btn small" id="anim-io-btn" onclick="openAnimIO()" title="Animasyonu kaydet / yükle">💾</button>
+      <button class="tp-btn small" id="anim-gif-btn" onclick="openAnimExport()" title="GIF olarak dışa aktar">🎞️</button>
+      <button class="tp-btn small" id="anim-reset-btn" onclick="animReset()" title="Tüm kareleri sil, baştan başla" style="color:#c05050;">↺</button>
     </div>
     <div class="tp-sep"></div>
+    <div id="drc-people"><button class="tp-btn" id="drc-add-player" onclick="dkAdd('player')" title="Oyuncu ekle" aria-label="Oyuncu ekle">👕</button><button class="tp-btn" id="drc-add-gk" onclick="dkAdd('gk')" title="Kaleci ekle" aria-label="Kaleci ekle">🧤</button><button class="tp-btn" id="drc-add-coach" onclick="dkAdd('coach')" title="Hoca ekle" aria-label="Hoca ekle">📋</button></div>
+    <button class="tp-btn" id="drc-ball" onclick="toggleBall()" title="Top ekle / kaldır">⚽</button>
     <button class="tp-btn" id="btn-equip" onclick="toggleEqPal(event)" title="Malzemeler (koni, kale, merdiven...)">🧰</button>
     <button class="tp-btn" onclick="exportPNG()" title="PNG İndir">📤</button>
     <button class="tp-btn tp-home" id="btn-main-menu" onclick="openScreen('menu')" title="Ana menü" aria-label="Ana menü"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"></path><path d="M5 10v10h14V10"></path></svg></button>
@@ -618,12 +645,19 @@ function tactechToast(msg){
   <div class="ctx-item del" onclick="eqDelete()">🗑️ Sil</div>
 </div>
 <div class="context-menu" id="ctx-menu">
-  <div class="ctx-item" onclick="ctxEdit()">✏️ Düzenle</div>
+  <div class="ctx-item" id="ctx-edit" onclick="ctxEdit()">✏️ Düzenle</div>
   <div id="ctx-vest" style="display:none;">
+    <div class="ctx-sub" id="ctx-vest-t">🦺 Yelek giydir</div>
     <div class="eq-colors" id="ctx-vest-colors"></div>
-    <div class="ctx-item" onclick="ctxVestOff()">🦺 Yeleği çıkar</div>
+    <div class="ctx-item" id="ctx-vest-off" onclick="ctxVestOff()">🦺 Yeleği çıkar</div>
   </div>
-  <div class="ctx-item del" onclick="ctxDel()">🗑️ Sil</div>
+  <div id="ctx-dk" style="display:none;">
+    <div class="ctx-sub">🎨 Rengi değiştir</div>
+    <div class="eq-colors" id="ctx-dk-colors"></div>
+    <div class="eq-rot"><div class="ctx-item" onclick="dkScale(-1)">➖ Küçült</div><div class="ctx-item" onclick="dkScale(1)">➕ Büyüt</div></div>
+    <div class="ctx-item" onclick="dkCopy()">⧉ Kopyala</div>
+  </div>
+  <div class="ctx-item del" id="ctx-del" onclick="ctxDel()">🗑️ Sil</div>
 </div>
 
 <!-- Quick Edit -->
@@ -958,6 +992,7 @@ const _ttLogoImg=new Image(); _ttLogoImg.src=TT_LOGO;
 
 // pitch
 let pitchW=0, pitchH=0;
+let pitchMode='full'; // full | half | empty (drill oluşturucu)
 function stMsg(t){ const e=document.getElementById('st-anim'); if(e) e.textContent=t; if(window.mmToast) mmToast(t); }
 let players=[];
 let goalsSwapped=false, _swapBusy=false;
@@ -1082,6 +1117,22 @@ function buildPitch(w,h) {
   svg.setAttribute('width',w); svg.setAttribute('height',h); svg.setAttribute('viewBox',`0 0 ${w} ${h}`);
   const px=x=>x/105*w, py=y=>y/68*h, lw=1.5, col='rgba(255,255,255,0.75)';
   let s='';
+  if(pitchMode==='empty'){ for(let i=0;i<10;i++) s+=`<rect x="${i*w/10}" y="0" width="${w/10}" height="${h}" fill="${i%2===0?'#1d7a35':'#1a6b2f'}"/>`; svg.innerHTML=s; return; }
+  if(pitchMode==='half'){
+    // Yarım saha: kale üstte, orta çizgi altta (68 m genişlik × 52,5 m derinlik)
+    const k=h/55, ox=(w-68*k)/2, oy=2.5*k, X=m=>ox+m*k, Y=m=>oy+m*k;
+    for(let i=0;i<10;i++) s+=`<rect x="0" y="${i*h/10}" width="${w}" height="${h/10}" fill="${i%2===0?'#1d7a35':'#1a6b2f'}"/>`;
+    const st=`fill="none" stroke="${col}" stroke-width="${lw}"`;
+    s+=`<rect x="${X(0)}" y="${Y(0)}" width="${68*k}" height="${52.5*k}" ${st}/>`
+      +`<rect x="${X(13.84)}" y="${Y(0)}" width="${40.32*k}" height="${16.5*k}" ${st}/>`
+      +`<rect x="${X(24.84)}" y="${Y(0)}" width="${18.32*k}" height="${5.5*k}" ${st}/>`
+      +`<rect x="${X(30.34)}" y="${Y(-2)}" width="${7.32*k}" height="${2*k}" ${st}/>`
+      +`<circle cx="${X(34)}" cy="${Y(11)}" r="${0.4*k}" fill="${col}"/>`
+      +`<path d="M${X(26.5)} ${Y(16.5)} A${9.15*k} ${9.15*k} 0 0 0 ${X(41.5)} ${Y(16.5)}" ${st}/>`
+      +`<path d="M${X(34-9.15)} ${Y(52.5)} A${9.15*k} ${9.15*k} 0 0 1 ${X(34+9.15)} ${Y(52.5)}" ${st}/>`
+      +`<circle cx="${X(34)}" cy="${Y(52.5)}" r="${0.5*k}" fill="${col}"/>`;
+    svg.innerHTML=s; return;
+  }
   for(let i=0;i<10;i++) s+=`<rect x="${i*w/10}" y="0" width="${w/10}" height="${h}" fill="${i%2===0?'#1d7a35':'#1a6b2f'}"/>`;
   svg.innerHTML=s+`
     <rect x="${px(0)}" y="${py(0)}" width="${px(105)}" height="${py(68)}" fill="none" stroke="${col}" stroke-width="${lw}"/>
@@ -3010,10 +3061,18 @@ function renderPlayers() {
     const cfg = TC[p.side] || {};
     const hideNum  = cfg.hideNums  || false;
     const hideName = cfg.hideNames || false;
+    if(p.dk){ // drill kişisi: isimsiz, numarasız (oyuncu / kaleci / hoca)
+      const sz=38, gk=p.dk==='gk', sc=p.scale||1;
+      el.classList.add('dk-token','dk-'+p.dk); el.title=p.dk==='gk'?'Kaleci':p.dk==='coach'?'Hoca':'Oyuncu';
+      let lt=p.dk==='gk'?'G':p.dk==='coach'?'C':'';
+      const asg=(window.drcAssigning&&drcAssigning())?drcAssignInfo(p.id):null;
+      if(window.drcAssigning&&drcAssigning()){ if(p.dk==='coach') el.classList.add('as-na'); else el.classList.add(asg?'as-on':'as-empty'); if(drcAssignSel()===p.id) el.classList.add('as-sel'); if(asg) lt=asg.num!==''&&asg.num!=null?String(asg.num):''; }
+      el.innerHTML=`<div class="jersey-wrap" style="position:relative;${sc!==1?'transform:scale('+sc+');':''}">${makeJerseySVG(p.color, p.color, 'solid', gk, sz, null)}${p.vest?'<div class="vest-on">'+vestSVG(p.vest,sz)+'</div>':''}${lt?'<div class="jersey-num dk-l" style="color:'+_dkText(p.color)+'">'+lt+'</div>':''}</div>${asg?'<div class="player-name-label">'+String(asg.name||'').replace(/[<>&"]/g,'')+'</div>':''}`;
+    } else
     el.innerHTML=`<div class="jersey-wrap" style="position:relative;">${p.gen?'<span class="pl-gen">'+genLabel(p.gen)+'</span>':''}${jerseyHtml}${p.vest?'<div class="vest-on">'+vestSVG(p.vest,38)+'</div>':''}<div class="jersey-num" style="${hideNum?'display:none;':''}">${label}</div>${subInBadge}${subOutBadge}</div>${hideName?'':'<div class="player-name-label">'+dispName+'</div>'}`;
     if(linkSel && linkSel.pids.includes(p.id)){ el.classList.add('link-pick'); el.dataset.lord=linkSel.pids.indexOf(p.id)+1; }
-    el.addEventListener('pointerdown',e=>{if(linkSel){e.stopPropagation();e.preventDefault();linkTap(p);return;} if(tool==='select')startDrag(e,p);});
-    el.addEventListener('contextmenu',e=>{e.preventDefault(); if(e.pointerType==='touch'||(e.sourceCapabilities&&e.sourceCapabilities.firesTouchEvents)) return; showCtx(e,p);});
+    el.addEventListener('pointerdown',e=>{if(linkSel){e.stopPropagation();e.preventDefault();linkTap(p);return;} if(p.dk&&window.drcAssigning&&drcAssigning()){e.stopPropagation();e.preventDefault();drcSlotTap(p,e);return;} if(tool==='select')startDrag(e,p);});
+    el.addEventListener('contextmenu',e=>{e.preventDefault(); if(p.dk&&window.drcAssigning&&drcAssigning()){ drcSlotMenu(p,e.clientX,e.clientY); return; } if(e.pointerType==='touch'||(e.sourceCapabilities&&e.sourceCapabilities.firesTouchEvents)) return; showCtx(e,p);});
     // Drop target: sahada oyuncu üzerine yedek bırakılabilir
     el.addEventListener('dragover', e=>{ e.preventDefault(); el.classList.add('drag-over-player'); });
     el.addEventListener('dragleave',()=>{ el.classList.remove('drag-over-player'); });
@@ -3039,6 +3098,7 @@ let _lastTap={id:null,t:0};
 function startDrag(e,player) {
   e.stopPropagation();
   if(animPlaying||_swapBusy) return;
+  if(window.drcAssigning && drcAssigning()) return; // oyuncu atamada drill değiştirilemez
   if(animMode && animPause){ animSettle(); _moveTokens(); }
   selectedP=player;
   let dragging=false;
@@ -3353,11 +3413,32 @@ function renderEquipScene(ctx,w,h,imgs){
 // ============================================================
 function ctxVestOff(){ document.getElementById('ctx-menu').classList.remove('show'); if(ctxP){ delete ctxP.vest; renderPlayers(); } }
 function _ctxVestUI(player){
-  const box=document.getElementById('ctx-vest'); box.style.display=player.vest?'block':'none'; if(!player.vest) return;
+  const dk=!!player.dk, box=document.getElementById('ctx-vest');
+  document.getElementById('ctx-edit').style.display=dk?'none':'';
+  document.getElementById('ctx-del').textContent=dk?'🗑️ Tahtadan kaldır':'🗑️ Sil';
+  document.getElementById('ctx-dk').style.display=dk?'block':'none';
+  document.getElementById('ctx-vest-t').style.display=dk?'':'none';
+  document.getElementById('ctx-vest-off').style.display=player.vest?'':'none';
+  if(dk) _ctxDkColors(player);
+  box.style.display=(player.vest||dk)?'block':'none'; if(!player.vest&&!dk) return;
   const cw=document.getElementById('ctx-vest-colors'); cw.innerHTML='';
   VEST_COLORS.forEach(c=>{ const d=document.createElement('span'); d.style.background=c; d.title='Yelek rengi'; if(player.vest===c) d.className='on';
     d.onclick=ev=>{ ev.stopPropagation(); player.vest=c; renderPlayers(); _ctxVestUI(player); }; cw.appendChild(d); });
 }
+const DK_COLORS=['#e84040','#2f7de1','#3fbf4a','#ffd21f','#ff7a1a','#9b7bff','#f5bc30','#f0f0f0','#263238'];
+function _ctxDkColors(player){ const cw=document.getElementById('ctx-dk-colors'); cw.innerHTML='';
+  DK_COLORS.forEach(c=>{ const d=document.createElement('span'); d.style.background=c; d.title='Renk'; if(player.color===c) d.className='on';
+    d.onclick=ev=>{ ev.stopPropagation(); player.color=c; renderPlayers(); _ctxDkColors(player); }; cw.appendChild(d); }); }
+function _dkText(c){ const h=String(c||'').replace('#',''); if(h.length<6) return '#fff'; const r=parseInt(h.substr(0,2),16),g=parseInt(h.substr(2,2),16),b=parseInt(h.substr(4,2),16); return (r*299+g*587+b*114)/1000>150?'#111':'#fff'; }
+function dkScale(dir){ if(!ctxP||!ctxP.dk) return; ctxP.scale=Math.round(Math.max(0.6,Math.min(1.8,(ctxP.scale||1)+dir*0.2))*10)/10; renderPlayers(); }
+function dkNextId(){ let n=1; players.forEach(p=>{ const m=/^y(\d+)$/.exec(p.id); if(m&&+m[1]>=n) n=+m[1]+1; }); return 'y'+n; }
+function dkAdd(kind){
+  const n=players.filter(p=>p.dk).length, off=(n%8)*6;
+  const p={id:dkNextId(), dk:kind, side:'home', num:'', name:'', x:Math.min(90,44+off), y:Math.min(90,44+off), color:kind==='gk'?'#f5bc30':kind==='coach'?'#263238':'#e84040', scale:1, isGK:kind==='gk'};
+  players.push(p); renderPlayers(); if(typeof updateStatus==='function') updateStatus(); return p;
+}
+function dkCopy(){ document.getElementById('ctx-menu').classList.remove('show'); if(!ctxP||!ctxP.dk) return;
+  const q=JSON.parse(JSON.stringify(ctxP)); q.id=dkNextId(); q.x=Math.min(96,ctxP.x+3); q.y=Math.min(96,ctxP.y+3); players.push(q); renderPlayers(); }
 function showCtx(e,player){ ctxP=player; eqHideMenu(); _ctxVestUI(player); const m=document.getElementById('ctx-menu'); m.style.left=e.clientX+'px'; m.style.top=e.clientY+'px'; m.classList.add('show');
   const r=m.getBoundingClientRect();
   if(r.right>window.innerWidth-4) m.style.left=Math.max(4,window.innerWidth-r.width-4)+'px';
@@ -4208,6 +4289,244 @@ if('serviceWorker' in navigator && location.protocol.startsWith('http') && !wind
 
 <!-- ANA MENÜ (tahtanın önünde ayrı ekran; tahta hiç değişmez, sadece arkada kalır) -->
 <style>
+#screen-ap{position:fixed;inset:0;z-index:2500;background:#0f1a10;color:#c8e6c9;font-family:'DM Sans',sans-serif;display:none;flex-direction:column}
+#screen-ap.show{display:flex}
+.ap-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;border-bottom:1px solid #22331f;flex:none}
+.ap-btn{min-height:48px;min-width:48px;padding:0 14px;border-radius:12px;border:1.5px solid #2a3d2b;background:#141e15;color:#e8f5e9;font:600 15px 'DM Sans',sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer}
+.ap-btn:hover{border-color:#7fff5a}
+.ap-btn.ap-ic{font-size:26px;padding:0;width:48px}
+.ap-nav{display:flex;align-items:center;gap:8px}
+.ap-title{min-width:190px;text-align:center;line-height:1.2}
+.ap-title b{display:block;font-size:20px;color:#fff}
+.ap-title small{font-size:12px;color:#8fb592}
+.ap-right{display:flex;align-items:center;gap:10px}
+.ap-seg{display:flex;border:1.5px solid #2a3d2b;border-radius:12px;overflow:hidden}
+.ap-seg button{min-height:48px;min-width:84px;border:none;background:#141e15;color:#c8e6c9;font:600 15px 'DM Sans',sans-serif;cursor:pointer}
+.ap-seg button.on{background:#7fff5a;color:#0e1f10}
+.ap-body{flex:1;min-height:0;display:flex;flex-direction:column;padding:12px 20px 16px}
+.ap-wd{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin-bottom:6px;flex:none}
+.ap-wd span{text-align:center;font-size:12px;letter-spacing:1px;color:#7a9a7c;font-weight:600}
+.ap-month{flex:1;min-height:0;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));grid-auto-rows:minmax(0,1fr);gap:6px}
+.ap-day{position:relative;border:1px solid #22331f;background:#121b13;border-radius:10px;padding:6px 8px;text-align:left;color:#c8e6c9;font:600 14px 'DM Sans',sans-serif;cursor:pointer;display:flex;flex-direction:column;align-items:stretch;min-height:48px;overflow:hidden}
+.ap-day:hover{border-color:#3d5a40}
+.ap-day.out{opacity:.38}
+.ap-day.wkend .ap-dn{color:#a9c4ab}
+.ap-day.today{border:2px solid #7fff5a;background:#16241a}
+.ap-day.today .ap-dn{background:#7fff5a;color:#0e1f10;border-radius:99px;padding:0 7px;align-self:flex-start}
+.ap-dn{font-size:14px}
+.ap-week{flex:1;min-height:0;display:flex;flex-direction:column;border:1px solid #22331f;border-radius:12px;overflow:hidden;background:#121b13}
+.ap-wh{display:grid;grid-template-columns:56px repeat(7,minmax(0,1fr));flex:none;border-bottom:1px solid #22331f;background:#0f1a10}
+.ap-wh button{min-height:52px;border:none;border-left:1px solid #1c2a1d;background:none;color:#c8e6c9;font:600 13px 'DM Sans',sans-serif;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.ap-wh button b{font-size:18px;color:#fff}
+.ap-wh button.today b{background:#7fff5a;color:#0e1f10;border-radius:99px;padding:0 8px}
+.ap-wh button.wkend{color:#a9c4ab}
+.ap-ws{flex:1;min-height:0;overflow-y:auto;position:relative;-webkit-overflow-scrolling:touch}
+.ap-wg{display:grid;grid-template-columns:56px repeat(7,minmax(0,1fr));position:relative}
+.ap-hr{height:56px;box-sizing:border-box;border-top:1px solid #1c2a1d;font-size:11px;color:#7a9a7c;text-align:right;padding:2px 8px 0 0}
+.ap-slot{height:56px;box-sizing:border-box;border-top:1px solid #1c2a1d;border-left:1px solid #1c2a1d;background:none;border-right:none;border-bottom:none;padding:0;cursor:pointer;display:block;width:100%}
+.ap-slot:hover{background:#16241a}
+.ap-slot.today{background:rgba(127,255,90,.04)}
+.ap-slot.off{background:rgba(0,0,0,.18)}
+.ap-now{position:absolute;height:2px;background:#ff5a5a;pointer-events:none;z-index:2}
+.ap-now::before{content:'';position:absolute;left:-5px;top:-4px;width:10px;height:10px;border-radius:50%;background:#ff5a5a}
+/* DRİLL OLUŞTURUCU (tahta drill kipinde) */
+body.drill-mode #drc-panel{display:flex}
+body.drill-mode #drc-ball{display:flex}
+body.drill-mode #btn-home-team,body.drill-mode #btn-away-team,body.drill-mode #btn-swap,body.drill-mode #btn-links,body.drill-mode #anim-io-btn,body.drill-mode #anim-ball,body.drill-mode #btn-main-menu,body.drill-mode .bench-panel,body.drill-mode .team-badge,body.drill-mode #link-panel{display:none!important}
+#drc-panel{width:270px;flex:none;flex-direction:column;background:var(--ui-panel,#111a12);border-left:1px solid var(--ui-border,#2a3d2b);font-family:'DM Sans',sans-serif;color:#e8f5e9;min-height:0}
+#drc-panel.folded{width:52px}
+#drc-panel.folded .drc-body,#drc-panel.folded .drc-act,#drc-panel.folded #drc-title{display:none}
+.drc-top{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:8px 8px 8px 14px;border-bottom:1px solid #22331f}
+.drc-top b{font-size:16px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.drc-fold{width:44px;height:44px;flex:none;border:1.5px solid #2a3d2b;border-radius:10px;background:#141e15;color:#c8e6c9;font-size:22px;cursor:pointer}
+#drc-panel.folded .drc-fold{transform:scaleX(-1)}
+.drc-body{flex:1;min-height:0;overflow-y:auto;padding:4px 14px 10px;display:flex;flex-direction:column}
+.drc-body>*{flex:none}
+.drc-l{font-size:11px;letter-spacing:1.5px;color:#7a9a7c;font-weight:600;margin:12px 0 6px}
+.drc-seg{display:flex;border:1.5px solid #2a3d2b;border-radius:10px;overflow:hidden}
+.drc-seg button{flex:1;min-height:44px;border:none;background:#141e15;color:#c8e6c9;font:600 13px 'DM Sans',sans-serif;cursor:pointer;padding:0 4px}
+.drc-seg button.on{background:#7fff5a;color:#0e1f10}
+#drc-name,#drc-desc,#drc-folder{width:100%;box-sizing:border-box;border-radius:10px;border:1.5px solid #2a3d2b;background:#141e15;color:#fff;font:15px 'DM Sans',sans-serif;padding:10px 12px;outline:none}
+#drc-name,#drc-folder{min-height:48px}
+#drc-desc{resize:vertical;min-height:96px;line-height:1.4}
+#drc-name:focus,#drc-desc:focus,#drc-folder:focus{border-color:#7fff5a}
+.drc-tags{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.drc-tags button{min-height:48px;border:1.5px solid #2a3d2b;border-radius:10px;background:#141e15;color:#c8e6c9;font:600 13px 'DM Sans',sans-serif;cursor:pointer;display:flex;align-items:center;gap:7px;padding:0 8px;text-align:left}
+.drc-tags button i{width:12px;height:12px;border-radius:50%;flex:none}
+.drc-tags button.on{border-color:var(--tc);background:#1b2a1c;color:#fff}
+.drc-err{color:#ff7a6a;font-size:13px;min-height:18px;margin-top:8px}
+.drc-act{display:flex;gap:8px;padding:10px 14px 14px;border-top:1px solid #22331f}
+.drc-b{flex:1;min-height:48px;border-radius:12px;border:1.5px solid #2a3d2b;background:#141e15;color:#fff;font:600 15px 'DM Sans',sans-serif;cursor:pointer}
+.drc-b.pri{background:#7fff5a;color:#0e1f10;border-color:#7fff5a}
+#drc-dlg{position:fixed;inset:0;z-index:2900;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif}
+#drc-dlg.show{display:flex}
+.drc-dlg-box{background:#0f1a10;border:1.5px solid #2a3d2b;border-radius:16px;padding:20px;width:min(400px,92vw);color:#fff}
+.drc-dlg-box h3{margin:0 0 6px;font-size:18px}.drc-dlg-box p{margin:0 0 6px;color:#8fb592;font-size:14px;line-height:1.4}
+.drc-dlg-box .drc-act{border:none;padding:10px 0 0;flex-wrap:wrap}
+.drc-act3 .drc-b{flex:1 1 30%}
+.drc-banner{display:none;background:#3a3214;color:#ffdd57;font:600 13px 'DM Sans',sans-serif;padding:8px 14px;border-bottom:1px solid #5c5220}
+body.drill-sesedit .drc-banner{display:block}
+@media (max-width:1100px){#drc-panel{width:236px}}
+.dk-l{font-weight:800}
+.dk-btn{position:relative;display:flex;align-items:center;justify-content:center;width:28px;height:28px}
+.dk-btn svg{width:28px;height:28px}
+.dk-btn b{position:absolute;left:0;right:0;top:50%;transform:translateY(-42%);text-align:center;font:800 11px 'DM Sans',sans-serif;pointer-events:none}
+.ctx-sub{font-size:11px;letter-spacing:1px;color:#7a9a7c;padding:6px 12px 2px}
+#drc-people{display:none;flex-direction:column;align-items:center;gap:4px}
+body.drill-mode #drc-people{display:flex}
+.ap-mdots{position:absolute;top:9px;right:9px;display:inline-flex;gap:3px}.ap-mdots i{width:7px;height:7px;border-radius:50%}
+.ap-day .ap-dn{display:inline}
+.ap-ms{display:block;margin-top:3px;font-size:12px;font-weight:600;color:#e8f5e9;background:#1f3322;border-radius:6px;padding:2px 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ap-ms.more{background:none;color:#8fb592;padding:0 6px}
+.ap-blk{position:absolute;z-index:3;box-sizing:border-box;border:1px solid #3d5a40;border-left:4px solid #7fff5a;border-radius:8px;background:#1d3320;color:#e8f5e9;text-align:left;padding:3px 6px;overflow:hidden;cursor:pointer;display:flex;flex-direction:column;gap:1px;font:12px 'DM Sans',sans-serif}
+.ap-blk:hover{background:#244028}
+.ap-blk b{font-size:12px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ap-blk span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#c8e6c9;font-size:11px}
+/* GÜN PANELİ */
+#dp{display:none;position:absolute;inset:0;z-index:5;background:#0f1a10;flex-direction:column}
+#dp.show{display:flex}
+.dp-head{display:flex;align-items:center;gap:14px;padding:12px 20px;border-bottom:1px solid #22331f;flex:none}
+.dp-head h2{margin:0;font-size:20px;color:#fff}
+.dp-team{color:#8fb592;font-size:13px}
+.dp-main{position:relative;flex:1;min-height:0;display:grid;grid-template-columns:250px minmax(0,1fr) 300px}
+.dp-col{min-height:0;overflow-y:auto;padding:14px 16px}
+.dp-sessions{border-right:1px solid #22331f;display:flex;flex-direction:column;gap:8px}
+.dp-pick{border-left:1px solid #22331f;display:flex;flex-direction:column;gap:8px}
+.dp-sec{font-size:11px;letter-spacing:1.5px;color:#7a9a7c;font-weight:600}
+.dp-add{width:100%;border-style:dashed;color:#7fff5a}
+.dp-ses{position:relative;width:100%;min-height:64px;border:1.5px solid #2a3d2b;border-radius:12px;background:#141e15;color:#e8f5e9;text-align:left;padding:10px 48px 10px 12px;cursor:pointer;font:600 15px 'DM Sans',sans-serif}
+.dp-ses.on{border-color:#7fff5a;background:#1a2a1c}
+.dp-ses small{display:block;font-size:12px;color:#8fb592;font-weight:400;margin-top:3px}
+.dp-ses .dr-more{bottom:auto;top:50%;transform:translateY(-50%)}
+.dp-dots{display:inline-flex;gap:3px;margin-left:6px;vertical-align:middle}.dp-dots i{width:8px;height:8px;border-radius:50%}
+.dp-match{border:1.5px dashed #5c5220;border-radius:12px;padding:10px 12px;color:#ffdd57;font-size:14px}
+.dp-none{color:#7a9a7c;font-size:14px;padding:20px 4px;text-align:center}
+.dp-times{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:12px}
+.dp-times label{font-size:12px;color:#8fb592;display:flex;flex-direction:column;gap:4px}
+.dp-tf{display:flex;flex-direction:column;gap:4px;font-size:12px;color:#8fb592}
+.dp-hm{display:flex;align-items:center;gap:4px}.dp-hm b{color:#fff;font-size:18px}
+.dp-hm select{min-height:48px;min-width:64px;border-radius:10px;border:1.5px solid #2a3d2b;background:#141e15;color:#fff;font:600 17px 'DM Sans',sans-serif;padding:0 8px;color-scheme:dark}
+.dp-times input{min-height:48px;border-radius:10px;border:1.5px solid #2a3d2b;background:#141e15;color:#fff;font:600 16px 'DM Sans',sans-serif;padding:0 10px;color-scheme:dark}
+.dp-tot{margin-left:auto;text-align:right;font-size:13px;color:#8fb592}.dp-tot b{display:block;font-size:20px;color:#fff}
+.dp-warn{background:#3a1d18;border:1px solid #7a3326;color:#ffb4a6;border-radius:10px;padding:8px 12px;font-size:13px;margin-bottom:10px}
+.dp-rows{display:flex;flex-direction:column;gap:8px}
+.dp-row{display:flex;align-items:center;gap:8px;min-height:56px;border:1.5px solid #2a3d2b;border-radius:12px;background:#141e15;padding:4px 6px 4px 0}
+.dp-row.dragging{opacity:.4}.dp-row.over{border-color:#7fff5a}
+.dp-grip{width:40px;align-self:stretch;display:flex;align-items:center;justify-content:center;color:#5d7a60;cursor:grab;touch-action:none;font-size:18px;flex:none}
+.dp-at{width:46px;font-size:13px;color:#8fb592;flex:none}
+.dp-nm{flex:1;min-width:0;font:600 15px 'DM Sans',sans-serif;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dp-nm small{display:block;font-size:12px;color:#8fb592;font-weight:400}
+.dp-min{display:flex;align-items:center;gap:4px;flex:none;font-size:13px;color:#8fb592}
+.dp-min input{width:58px;min-height:44px;border-radius:8px;border:1.5px solid #2a3d2b;background:#0f1a10;color:#fff;font:600 15px 'DM Sans',sans-serif;text-align:center}
+.dp-min input.fixed{border-color:#7fff5a}
+.dp-ib{width:44px;height:44px;flex:none;border:none;border-radius:10px;background:none;color:#c8e6c9;font-size:16px;cursor:pointer}.dp-ib:hover{background:#1d2e1f}
+.dp-search{min-height:48px;border-radius:10px;border:1.5px solid #2a3d2b;background:#141e15;color:#fff;font:15px 'DM Sans',sans-serif;padding:0 12px;width:100%;box-sizing:border-box}
+.dp-tagf{display:flex;flex-wrap:wrap;gap:6px}.dp-tagf button{min-height:40px;padding:0 10px;border-radius:99px;border:1.5px solid #2a3d2b;background:#141e15;color:#c8e6c9;font:600 12px 'DM Sans',sans-serif;cursor:pointer;display:flex;align-items:center;gap:6px}
+.dp-tagf button i{width:9px;height:9px;border-radius:50%}.dp-tagf button.on{border-color:var(--tc);color:#fff;background:#1b2a1c}
+.dp-crumb{display:flex;align-items:center;gap:4px;flex-wrap:wrap;font-size:13px}.dp-crumb button{min-height:40px;border:none;background:none;color:#8fb592;font:600 13px 'DM Sans',sans-serif;cursor:pointer;padding:0 4px}.dp-crumb button:last-of-type{color:#fff}
+.dp-pi{display:flex;align-items:center;gap:10px;width:100%;min-height:52px;border:1.5px solid #2a3d2b;border-radius:10px;background:#141e15;color:#e8f5e9;font:600 14px 'DM Sans',sans-serif;text-align:left;padding:6px 10px;cursor:pointer}
+.dp-pi:hover{border-color:#7fff5a}.dp-pi small{display:block;font-size:11px;color:#8fb592;font-weight:400}.dp-pi svg{flex:none;color:#7fff5a}
+.dp-pi .dr-tag{flex:none;margin:0}
+.dp-up{color:#8fb592}
+.dp-empty-ed{display:flex;align-items:center;justify-content:center;height:100%;color:#7a9a7c;text-align:center;font-size:15px;padding:20px}
+@media (max-width:1100px){.dp-main{grid-template-columns:210px minmax(0,1fr) 250px}.dp-col{padding:10px}.dp-head{padding:10px 12px}.dp-at{width:40px}}
+/* OYUNCU ATAMA (drill kipinin salt-okunur hali) */
+body.drill-assign #as-panel{display:flex}
+body.drill-assign #drc-panel,body.drill-assign #left-panel,body.drill-assign #drc-people,body.drill-assign #drc-ball,body.drill-assign #btn-equip,body.drill-assign #anim-add,body.drill-assign #anim-del,body.drill-assign #anim-reset-btn,body.drill-assign #anim-gif-btn,body.drill-assign #right-panel>button[onclick="exportPNG()"]{display:none!important}
+body.drill-assign .equip-token,body.drill-assign #draw-canvas,body.drill-assign .ball-token{pointer-events:none}
+#as-panel{width:300px;flex:none;flex-direction:column;background:var(--ui-panel,#111a12);border-left:1px solid var(--ui-border,#2a3d2b);font-family:'DM Sans',sans-serif;color:#e8f5e9;min-height:0}
+.as-top{padding:12px 14px 8px;border-bottom:1px solid #22331f}.as-top b{display:block;font-size:16px}.as-top small{color:#8fb592;font-size:12px}
+.as-hint{padding:8px 14px;font-size:13px;color:#ffdd57;min-height:20px}
+.as-list{flex:1;min-height:0;overflow-y:auto;padding:4px 10px 10px;display:flex;flex-direction:column;gap:6px}
+.as-pl{display:flex;align-items:center;gap:10px;min-height:52px;border:1.5px solid #2a3d2b;border-radius:10px;background:#141e15;color:#e8f5e9;font:600 14px 'DM Sans',sans-serif;text-align:left;padding:4px 10px;cursor:pointer;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.as-pl:hover{border-color:#7fff5a}.as-pl.used{opacity:.55}
+.as-pl .n{width:30px;height:30px;flex:none;border-radius:50%;background:#1f3322;display:flex;align-items:center;justify-content:center;font-size:13px}
+.as-pl .t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.as-pl .t small{display:block;color:#8fb592;font-weight:400;font-size:11px}
+.as-pl .ok{font-size:11px;color:#7fff5a;border:1px solid #3d5a40;border-radius:99px;padding:2px 8px;flex:none}
+.as-act{display:flex;flex-wrap:wrap;gap:6px;padding:10px 12px 12px;border-top:1px solid #22331f}.as-act .drc-b{flex:1 1 40%;font-size:14px}.as-act .pri{flex-basis:100%}
+.dk-token.as-empty .jersey-wrap{opacity:.55;filter:grayscale(.4)}
+.dk-token.as-sel .jersey-wrap{opacity:1;filter:drop-shadow(0 0 6px #7fff5a) drop-shadow(0 0 2px #fff)}
+.dk-token.as-na{opacity:.85}
+.dk-token.as-drop .jersey-wrap{filter:drop-shadow(0 0 8px #ffdd57)}
+#as-menu{position:fixed;z-index:2750;background:#0f1a10;border:1.5px solid #2a3d2b;border-radius:12px;padding:6px;box-shadow:0 12px 32px rgba(0,0,0,.55);display:none;min-width:210px}
+#as-menu.show{display:block}#as-menu button{display:block;width:100%;min-height:48px;border:none;background:none;color:#fff;font:600 15px 'DM Sans',sans-serif;text-align:left;padding:0 14px;border-radius:8px;cursor:pointer}#as-menu button:hover{background:#182019}
+@media (max-width:1100px){#as-panel{width:250px}}
+#dp-sheet{display:none;position:absolute;inset:0;z-index:6;background:#0f1a10;flex-direction:column}
+#dp-sheet.show{display:flex}
+.sh-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 20px;border-bottom:1px solid #22331f}
+.sh-head h3{margin:0;font-size:18px;color:#fff}.sh-head small{color:#8fb592;font-size:13px}
+.sh-head .sp{flex:1}
+.sh-list{flex:1;min-height:0;overflow-y:auto;padding:10px 20px 20px;display:flex;flex-direction:column;gap:6px}
+.sh-row{display:flex;align-items:center;gap:10px;min-height:56px;border:1.5px solid #2a3d2b;border-radius:12px;background:#141e15;padding:4px 10px}
+.sh-row .n{width:32px;height:32px;flex:none;border-radius:50%;background:#1f3322;display:flex;align-items:center;justify-content:center;font:700 13px 'DM Sans',sans-serif;color:#fff}
+.sh-row .t{flex:1;min-width:120px;font:600 15px 'DM Sans',sans-serif;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.sh-row .t small{display:block;color:#8fb592;font-weight:400;font-size:12px}
+.sh-st{display:flex;gap:6px;flex-wrap:wrap}
+.sh-st button{min-height:44px;min-width:76px;border-radius:10px;border:1.5px solid #2a3d2b;background:#0f1a10;color:#c8e6c9;font:600 13px 'DM Sans',sans-serif;cursor:pointer}
+.sh-st button.on{color:#0e1f10;border-color:var(--c);background:var(--c)}
+.sh-rpe{display:flex;gap:4px}
+.sh-rpe button{width:40px;min-height:44px;border-radius:8px;border:1.5px solid #2a3d2b;background:#0f1a10;color:#c8e6c9;font:700 14px 'DM Sans',sans-serif;cursor:pointer}
+.sh-rpe button.on{background:#7fff5a;color:#0e1f10;border-color:#7fff5a}
+.sh-load{width:86px;text-align:right;font:600 13px 'DM Sans',sans-serif;color:#8fb592;flex:none}.sh-load b{display:block;color:#fff;font-size:15px}
+.sh-foot{display:flex;gap:18px;flex-wrap:wrap;padding:12px 20px;border-top:1px solid #22331f;color:#8fb592;font-size:13px}.sh-foot b{color:#fff;font-size:16px;margin-left:4px}
+.dp-tools{display:flex;gap:8px;margin:0 0 12px;flex-wrap:wrap}
+.dp-tools .ap-btn{font-size:14px}
+@media (max-width:1100px){.sh-st button{min-width:62px;font-size:12px}.sh-rpe button{width:34px}.sh-head,.sh-list{padding-left:12px;padding-right:12px}}
+/* DRİLLER PANELİ */
+#screen-ap.dr .ap-head,#screen-ap.dr #ap-body{display:none}
+#dr-view{display:none;flex:1;min-height:0;flex-direction:column}
+#screen-ap.dr #dr-view{display:flex}
+.dr-head{display:flex;align-items:center;gap:10px;padding:12px 20px;border-bottom:1px solid #22331f;flex:none}
+.dr-head h2{margin:0 8px 0 4px;font-size:20px;color:#fff;flex:none}
+.dr-crumb{flex:1;min-width:0;display:flex;align-items:center;gap:2px;overflow-x:auto;white-space:nowrap}
+.dr-crumb button{min-height:48px;padding:0 8px;border:none;background:none;color:#8fb592;font:600 15px 'DM Sans',sans-serif;cursor:pointer;border-radius:8px}
+.dr-crumb button:last-child{color:#fff}
+.dr-crumb button.drop{background:#24402a;outline:2px dashed #7fff5a}
+.dr-crumb i{color:#4d6a50;font-style:normal}
+.ap-btn.pri{background:#7fff5a;color:#0e1f10;border-color:#7fff5a}
+.dr-main{flex:1;min-height:0;display:flex}
+.dr-tree{width:240px;flex:none;border-right:1px solid #22331f;overflow-y:auto;padding:8px}
+.dr-tree button{display:flex;align-items:center;gap:6px;width:100%;min-height:44px;border:none;background:none;color:#c8e6c9;font:500 14px 'DM Sans',sans-serif;text-align:left;border-radius:8px;cursor:pointer;padding:0 8px}
+.dr-tree button.on{background:#1d2e1f;color:#fff}
+.dr-tree button.drop{background:#24402a;outline:2px dashed #7fff5a}
+.dr-tree button span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dr-list{flex:1;min-width:0;overflow-y:auto;padding:14px 20px 24px}
+.dr-sec{font-size:12px;letter-spacing:1.5px;color:#7a9a7c;font-weight:600;margin:6px 0 10px}
+.dr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:20px}
+.dr-card{position:relative;border:1.5px solid #2a3d2b;background:#141e15;border-radius:14px;color:#e8f5e9;text-align:left;cursor:pointer;padding:0;overflow:hidden;font:600 15px 'DM Sans',sans-serif;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.dr-card:hover{border-color:#3d5a40}
+.dr-card.drop{border-color:#7fff5a;background:#1d3320}
+.dr-card.dragging{opacity:.35}
+.dr-fold{display:flex;align-items:center;gap:12px;min-height:64px;padding:8px 52px 8px 14px}
+.dr-fold svg{flex:none;color:#7fff5a}
+.dr-fold small,.dr-dinfo small{display:block;font-size:12px;color:#8fb592;font-weight:400;margin-top:2px}
+.dr-thumb{display:block;width:100%;aspect-ratio:16/10;background:#1f5f2a}
+.dr-dinfo{padding:8px 52px 10px 12px;min-height:48px}
+.dr-tag{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.dr-more{position:absolute;right:4px;bottom:4px;width:44px;height:44px;border:none;border-radius:10px;background:none;color:#c8e6c9;font-size:22px;cursor:pointer;line-height:1}
+.dr-more:hover{background:#1d2e1f}
+.dr-none{color:#7a9a7c;font-size:15px;padding:30px 0;text-align:center}
+.dr-ghost{position:fixed;z-index:2800;pointer-events:none;padding:10px 14px;border-radius:12px;background:#1d3320;border:2px solid #7fff5a;color:#fff;font:600 14px 'DM Sans',sans-serif;box-shadow:0 10px 30px rgba(0,0,0,.5);transform:translate(-50%,-120%)}
+#dr-menu{position:fixed;z-index:2750;background:#0f1a10;border:1.5px solid #2a3d2b;border-radius:12px;padding:6px;box-shadow:0 12px 32px rgba(0,0,0,.55);display:none;min-width:190px}
+#dr-menu.show{display:block}
+#dr-menu button{display:block;width:100%;min-height:48px;border:none;background:none;color:#fff;font:600 15px 'DM Sans',sans-serif;text-align:left;padding:0 14px;border-radius:8px;cursor:pointer}
+#dr-menu button:hover{background:#182019}
+#dr-menu button.del{color:#ff7a6a}
+#dr-dlg{position:fixed;inset:0;z-index:2760;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif}
+#dr-dlg.show{display:flex}
+.dr-dlg-box{background:#0f1a10;border:1.5px solid #2a3d2b;border-radius:16px;padding:20px;width:min(420px,92vw);max-height:84vh;display:flex;flex-direction:column;color:#fff}
+.dr-dlg-box h3{margin:0 0 6px;font-size:18px}
+.dr-dlg-box p{margin:0 0 12px;color:#8fb592;font-size:14px;line-height:1.4}
+.dr-dlg-box input{min-height:48px;border-radius:10px;border:1.5px solid #2a3d2b;background:#141e15;color:#fff;font:16px 'DM Sans',sans-serif;padding:0 12px;outline:none}
+.dr-dlg-box input:focus{border-color:#7fff5a}
+.dr-err{color:#ff7a6a;font-size:13px;min-height:18px;margin-top:6px}
+.dr-tpick{overflow-y:auto;border:1px solid #22331f;border-radius:10px;margin-bottom:6px;max-height:50vh}
+.dr-tpick button{display:block;width:100%;min-height:48px;border:none;border-bottom:1px solid #1c2a1d;background:none;color:#fff;font:500 15px 'DM Sans',sans-serif;text-align:left;cursor:pointer}
+.dr-tpick button:hover{background:#182019}
+.dr-tpick button:disabled{opacity:.35;cursor:default}
+.dr-dlg-act{display:flex;gap:10px;justify-content:flex-end;margin-top:12px}
+@media (max-width:1100px){.dr-tree{width:190px}.dr-head{padding:10px 12px}.dr-list{padding:12px}}
+.ap-empty{flex:1;display:flex;align-items:center;justify-content:center;color:#7a9a7c;font-size:16px;text-align:center}
+@media (max-width:1100px){.ap-btn span{display:none}.ap-title{min-width:150px}.ap-seg button{min-width:70px}.ap-head{padding:10px 12px}.ap-body{padding:8px 12px 12px}}
 #screen-menu{position:fixed;inset:0;z-index:2500;background:#0f1a10;color:#c8e6c9;font-family:'DM Sans',sans-serif;display:none;flex-direction:column}
 #screen-menu.show{display:flex}
 .mm-head{min-height:84px;box-sizing:border-box;padding:12px 32px;display:flex;align-items:center;gap:20px;background:#182019;border-bottom:1px solid #2a3d2b;flex-wrap:wrap}
@@ -4281,7 +4600,45 @@ if('serviceWorker' in navigator && location.protocol.startsWith('http') && !wind
 
 </div>
 </header>
-<div class="mm-grid"><button type="button" class="mm-card mm-on" data-go="tahta"><span class="mm-ic"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="1"></rect><path d="M12 4v16"></path><circle cx="12" cy="12" r="3"></circle><path d="M2 9h3v6H2"></path><path d="M22 9h-3v6h3"></path></svg></span><span class="mm-tt">Taktik Tahtası</span><span class="mm-ds">Diziliş, çizim ve animasyon</span></button><button type="button" class="mm-card mm-soon" data-soon="Antrenman Planlayıcı"><span class="mm-tag">YAKINDA</span><span class="mm-ic"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.5" width="18" height="16" rx="2"></rect><path d="M3 9.5h18"></path><path d="M8 2.5v4"></path><path d="M16 2.5v4"></path><path d="M7.5 14h3"></path><path d="M13.5 14h3"></path><path d="M7.5 17.5h3"></path></svg></span><span class="mm-tt">Antrenman Planlayıcı</span><span class="mm-ds">Drill, seans, yoklama</span></button><button type="button" class="mm-card mm-soon" data-soon="Maç Günü" data-teamonly="1"><span class="mm-tag">YAKINDA</span><span class="mm-ic"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2.5 2"></path><path d="M10 2.5h4"></path></svg></span><span class="mm-tt">Maç Günü</span><span class="mm-ds">Kadro görseli, olaylar, dakika</span></button><button type="button" class="mm-card mm-soon" data-soon="Rakip ve Scout"><span class="mm-tag">YAKINDA</span><span class="mm-ic"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="M16 16l5 5"></path><path d="M8.5 11h5"></path></svg></span><span class="mm-tt">Rakip ve Scout</span><span class="mm-ds">Rapor şablonları, PDF</span></button><button type="button" class="mm-card mm-soon" data-soon="Fiziksel Testler" data-teamonly="1"><span class="mm-tag">YAKINDA</span><span class="mm-ic"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h3.5l2.5-6 4 12 2.5-6H21"></path></svg></span><span class="mm-tt">Fiziksel Testler</span><span class="mm-ds">Sprint, sıçrama, asimetri</span></button><button type="button" class="mm-card mm-soon" data-soon="Video Analiz"><span class="mm-tag">YAKINDA</span><span class="mm-ic"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="5.5" width="13" height="13" rx="2"></rect><path d="M15.5 10l6-3.5v11l-6-3.5"></path></svg></span><span class="mm-tt">Video Analiz</span><span class="mm-ds">Etiketleme ve klipler</span></button></div>
+<div class="mm-grid"><button type="button" class="mm-card mm-on" data-go="tahta"><span class="mm-ic"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="1"></rect><path d="M12 4v16"></path><circle cx="12" cy="12" r="3"></circle><path d="M2 9h3v6H2"></path><path d="M22 9h-3v6h3"></path></svg></span><span class="mm-tt">Taktik Tahtası</span><span class="mm-ds">Diziliş, çizim ve animasyon</span></button><button type="button" class="mm-card mm-on" data-go="antrenman" data-soon="Antrenman Planlayıcı"><span class="mm-ic"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.5" width="18" height="16" rx="2"></rect><path d="M3 9.5h18"></path><path d="M8 2.5v4"></path><path d="M16 2.5v4"></path><path d="M7.5 14h3"></path><path d="M13.5 14h3"></path><path d="M7.5 17.5h3"></path></svg></span><span class="mm-tt">Antrenman Planlayıcı</span><span class="mm-ds">Drill, seans, yoklama</span></button><button type="button" class="mm-card mm-soon" data-soon="Maç Günü" data-teamonly="1"><span class="mm-tag">YAKINDA</span><span class="mm-ic"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2.5 2"></path><path d="M10 2.5h4"></path></svg></span><span class="mm-tt">Maç Günü</span><span class="mm-ds">Kadro görseli, olaylar, dakika</span></button><button type="button" class="mm-card mm-soon" data-soon="Rakip ve Scout"><span class="mm-tag">YAKINDA</span><span class="mm-ic"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="M16 16l5 5"></path><path d="M8.5 11h5"></path></svg></span><span class="mm-tt">Rakip ve Scout</span><span class="mm-ds">Rapor şablonları, PDF</span></button><button type="button" class="mm-card mm-soon" data-soon="Fiziksel Testler" data-teamonly="1"><span class="mm-tag">YAKINDA</span><span class="mm-ic"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h3.5l2.5-6 4 12 2.5-6H21"></path></svg></span><span class="mm-tt">Fiziksel Testler</span><span class="mm-ds">Sprint, sıçrama, asimetri</span></button><button type="button" class="mm-card mm-soon" data-soon="Video Analiz"><span class="mm-tag">YAKINDA</span><span class="mm-ic"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="5.5" width="13" height="13" rx="2"></rect><path d="M15.5 10l6-3.5v11l-6-3.5"></path></svg></span><span class="mm-tt">Video Analiz</span><span class="mm-ds">Etiketleme ve klipler</span></button></div>
+</section>
+<!-- ANTRENMAN PLANLAYICI: takvim ekranı -->
+<section id="screen-ap" aria-label="Antrenman Planlayıcı">
+  <header class="ap-head">
+    <button type="button" class="ap-btn" id="ap-home" onclick="openScreen('menu')" aria-label="Ana menü"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg><span>Ana menü</span></button>
+    <div class="ap-nav">
+      <button type="button" class="ap-btn ap-ic" id="ap-prev" aria-label="Önceki">‹</button>
+      <div class="ap-title"><b id="ap-range"></b><small id="ap-team"></small></div>
+      <button type="button" class="ap-btn ap-ic" id="ap-next" aria-label="Sonraki">›</button>
+      <button type="button" class="ap-btn" id="ap-today">Bugün</button>
+    </div>
+    <div class="ap-right">
+      <div class="ap-seg" role="group" aria-label="Görünüm"><button type="button" id="ap-v-month" class="on">Aylık</button><button type="button" id="ap-v-week">Haftalık</button></div>
+      <button type="button" class="ap-btn" id="ap-drills">Driller</button>
+    </div>
+  </header>
+  <div class="ap-body" id="ap-body"></div>
+  <div id="dr-view">
+    <div class="dr-head">
+      <button type="button" class="ap-btn" id="dr-back" aria-label="Geri"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg><span id="dr-back-t">Takvim</span></button>
+      <h2>Driller</h2>
+      <div class="dr-crumb" id="dr-crumb"></div>
+      <button type="button" class="ap-btn" id="dr-newf"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M12 11v6M9 14h6"/></svg><span>Klasör oluştur</span></button>
+      <button type="button" class="ap-btn pri" id="dr-newd">+ Drill ekle</button>
+    </div>
+    <div class="dr-main"><nav class="dr-tree" id="dr-tree" aria-label="Klasörler"></nav><div class="dr-list" id="dr-list"></div></div>
+  </div>
+  <div id="dp" aria-label="Gün paneli">
+    <div class="dp-head"><button type="button" class="ap-btn" id="dp-close" aria-label="Kapat"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg><span>Takvim</span></button><h2 id="dp-title"></h2><span id="dp-team" class="dp-team"></span></div>
+    <div class="dp-main">
+      <section class="dp-col dp-sessions"><div class="dp-sec">ANTRENMANLAR</div><div id="dp-list"></div><button type="button" class="ap-btn dp-add" id="dp-add">+ Antrenman ekle</button></section>
+      <section class="dp-col dp-editor" id="dp-editor"></section>
+      <section class="dp-col dp-pick" id="dp-pick"></section>
+      <div id="dp-sheet"></div>
+    </div>
+  </div>
+  <div id="dr-menu" role="menu"></div>
+  <div id="dr-dlg"><div class="dr-dlg-box" id="dr-dlg-box"></div></div>
 </section>
 <div id="mm-lock" onclick="if(event.target===this)mmLockClose()"><div class="mm-lk-box"><div class="mm-lk-ic">🔒</div><h3 id="mm-lk-t"></h3><p>Bu modül bir takımla çalışır. Kişisel kullanımda kapalıdır; kullanmak için bir takım seçin.</p><button type="button" class="pri" onclick="mmLockClose();tmKind='own';tmEdit(null)">+ Takım ekle</button><button type="button" id="mm-lk-pick" onclick="mmLockClose();setTimeout(mmTeamMenuToggle,0)">Takım seç</button><button type="button" onclick="mmLockClose()">Kapat</button></div></div>
 <div class="qedit-overlay" id="settings-overlay" onclick="if(event.target===this)closeSettings()">
@@ -4308,6 +4665,8 @@ if('serviceWorker' in navigator && location.protocol.startsWith('http') && !wind
   </div>
 </div>
 <div class="mm-toast" id="mm-toast"></div>
+<div id="as-menu"></div>
+<div id="drc-dlg"><div class="drc-dlg-box"><h3 id="drc-dlg-t"></h3><p id="drc-dlg-p"></p><div class="drc-act drc-act3"><button type="button" class="drc-b" id="drc-dlg-no">Vazgeç</button><button type="button" class="drc-b" id="drc-dlg-alt" style="display:none"></button><button type="button" class="drc-b pri" id="drc-dlg-yes">Tamam</button></div></div></div>
 <script>
 // ---- Ekran yönetimi: menü tahtanın önünde ayrı katman. Hata olursa menü kapanır, tahta açık kalır. ----
 (function(){
@@ -4316,8 +4675,11 @@ if('serviceWorker' in navigator && location.protocol.startsWith('http') && !wind
   window.mmToast=function(msg){ var t=document.getElementById('mm-toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(tt); tt=setTimeout(function(){t.classList.remove('show');},1800); };
   window.openScreen=function(name){
     try{
-      if(name==='menu'){ renderMenuTeam(); menu.classList.add('show'); _mmAcctRefresh(); }
-      else { mmTeamMenuClose(); menu.classList.remove('show'); if(typeof resizePitch==='function') setTimeout(resizePitch,0); }
+      if(name!=='tahta' && window.drcActive && drcActive() && !window._drcLeaving) drcForceExit();
+      var ap=document.getElementById('screen-ap');
+      if(name==='antrenman'){ if(!window.apOpen||!apOpen()) return; mmTeamMenuClose(); menu.classList.remove('show'); ap.classList.add('show'); }
+      else if(name==='menu'){ if(ap) ap.classList.remove('show'); renderMenuTeam(); menu.classList.add('show'); _mmAcctRefresh(); }
+      else { if(ap) ap.classList.remove('show'); mmTeamMenuClose(); menu.classList.remove('show'); if(typeof resizePitch==='function') setTimeout(resizePitch,0); }
       window.currentScreen=name;
     }catch(e){ console.error('Menü hatası, tahta açılıyor:',e); menu.classList.remove('show'); window.currentScreen='tahta'; }
   };
@@ -4355,6 +4717,7 @@ if('serviceWorker' in navigator && location.protocol.startsWith('http') && !wind
     w.appendChild(n); w.appendChild(a); slot.appendChild(w);
     mmApplyLocks(personal);
     mmApplyHidden();
+    if(window.apMenuCard) apMenuCard();
   }
   // Ayarlardan gizlenen modül kartları (Taktik Tahtası gizlenemez)
   var MM_HID_KEY='tactech_hidden_mods_v1';
@@ -4461,7 +4824,7 @@ if('serviceWorker' in navigator && location.protocol.startsWith('http') && !wind
       const keys=Object.keys(file.data).filter(k=>k.indexOf('tactech_')===0||k.indexOf('taktik_squad_')===0);
       if(bkMode==='replace'){ bkKeys().forEach(k=>stDel(k)); keys.forEach(k=>stSet(k,file.data[k])); }
       else keys.forEach(k=>{
-        if(k===TEAMS_KEY||k===SAVED_TEAMS_KEY) mergeTeams(k,file.data[k]);
+        if(listKeys().indexOf(k)>=0) mergeTeams(k,file.data[k]);
         else if(stGet(k)==null) stSet(k,file.data[k]);
       });
       bkMsg('✅ Yedek yüklendi ('+keys.length+' kayıt, '+(bkMode==='replace'?'her şey değiştirildi':'birleştirildi')+').','#60d090');
@@ -4551,6 +4914,9 @@ if('serviceWorker' in navigator && location.protocol.startsWith('http') && !wind
 <script>
 // ---- Takımlarım veri katmanı ----
 const TEAMS_KEY='tactech_teams_v1', ACTIVE_TEAM_KEY='tactech_activeTeam_v1';
+// Kayıt kayıt birleştirilen listeler (her öğede id + updatedAt): takımlar, driller, drill klasörleri
+const DRILLS_KEY='tactech_drills_v1', DFOLDERS_KEY='tactech_drillFolders_v1', SESSIONS_KEY='tactech_sessions_v1';
+function listKeys(){ return [TEAMS_KEY,SAVED_TEAMS_KEY,DRILLS_KEY,DFOLDERS_KEY,SESSIONS_KEY]; }
 // İki ayrı liste: 'own' = Takımlarım, 'saved' = Kayıtlı Takımlar (rakip ve diğer takımlar). Birbirine karışmaz.
 const SAVED_TEAMS_KEY='tactech_savedTeams_v1';
 let tmKind='own';
@@ -4742,6 +5108,10 @@ function tmLoadIntoModal(id,kind){
       if(isOpen('tm-list-ov')){ tmCloseList(); return true; }
       if(isOpen('settings-overlay')){ closeSettings(); return true; }
       if(isOpen('modal-overlay')){ closeModal(); return true; }
+      if(isOpen('drc-dlg')){ drcDlgClose(); return true; }
+      if(window.drcActive && drcActive()){ drcCancel(); return true; }
+      if(window.currentScreen==='antrenman' && window.dpBack && dpBack()) return true;
+      if(window.currentScreen==='antrenman' && window.drBack && drBack()) return true;
       if(window.currentScreen!=='menu'){ openScreen('menu'); return true; }
       if(fromHardware){ $('exit-overlay').classList.add('show'); return true; }   // menüde: çıkış onayı
       return false;
@@ -4750,6 +5120,7 @@ function tmLoadIntoModal(id,kind){
   // Bilgisayar: Esc (yazı kutusundaki kendi Esc'leri önce çalışır)
   document.addEventListener('keydown',function(e){
     if(e.key!=='Escape' || e.defaultPrevented) return;
+    if(e.target && e.target.closest && e.target.closest('#drc-panel')){ e.target.blur(); return; } // yazarken Esc: yalnızca kutudan çık
     if(e.target && (e.target.id==='anim-name-input' || e.target.id==='save-name-input')) return; // kendi Esc'leri var
     if(ttGoBack(false)) e.preventDefault();
   });
@@ -4759,6 +5130,1049 @@ function tmLoadIntoModal(id,kind){
 })();
 </script>
 
+<!-- ANTRENMAN PLANLAYICI -->
+<script>
+(function(){
+  // Modül herkese açık (geliştirme bayrağı kaldırıldı)
+  var DEV=true;
+  try{ localStorage.removeItem('ttdev_ap'); }catch(e){}
+  window.apDevOn=function(){ return DEV; };
+  var AYLAR=['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+  var GUNLER=['PZT','SAL','ÇAR','PER','CUM','CMT','PAZ'];
+  var VIEW_KEY='tactech_ap_view';
+  var cur=null;      // görüntülenen ayın 1'i (yerel saat)
+  function today(){ var d=new Date(); return new Date(d.getFullYear(),d.getMonth(),d.getDate()); }
+  function ymd(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+  function $(id){ return document.getElementById(id); }
+  window.apYmd=ymd;
+  // Menü kartı: geliştirme açıksa kart etkin olur
+  window.apMenuCard=function(){
+    var c=document.querySelector('#screen-menu [data-soon="Antrenman Planlayıcı"]'); if(!c) return;
+    var tg=c.querySelector('.mm-tag');
+    if(DEV){ c.classList.remove('mm-soon'); c.classList.add('mm-on'); c.setAttribute('data-go','antrenman'); if(tg) tg.remove(); }
+  };
+  window.apOpen=function(){
+    var tc=(typeof teamActive==='function')?teamActive():null;
+    if(!cur){ var t=today(); cur=new Date(t.getFullYear(),t.getMonth(),1); }
+    // Kişisel modda takvim yok: doğrudan Driller açılır
+    if(!tc){ drOpen({fromCal:false}); return true; }
+    $('screen-ap').classList.remove('dr'); render(); return true;
+  };
+  var wk=null;   // haftalık görünümde haftanın Pazartesi'si
+  var HR_H=56, DAY_START=8, DAY_END=22;
+  function mondayOf(d){ return new Date(d.getFullYear(),d.getMonth(),d.getDate()-((d.getDay()+6)%7)); }
+  function getView(){ var v='month'; try{ v=stGet(VIEW_KEY)||'month'; }catch(e){} return v==='week'?'week':'month'; }
+  function setView(v){ try{ stSet(VIEW_KEY,v); }catch(e){} }
+  window.apView=getView;
+  window.apRender=function(){ render(); };
+  function render(){
+    var tc=(typeof teamActive==='function')?teamActive():null;
+    $('ap-team').textContent=tc?(tc.name||'Takım')+(tc.season?' · '+tc.season:''):'';
+    var view=getView();
+    $('ap-v-month').classList.toggle('on',view!=='week'); $('ap-v-week').classList.toggle('on',view==='week');
+    if(view==='week'){ if(!wk) wk=mondayOf(weekAnchor()); renderWeek(); } else renderMonth();
+  }
+  // Aydan haftaya geçerken: bu aysa bugünün haftası, değilse ayın ilk haftası
+  function weekAnchor(){ var t=today(); return (cur && (cur.getFullYear()!==t.getFullYear()||cur.getMonth()!==t.getMonth()))?cur:t; }
+  function weekTitle(a,b){
+    if(a.getMonth()===b.getMonth()) return a.getDate()+'–'+b.getDate()+' '+AYLAR[a.getMonth()]+' '+a.getFullYear();
+    var k=function(d){ return AYLAR[d.getMonth()].slice(0,3); };
+    return a.getDate()+' '+k(a)+(a.getFullYear()!==b.getFullYear()?' '+a.getFullYear():'')+' – '+b.getDate()+' '+k(b)+' '+b.getFullYear();
+  }
+  function renderWeek(){
+    var end=new Date(wk.getFullYear(),wk.getMonth(),wk.getDate()+6);
+    $('ap-range').textContent=weekTitle(wk,end);
+    var body=$('ap-body'); body.innerHTML='';
+    var box=document.createElement('div'); box.className='ap-week';
+    var tk=ymd(today()), days=[];
+    for(var i=0;i<7;i++) days.push(new Date(wk.getFullYear(),wk.getMonth(),wk.getDate()+i));
+    var head=document.createElement('div'); head.className='ap-wh'; head.appendChild(document.createElement('span'));
+    days.forEach(function(d,i){
+      var b=document.createElement('button'); b.type='button'; b.dataset.date=ymd(d);
+      if(ymd(d)===tk) b.classList.add('today'); if(i>=5) b.classList.add('wkend');
+      b.innerHTML='<span></span><b></b>'; b.firstChild.textContent=GUNLER[i]; b.lastChild.textContent=d.getDate();
+      b.setAttribute('aria-label',d.getDate()+' '+AYLAR[d.getMonth()]+' '+d.getFullYear());
+      b.onclick=dayTap; head.appendChild(b);
+    });
+    box.appendChild(head);
+    var sc=document.createElement('div'); sc.className='ap-ws'; sc.id='ap-ws';
+    var g=document.createElement('div'); g.className='ap-wg';
+    for(var h=0;h<24;h++){
+      var l=document.createElement('div'); l.className='ap-hr'; l.textContent=String(h).padStart(2,'0')+':00'; l.style.gridRow=(h+1); l.style.gridColumn=1; g.appendChild(l);
+      days.forEach(function(d,i){
+        var c=document.createElement('button'); c.type='button'; c.className='ap-slot'; c.style.gridRow=(h+1); c.style.gridColumn=(i+2);
+        c.dataset.date=ymd(d); c.dataset.hour=h; if(ymd(d)===tk) c.classList.add('today'); if(h<DAY_START||h>=DAY_END) c.classList.add('off');
+        c.setAttribute('aria-label',d.getDate()+' '+AYLAR[d.getMonth()]+' '+String(h).padStart(2,'0')+':00');
+        c.onclick=slotTap; g.appendChild(c);
+      });
+    }
+    // şu anki saat çizgisi (bu haftaysa)
+    var ti=days.findIndex(function(d){ return ymd(d)===tk; });
+    if(ti>=0){ var n=new Date(), ln=document.createElement('div'); ln.className='ap-now'; ln.id='ap-now';
+      ln.style.top=((n.getHours()+n.getMinutes()/60)*HR_H)+'px';
+      ln.style.left='calc(56px + (100% - 56px) * '+ti+' / 7)'; ln.style.width='calc((100% - 56px) / 7)'; g.appendChild(ln); }
+    try{ weekBlocks(g,days); }catch(e){ console.error(e); }
+    sc.appendChild(g); box.appendChild(sc); body.appendChild(box);
+    sc.scrollTop=DAY_START*HR_H;
+  }
+  // Haftalık bloklar: başlangıçtan bitişe; çakışanlar sütunu yan yana paylaşır
+  function tm(t){ var m=/^(\d{1,2}):(\d{2})$/.exec(t||''); return m?(+m[1])*60+(+m[2]):0; }
+  function weekBlocks(g,days){
+    if(!window.sesOnDay) return;
+    days.forEach(function(d,di){
+      var L=sesOnDay(ymd(d)).map(function(s){ return {s:s,a:tm(s.start),b:Math.max(tm(s.start)+15,tm(s.end))}; });
+      // kümeler: birbirine değen bloklar aynı kümede, her biri ilk boş sütuna
+      var clusters=[],cur=null;
+      L.forEach(function(x){ if(!cur||x.a>=cur.end){ cur={items:[],end:x.b,cols:[]}; clusters.push(cur); } cur.end=Math.max(cur.end,x.b);
+        var c=0; while(cur.cols[c]!=null&&cur.cols[c]>x.a) c++; cur.cols[c]=x.b; x.col=c; cur.items.push(x); });
+      clusters.forEach(function(cl){ var n=cl.cols.length; cl.items.forEach(function(x){
+        var el=document.createElement('button'); el.type='button'; el.className='ap-blk'; el.dataset.sid=x.s.id; el.dataset.date=ymd(d);
+        el.style.top=(x.a/60*HR_H+1)+'px'; el.style.height=Math.max(22,(x.b-x.a)/60*HR_H-2)+'px';
+        el.style.left='calc(56px + (100% - 56px) * '+(di+x.col/n)+' / 7 + 2px)'; el.style.width='calc((100% - 56px) / '+(7*n)+' - 4px)';
+        var tags=window.sesTags?sesTags(x.s):[]; if(tags[0]) el.style.borderLeftColor=(DRILL_TAGS[tags[0]]||{}).c;
+        var h=document.createElement('b'); h.textContent=x.s.start+'–'+x.s.end; el.appendChild(h);
+        var D=window.sesDurations?sesDurations(x.s):{mins:[]};
+        (x.s.drills||[]).forEach(function(r,i){ var dd=r.custom||(window.drDrills?drDrills():[]).find(function(q){ return q.id===r.drillId; }); var ln=document.createElement('span'); ln.textContent=(dd?dd.name:'(silinmiş)')+' · '+D.mins[i]+' dk'; el.appendChild(ln); });
+        el.setAttribute('aria-label',x.s.start+'–'+x.s.end+' antrenman');
+        el.onclick=function(ev){ ev.stopPropagation(); if(window.dpOpen) dpOpen(ymd(d),{sesId:x.s.id}); };
+        g.appendChild(el); }); });
+    });
+  }
+  function slotTap(e){ var c=e.currentTarget; if(window.dpOpen) dpOpen(c.dataset.date,{newAt:+c.dataset.hour*60}); }
+  function renderMonth(){
+    $('ap-range').textContent=AYLAR[cur.getMonth()]+' '+cur.getFullYear();
+    var body=$('ap-body'); body.innerHTML='';
+    var wd=document.createElement('div'); wd.className='ap-wd'; GUNLER.forEach(function(g){ var s=document.createElement('span'); s.textContent=g; wd.appendChild(s); }); body.appendChild(wd);
+    var grid=document.createElement('div'); grid.className='ap-month'; grid.id='ap-month';
+    var first=new Date(cur.getFullYear(),cur.getMonth(),1);
+    var off=(first.getDay()+6)%7;                       // Pazartesi = 0
+    var start=new Date(cur.getFullYear(),cur.getMonth(),1-off);
+    var daysIn=new Date(cur.getFullYear(),cur.getMonth()+1,0).getDate();
+    var weeks=Math.ceil((off+daysIn)/7);
+    var tk=ymd(today());
+    for(var i=0;i<weeks*7;i++){
+      var d=new Date(start.getFullYear(),start.getMonth(),start.getDate()+i);
+      var b=document.createElement('button'); b.type='button'; b.className='ap-day'; b.dataset.date=ymd(d);
+      if(d.getMonth()!==cur.getMonth()) b.classList.add('out');
+      if(i%7>=5) b.classList.add('wkend');
+      if(ymd(d)===tk) b.classList.add('today');
+      b.setAttribute('aria-label',d.getDate()+' '+AYLAR[d.getMonth()]+' '+d.getFullYear());
+      var n=document.createElement('span'); n.className='ap-dn'; n.textContent=d.getDate(); b.appendChild(n);
+      try{ monthCell(b,ymd(d)); }catch(e){}
+      b.onclick=dayTap; grid.appendChild(b);
+    }
+    body.appendChild(grid);
+    try{ fillMonthLines(grid); }catch(e){}
+  }
+  // Aylık hücre: saat satırları, sığmayanlar +N, etiket noktaları
+  function monthCell(b,k){
+    if(!window.sesOnDay) return; var L=sesOnDay(k); if(!L.length) return;
+    var dt=document.createElement('span'); dt.className='ap-mdots'; var tags=[];
+    L.forEach(function(s){ (window.sesTags?sesTags(s):[]).forEach(function(t){ if(tags.indexOf(t)<0) tags.push(t); }); });
+    tags.forEach(function(t){ var i=document.createElement('i'); i.style.background=(DRILL_TAGS[t]||{}).c||'#888'; dt.appendChild(i); }); b.querySelector('.ap-dn').after(dt);
+    b._ses=L; b.classList.add('has');
+  }
+  // Satırlar hücre yerleşince eklenir: sığan kadar saat, kalanlar +N
+  function fillMonthLines(grid){
+    grid.querySelectorAll('.ap-day.has').forEach(function(b){
+      var L=b._ses||[]; var room=b.clientHeight-28, per=21, max=Math.max(1,Math.floor(room/per));
+      var show=L.length>max?Math.max(0,max-1):L.length;
+      L.slice(0,show).forEach(function(s){ var r=document.createElement('span'); r.className='ap-ms'; r.textContent=s.start+'–'+s.end; b.appendChild(r); });
+      if(L.length>show){ var m=document.createElement('span'); m.className='ap-ms more'; m.textContent='+'+(L.length-show); b.appendChild(m); }
+    });
+  }
+  function dayTap(e){ if(window.dpOpen) dpOpen(e.currentTarget.dataset.date); }
+  function shift(n){
+    if(getView()==='week'){ wk=new Date(wk.getFullYear(),wk.getMonth(),wk.getDate()+7*n); }
+    else cur=new Date(cur.getFullYear(),cur.getMonth()+n,1);
+    render();
+  }
+  document.addEventListener('DOMContentLoaded',function(){});
+  function wire(){
+    $('ap-prev').onclick=function(){ shift(-1); };
+    $('ap-next').onclick=function(){ shift(1); };
+    $('ap-today').onclick=function(){ var t=today(); cur=new Date(t.getFullYear(),t.getMonth(),1); wk=mondayOf(t); render(); };
+    $('ap-v-month').onclick=function(){ if(getView()==='week'&&wk){ var th=new Date(wk.getFullYear(),wk.getMonth(),wk.getDate()+3); cur=new Date(th.getFullYear(),th.getMonth(),1); } setView('month'); render(); };
+    $('ap-v-week').onclick=function(){ if(getView()!=='week'){ wk=mondayOf(weekAnchor()); setView('week'); } render(); };
+    $('ap-drills').onclick=function(){ drOpen({fromCal:true}); };
+    if(window.apMenuCard) apMenuCard();
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',wire); else wire();
+})();
+</script>
+<!-- DRİLLER PANELİ: kütüphane ve iç içe klasörler (takımdan bağımsız) -->
+<script>
+(function(){
+  var $=function(id){ return document.getElementById(id); };
+  var TAGS={teknik:{n:'Teknik antrenman',c:'#4f9dff'},taktik:{n:'Taktik antrenman',c:'#ffd21f'},fiziksel:{n:'Fiziksel antrenman',c:'#ff6b5a'},sosyal:{n:'Sosyal antrenman',c:'#b07cff'}};
+  window.DRILL_TAGS=TAGS;
+  var curF=null;           // açık klasör (null = Driller en üst)
+  var fromCal=false;       // takvimden mi açıldı
+  function J(k){ try{ var a=JSON.parse(stGet(k)||'[]'); return Array.isArray(a)?a:[]; }catch(e){ return []; } }
+  function folders(){ return J(DFOLDERS_KEY); }
+  function drills(){ return J(DRILLS_KEY); }
+  function saveF(a){ stSet(DFOLDERS_KEY,JSON.stringify(a)); }
+  function saveD(a){ stSet(DRILLS_KEY,JSON.stringify(a)); }
+  function uid(p){ return p+Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+  var coll=function(a,b){ return String(a).localeCompare(String(b),'tr',{sensitivity:'base',numeric:true}); };
+  function norm(n){ return String(n||'').trim().replace(/\s+/g,' ').toLocaleLowerCase('tr'); }
+  function fById(id,F){ return (F||folders()).find(function(f){ return f.id===id; })||null; }
+  function kids(id,F){ return (F||folders()).filter(function(f){ return (f.parentId||null)===(id||null); }).sort(function(a,b){ return coll(a.name,b.name); }); }
+  function inF(id,D){ return (D||drills()).filter(function(d){ return (d.folderId||null)===(id||null); }).sort(function(a,b){ return coll(a.name,b.name); }); }
+  function path(id,F){ var out=[],f=fById(id,F),g=0; while(f&&g++<64){ out.unshift(f); f=fById(f.parentId,F); } return out; }
+  function desc(id,F){ var out=[],st=[id],g=0; F=F||folders(); while(st.length&&g++<5000){ var x=st.pop(); F.forEach(function(f){ if(f.parentId===x){ out.push(f.id); st.push(f.id); } }); } return out; }
+  function nameTaken(name,parentId,exceptId,F){ var n=norm(name); return kids(parentId,F).some(function(f){ return f.id!==exceptId && norm(f.name)===n; }); }
+  function freeName(base,parentId,F){ var n=base,i=2; while(nameTaken(n,parentId,null,F)) n=base+' ('+(i++)+')'; return n; }
+  function counts(id,F,D){ var all=[id].concat(desc(id,F)); var d=(D||drills()).filter(function(x){ return all.indexOf(x.folderId||null)>=0; }).length; return {f:all.length-1,d:d}; }
+  window.drFolders=folders; window.drDrills=drills; window.drPath=path; window.drKids=kids; window.drInFolder=inF; window.drDesc=desc;
+  // ---- işlemler (test ve diğer ekranlar da kullanır) ----
+  window.drCreateFolder=function(name,parentId){
+    name=String(name||'').trim().replace(/\s+/g,' '); if(!name) return {err:'Klasör adı boş olamaz.'};
+    var F=folders(); if(parentId&&!fById(parentId,F)) parentId=null;
+    if(nameTaken(name,parentId,null,F)) return {err:'Bu klasörde "'+name+'" adlı bir klasör zaten var.'};
+    var t=Date.now(), f={id:uid('f'),name:name,parentId:parentId||null,createdAt:t,updatedAt:t}; F.push(f); saveF(F); return {ok:f};
+  };
+  window.drRenameFolder=function(id,name){
+    name=String(name||'').trim().replace(/\s+/g,' '); if(!name) return {err:'Klasör adı boş olamaz.'};
+    var F=folders(), f=fById(id,F); if(!f) return {err:'Klasör bulunamadı.'};
+    if(nameTaken(name,f.parentId,id,F)) return {err:'Bu klasörde "'+name+'" adlı bir klasör zaten var.'};
+    f.name=name; f.updatedAt=Date.now(); saveF(F); return {ok:f};
+  };
+  // Hedef: klasör id'si ya da null (en üst). newName: ad çakışmasında kullanıcının verdiği yeni ad
+  window.drMoveFolder=function(id,target,newName){
+    var F=folders(), f=fById(id,F); if(!f) return {err:'Klasör bulunamadı.'};
+    target=target||null; if(target&&!fById(target,F)) return {err:'Hedef klasör bulunamadı.'};
+    if(target===id||desc(id,F).indexOf(target)>=0) return {err:'Klasör kendi içine taşınamaz.'};
+    if((f.parentId||null)===target) return {ok:f,same:true};
+    var nm=newName!=null?String(newName).trim().replace(/\s+/g,' '):f.name; if(!nm) return {err:'Klasör adı boş olamaz.'};
+    if(nameTaken(nm,target,id,F)) return {conflict:true,err:'Hedefte "'+nm+'" adlı bir klasör var. Yeni bir ad gir.'};
+    f.name=nm; f.parentId=target; f.updatedAt=Date.now(); saveF(F); return {ok:f};
+  };
+  // Klasör silinir; içindeki alt klasörler ve driller bir üst klasöre çıkar (ad çakışırsa sonuna numara eklenir)
+  window.drDeleteFolder=function(id){
+    var F=folders(), f=fById(id,F); if(!f) return {err:'Klasör bulunamadı.'};
+    var up=f.parentId||null, t=Date.now(), rest=F.filter(function(x){ return x.id!==id; });
+    rest.forEach(function(x){ if(x.parentId===id){ x.parentId=up; if(nameTaken(x.name,up,x.id,rest)) x.name=freeName(x.name,up,rest.filter(function(y){ return y.id!==x.id; })); x.updatedAt=t; } });
+    var D=drills(), ch=false; D.forEach(function(d){ if(d.folderId===id){ d.folderId=up; d.updatedAt=t; ch=true; } });
+    saveF(rest); if(ch) saveD(D); if(curF===id) curF=up; return {ok:true};
+  };
+  window.drMoveDrill=function(id,target){
+    var D=drills(), d=D.find(function(x){ return x.id===id; }); if(!d) return {err:'Drill bulunamadı.'};
+    target=target||null; if(target&&!fById(target)) return {err:'Hedef klasör bulunamadı.'};
+    d.folderId=target; d.updatedAt=Date.now(); saveD(D); return {ok:d};
+  };
+  window.drCopyDrill=function(id){
+    var D=drills(), d=D.find(function(x){ return x.id===id; }); if(!d) return {err:'Drill bulunamadı.'};
+    var c=JSON.parse(JSON.stringify(d)), t=Date.now(); c.id=uid('d'); c.name=(d.name||'Drill')+' (kopya)'; c.createdAt=t; c.updatedAt=t; D.push(c); saveD(D); return {ok:c};
+  };
+  window.drDeleteDrill=function(id){ var D=drills(), n=D.length; D=D.filter(function(x){ return x.id!==id; }); if(D.length===n) return {err:'Drill bulunamadı.'}; saveD(D); return {ok:true}; };
+  // ---- görünüm ----
+  var IC_F='<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>';
+  window.drOpen=function(opts){
+    opts=opts||{}; fromCal=!!opts.fromCal;
+    if(curF&&!fById(curF)) curF=null;
+    $('screen-ap').classList.add('dr'); $('dr-back-t').textContent=fromCal?'Takvim':'Ana menü';
+    render();
+  };
+  window.drFromCal=function(){ return fromCal; };
+  window.drIsOpen=function(){ var s=$('screen-ap'); return !!(s&&s.classList.contains('show')&&s.classList.contains('dr')); };
+  window.drClose=function(){ menuClose(); dlgClose(); $('screen-ap').classList.remove('dr'); if(fromCal){ if(window.apRender) apRender(); } else openScreen('menu'); };
+  window.drGo=function(id){ curF=(id&&fById(id))?id:null; render(); };
+  window.drCur=function(){ return curF; };
+  function render(){
+    var F=folders(), D=drills();
+    if(curF&&!fById(curF,F)) curF=null;
+    // gezinme yolu
+    var cr=$('dr-crumb'); cr.innerHTML='';
+    var mk=function(label,id){ var b=document.createElement('button'); b.type='button'; b.textContent=label; b.dataset.drop=id||''; b.onclick=function(){ drGo(id); }; return b; };
+    path(curF,F).forEach(function(f,ix){ if(ix){ var i=document.createElement('i'); i.textContent='›'; cr.appendChild(i); } cr.appendChild(mk(f.name,f.id)); });
+    cr.scrollLeft=cr.scrollWidth;
+    // klasör ağacı
+    var tr=$('dr-tree'); tr.innerHTML='';
+    var row=function(id,name,depth){ var b=document.createElement('button'); b.type='button'; b.dataset.drop=id||''; b.style.paddingLeft=(8+depth*16)+'px'; if((id||null)===curF) b.classList.add('on');
+      b.innerHTML=(id?IC_F.replace('26','18').replace('26','18'):'')+'<span></span>'; b.querySelector('span').textContent=name; b.onclick=function(){ drGo(id); }; tr.appendChild(b); };
+    row(null,'Driller',0);
+    (function walk(pid,dep){ kids(pid,F).forEach(function(f){ row(f.id,f.name,dep); walk(f.id,dep+1); }); })(null,1);
+    // liste
+    var L=$('dr-list'); L.innerHTML='';
+    var sub=kids(curF,F), here=inF(curF,D);
+    if(sub.length){ L.appendChild(sec('KLASÖRLER')); var g=grid(); sub.forEach(function(f){ g.appendChild(folderCard(f,F,D)); }); L.appendChild(g); }
+    if(here.length){ L.appendChild(sec(curF?'DRİLLER':'KLASÖRSÜZ')); var g2=grid(); here.forEach(function(d){ g2.appendChild(drillCard(d)); }); L.appendChild(g2); }
+    if(!sub.length&&!here.length){ var e=document.createElement('div'); e.className='dr-none'; e.textContent=curF?'Bu klasör boş. "+ Drill ekle" ya da "Klasör oluştur" ile başla.':'Henüz drill yok. "+ Drill ekle" ile ilk drillini oluştur; istersen önce klasör aç.'; L.appendChild(e); }
+  }
+  window.drRender=function(){ if(drIsOpen()) render(); };
+  function sec(t){ var d=document.createElement('div'); d.className='dr-sec'; d.textContent=t; return d; }
+  function grid(){ var d=document.createElement('div'); d.className='dr-grid'; return d; }
+  function moreBtn(fn){ var m=document.createElement('button'); m.type='button'; m.className='dr-more'; m.textContent='⋯'; m.setAttribute('aria-label','Seçenekler'); m.onclick=function(e){ e.stopPropagation(); fn(m); }; m.addEventListener('pointerdown',function(e){ e.stopPropagation(); }); return m; }
+  function folderCard(f,F,D){
+    var c=document.createElement('div'); c.className='dr-card'; c.tabIndex=0; c.setAttribute('role','button'); c.dataset.fid=f.id; c.dataset.drop=f.id;
+    var n=counts(f.id,F,D);
+    c.innerHTML='<div class="dr-fold">'+IC_F+'<span><b></b><small></small></span></div>';
+    c.querySelector('b').textContent=f.name; c.querySelector('small').textContent=n.d+' drill'+(n.f?' · '+n.f+' alt klasör':'');
+    c.appendChild(moreBtn(function(m){ folderMenu(f.id,m); }));
+    bindItem(c,{kind:'f',id:f.id,label:f.name},function(){ drGo(f.id); },function(x,y){ folderMenu(f.id,null,x,y); });
+    return c;
+  }
+  function drillCard(d){
+    var c=document.createElement('div'); c.className='dr-card'; c.tabIndex=0; c.setAttribute('role','button'); c.dataset.did=d.id;
+    var tg=TAGS[d.tag]||null;
+    var cv=document.createElement('canvas'); cv.className='dr-thumb'; cv.width=320; cv.height=200; c.appendChild(cv);
+    try{ if(window.drDrawThumb) drDrawThumb(cv,d); }catch(e){}
+    var inf=document.createElement('div'); inf.className='dr-dinfo'; inf.innerHTML='<b></b><small></small>';
+    inf.querySelector('b').textContent=d.name||'Adsız drill';
+    var sm=inf.querySelector('small'); if(tg){ var dot=document.createElement('span'); dot.className='dr-tag'; dot.style.background=tg.c; sm.appendChild(dot); sm.appendChild(document.createTextNode(tg.n)); } else sm.textContent='Etiketsiz';
+    if(d.frames&&d.frames.length>1){ sm.appendChild(document.createTextNode(' · ▶ animasyon')); }
+    c.appendChild(inf);
+    c.appendChild(moreBtn(function(m){ drillMenu(d.id,m); }));
+    bindItem(c,{kind:'d',id:d.id,label:d.name||'Drill'},function(){ drEditDrill(d.id); },function(x,y){ drillMenu(d.id,null,x,y); });
+    return c;
+  }
+  window.drEditDrill=function(id){ if(window.drcOpen) drcOpen(id); else if(window.mmToast) mmToast('Drill oluşturucu sıradaki adımda'); };
+  // ---- dokunma: tık, sağ tık, çift dokunuş, sürükle-bırak ----
+  var drag=null, lastTap={t:0,el:null};
+  function bindItem(el,info,onOpen,onMenu){
+    el.addEventListener('contextmenu',function(e){ e.preventDefault(); onMenu(e.clientX,e.clientY); });
+    el.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); onOpen(); } });
+    el.addEventListener('pointerdown',function(e){
+      if(e.button>0) return;
+      var sx=e.clientX, sy=e.clientY, pid=e.pointerId, started=false, ghost=null, over=null, timer=null;
+      var touch=e.pointerType!=='mouse';
+      // dokunmatikte sürükleme kısa basılı tutunca başlar (kaydırma ile karışmasın)
+      var armed=!touch; if(touch) timer=setTimeout(function(){ armed=true; try{ el.setPointerCapture(pid); }catch(_){} if(navigator.vibrate) try{ navigator.vibrate(15); }catch(_){} },350);
+      function mv(ev){
+        if(ev.pointerId!==pid) return;
+        var dx=ev.clientX-sx, dy=ev.clientY-sy;
+        if(!started){ if(Math.hypot(dx,dy)<8) return; if(!armed){ clearTimeout(timer); cleanup(); return; } started=true; try{ el.setPointerCapture(pid); }catch(_){} el.classList.add('dragging'); ghost=document.createElement('div'); ghost.className='dr-ghost'; ghost.textContent=(info.kind==='f'?'📁 ':'')+info.label; document.body.appendChild(ghost); drag=info; }
+        ev.preventDefault();
+        ghost.style.left=ev.clientX+'px'; ghost.style.top=ev.clientY+'px';
+        var t=document.elementFromPoint(ev.clientX,ev.clientY), tgt=t&&t.closest('[data-drop]');
+        if(tgt&&!validDrop(info,tgt.dataset.drop||null)) tgt=null;
+        if(over&&over!==tgt) over.classList.remove('drop'); if(tgt) tgt.classList.add('drop'); over=tgt;
+      }
+      function up(ev){
+        if(ev.pointerId!==pid) return; clearTimeout(timer);
+        var wasDrag=started, tgt=over; cleanup();
+        if(wasDrag){ if(tgt) doDrop(info,tgt.dataset.drop||null); return; }
+        if(ev.type==='pointercancel') return;
+        // çift dokunuş = menü (tablet), tek = aç
+        var now=Date.now();
+        if(touch && lastTap.el===el && now-lastTap.t<350){ lastTap={t:0,el:null}; clearTimeout(lastTap.tm); onMenu(ev.clientX,ev.clientY); return; }
+        if(touch){ lastTap={t:now,el:el,tm:setTimeout(function(){ if(lastTap.el===el){ lastTap={t:0,el:null}; onOpen(); } },350)}; return; }
+        onOpen();
+      }
+      function cleanup(){ document.removeEventListener('pointermove',mv,true); document.removeEventListener('pointerup',up,true); document.removeEventListener('pointercancel',up,true);
+        el.classList.remove('dragging'); if(ghost) ghost.remove(); if(over) over.classList.remove('drop'); ghost=null; over=null; drag=null; }
+      document.addEventListener('pointermove',mv,true); document.addEventListener('pointerup',up,true); document.addEventListener('pointercancel',up,true);
+    });
+  }
+  function validDrop(info,target){
+    target=target||null;
+    if(info.kind==='d'){ var d=drills().find(function(x){ return x.id===info.id; }); return !!d && (d.folderId||null)!==target; }
+    var F=folders(), f=fById(info.id,F); if(!f) return false;
+    if(target===info.id || desc(info.id,F).indexOf(target)>=0) return false;
+    return (f.parentId||null)!==target;
+  }
+  function tName(t){ var f=t?fById(t):null; return f?f.name:'Driller (en üst)'; }
+  function doDrop(info,target){
+    if(info.kind==='d'){ var r=drMoveDrill(info.id,target); if(r.ok){ render(); mmToast('"'+info.label+'" → '+tName(target)); } return; }
+    moveFolderUI(info.id,target);
+  }
+  function moveFolderUI(id,target,name){
+    var r=drMoveFolder(id,target,name);
+    if(r.ok){ render(); if(!r.same) mmToast('"'+r.ok.name+'" → '+tName(target)); return; }
+    if(r.conflict){ var f=fById(id); askName('Ad çakışması',r.err,name||(f&&f.name)||'',function(nn){ var r2=drMoveFolder(id,target,nn); if(r2.ok){ render(); mmToast('"'+r2.ok.name+'" → '+tName(target)); return true; } return r2.err; }); return; }
+    mmToast(r.err);
+  }
+  // ---- menüler ----
+  function menuClose(){ var m=$('dr-menu'); if(m) m.classList.remove('show'); }
+  window.drMenuClose=menuClose;
+  window.drShowMenu=function(items,anchor,x,y){ showMenu(items,anchor,x,y); };
+  function showMenu(items,anchor,x,y){
+    var m=$('dr-menu'); m.innerHTML='';
+    items.forEach(function(it){ var b=document.createElement('button'); b.type='button'; b.textContent=it[0]; if(it[2]) b.className=it[2]; b.onclick=function(e){ e.stopPropagation(); menuClose(); it[1](); }; m.appendChild(b); });
+    m.classList.add('show');
+    var r=anchor?anchor.getBoundingClientRect():{left:x,right:x,top:y,bottom:y}; var w=m.offsetWidth, h=m.offsetHeight;
+    var L=Math.min(Math.max(8,(anchor?r.right-w:x)),innerWidth-w-8), T=(anchor?r.bottom+4:y); if(T+h>innerHeight-8) T=Math.max(8,(anchor?r.top-h-4:y-h));
+    m.style.left=L+'px'; m.style.top=T+'px';
+  }
+  document.addEventListener('pointerdown',function(e){ var m=$('dr-menu'); if(m&&m.classList.contains('show')&&!m.contains(e.target)) menuClose(); },true);
+  function folderMenu(id,anchor,x,y){
+    var f=fById(id); if(!f) return;
+    showMenu([
+      ['Yeniden adlandır',function(){ askName('Klasörü yeniden adlandır','',f.name,function(n){ var r=drRenameFolder(id,n); if(r.ok){ render(); return true; } return r.err; }); }],
+      ['Taşı',function(){ pickTarget({kind:'f',id:id}); }],
+      ['Sil',function(){ confirmDlg('"'+f.name+'" silinsin mi?','İçindeki alt klasörler ve driller silinmez; bir üst klasöre çıkar.','Sil',function(){ drDeleteFolder(id); render(); mmToast('Klasör silindi'); }); },'del']
+    ],anchor,x,y);
+  }
+  function drillMenu(id,anchor,x,y){
+    var d=drills().find(function(q){ return q.id===id; }); if(!d) return;
+    showMenu([
+      ['Düzenle',function(){ drEditDrill(id); }],
+      ['Kopyala',function(){ var r=drCopyDrill(id); if(r.ok){ render(); mmToast('Kopyalandı: '+r.ok.name); } }],
+      ['Taşı',function(){ pickTarget({kind:'d',id:id}); }],
+      ['Sil',function(){ confirmDlg('"'+(d.name||'Drill')+'" silinsin mi?','Bu drill kütüphaneden kaldırılır.','Sil',function(){ drDeleteDrill(id); render(); mmToast('Drill silindi'); }); },'del']
+    ],anchor,x,y);
+  }
+  // ---- pencereler ----
+  function dlgClose(){ var d=$('dr-dlg'); if(d) d.classList.remove('show'); }
+  window.drDlgOpen=function(){ var d=$('dr-dlg'); return !!(d&&d.classList.contains('show')); };
+  window.drDlgClose=dlgClose;
+  window.drConfirm=function(t,m,ok,fn){ confirmDlg(t,m,ok,fn); };
+  window.drAskValue=function(title,msg,type,val,onOk){ askName(title,msg,val,onOk); var i=$('dr-name'); if(i&&type){ i.type=type; i.value=val||''; } };
+  $('dr-dlg').addEventListener('pointerdown',function(e){ if(e.target===this) dlgClose(); });
+  function box(){ var b=$('dr-dlg-box'); b.innerHTML=''; return b; }
+  function btn(t,cls,fn){ var b=document.createElement('button'); b.type='button'; b.className='ap-btn'+(cls?' '+cls:''); b.textContent=t; b.onclick=fn; return b; }
+  function askName(title,msg,val,onOk){
+    var b=box(); var h=document.createElement('h3'); h.textContent=title; b.appendChild(h);
+    if(msg){ var p=document.createElement('p'); p.textContent=msg; b.appendChild(p); }
+    var inp=document.createElement('input'); inp.type='text'; inp.maxLength=60; inp.value=val||''; inp.id='dr-name'; b.appendChild(inp);
+    var er=document.createElement('div'); er.className='dr-err'; b.appendChild(er);
+    var act=document.createElement('div'); act.className='dr-dlg-act';
+    var ok=function(){ var r=onOk(inp.value); if(r===true) dlgClose(); else er.textContent=r||''; };
+    act.appendChild(btn('İptal','',dlgClose)); act.appendChild(btn('Kaydet','pri',ok)); b.appendChild(act);
+    inp.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); ok(); } else if(e.key==='Escape'){ e.preventDefault(); e.stopPropagation(); dlgClose(); } });
+    $('dr-dlg').classList.add('show'); setTimeout(function(){ inp.focus(); try{ inp.select(); }catch(_){} },30);
+  }
+  function confirmDlg(title,msg,okText,onOk){
+    var b=box(); var h=document.createElement('h3'); h.textContent=title; b.appendChild(h); var p=document.createElement('p'); p.textContent=msg; b.appendChild(p);
+    var act=document.createElement('div'); act.className='dr-dlg-act'; act.appendChild(btn('Vazgeç','',dlgClose)); var o=btn(okText,'pri',function(){ dlgClose(); onOk(); }); o.id='dr-ok'; act.appendChild(o); b.appendChild(act);
+    $('dr-dlg').classList.add('show');
+  }
+  function pickTarget(info){
+    var F=folders(), cur, bad=[];
+    if(info.kind==='f'){ var f=fById(info.id,F); cur=f?(f.parentId||null):null; bad=[info.id].concat(desc(info.id,F)); }
+    else { var d=drills().find(function(x){ return x.id===info.id; }); cur=d?(d.folderId||null):null; }
+    var b=box(); var h=document.createElement('h3'); h.textContent='Nereye taşınsın?'; b.appendChild(h);
+    var p=document.createElement('p'); p.textContent='Bulunduğu klasör soluk görünür.'; b.appendChild(p);
+    var lst=document.createElement('div'); lst.className='dr-tpick'; lst.id='dr-tpick';
+    var add=function(id,name,dep){ if(bad.indexOf(id)>=0) return; var x=document.createElement('button'); x.type='button'; x.dataset.target=id||''; x.style.paddingLeft=(12+dep*18)+'px'; x.textContent=(id?'📁 ':'')+name; if((id||null)===cur) x.disabled=true;
+      x.onclick=function(){ dlgClose(); if(info.kind==='d'){ var r=drMoveDrill(info.id,id); if(r.ok){ render(); mmToast('Taşındı → '+tName(id)); } } else moveFolderUI(info.id,id); }; lst.appendChild(x); };
+    add(null,'Driller (en üst)',0);
+    (function walk(pid,dep){ kids(pid,F).forEach(function(f){ if(bad.indexOf(f.id)>=0) return; add(f.id,f.name,dep); walk(f.id,dep+1); }); })(null,1);
+    b.appendChild(lst);
+    var act=document.createElement('div'); act.className='dr-dlg-act'; act.appendChild(btn('Vazgeç','',dlgClose)); b.appendChild(act);
+    $('dr-dlg').classList.add('show');
+  }
+  // Geri tuşu / Esc sırası: pencere → menü → (takvim ya da ana menü)
+  window.drBack=function(){
+    if(drDlgOpen()){ dlgClose(); return true; }
+    var m=$('dr-menu'); if(m&&m.classList.contains('show')){ menuClose(); return true; }
+    if(drIsOpen()){ drClose(); return true; }
+    return false;
+  };
+  function wire(){
+    $('dr-back').onclick=function(){ drClose(); };
+    $('dr-newf').onclick=function(){ askName('Yeni klasör',curF?('"'+(fById(curF)||{}).name+'" içine açılacak.'):'Driller en üst seviyesine açılacak.','',function(n){ var r=drCreateFolder(n,curF); if(r.ok){ render(); mmToast('Klasör oluşturuldu: '+r.ok.name); return true; } return r.err; }); };
+    $('dr-newd').onclick=function(){ if(window.drcNew) drcNew(curF); else if(window.mmToast) mmToast('Drill oluşturucu sıradaki adımda'); };
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',wire); else wire();
+})();
+</script>
+<!-- DRİLL OLUŞTURUCU: tahta drill kipinde açılır; tahtadaki durum kenara alınır, çıkınca geri konur -->
+<script>
+(function(){
+  var $=function(id){ return document.getElementById(id); };
+  var saved=null, cur=null, startSer='', active=false, field='empty', tag='';
+  window.drcActive=function(){ return active; };
+  function clone(o){ return JSON.parse(JSON.stringify(o)); }
+  // Çizimler piksel olarak tutuluyor; drill'de sahadan bağımsız (0–1) saklanır
+  function mapPaths(arr,fx,fy){ return (arr||[]).map(function(p){ var q=clone(p); var f=function(o){ if(o&&typeof o.x==='number'){ o.x=o.x*fx; o.y=o.y*fy; } };
+    f(q.from); f(q.to); if(Array.isArray(q.points)) q.points.forEach(f); return q; }); }
+  function frameNow(){
+    var people=players.filter(function(p){ return p.dk; }).map(function(p){ var o={yid:p.id,kind:p.dk,x:p.x,y:p.y,color:p.color,scale:p.scale||1}; if(p.vest) o.vest=p.vest; return o; });
+    return { equip:clone(equip), ball:ball?[ball.x,ball.y]:null, paths:mapPaths(allPaths,1/Math.max(1,pitchW),1/Math.max(1,pitchH)), people:people };
+  }
+  function animSnaps(){ return (animFrames&&animFrames.length>1)?animFrames:[]; }
+  // Değişiklik kontrolü: animasyonda yalnızca kare değiştirmek değişiklik sayılmaz (konumlar ilk kareden alınır)
+  function baseFrame(){ var f=frameNow(); var a=animSnaps(); if(!a.length) return f; var s0=a[0];
+    f.people.forEach(function(q){ var v=s0.pos&&s0.pos[q.yid]; if(v){ q.x=v[0]; q.y=v[1]; } });
+    if(f.ball&&s0.ball) f.ball=s0.ball.slice();
+    f.equip.forEach(function(it){ var v=s0.eq&&s0.eq[it.id]; if(v){ it.x=v[0]; it.y=v[1]; it.rot=v[2]||0; } });
+    return f; }
+  function ser(){ return JSON.stringify({f:baseFrame(),a:animSnaps(),sp:animSpeed,field:field,n:$('drc-name').value.trim(),d:$('drc-desc').value,t:tag,fo:$('drc-folder').value}); }
+  function folderOptions(sel){
+    var s=$('drc-folder'); s.innerHTML=''; var o=document.createElement('option'); o.value=''; o.textContent='Klasörsüz'; s.appendChild(o);
+    (function walk(pid,dep){ drKids(pid).forEach(function(f){ var x=document.createElement('option'); x.value=f.id; x.textContent=' '.repeat(dep*3)+(dep?'└ ':'')+f.name; s.appendChild(x); walk(f.id,dep+1); }); })(null,0);
+    s.value=(sel&&drFolders().some(function(f){ return f.id===sel; }))?sel:'';
+  }
+  function tagButtons(){
+    var box=$('drc-tags'); box.innerHTML='';
+    Object.keys(DRILL_TAGS).forEach(function(k){ var t=DRILL_TAGS[k], b=document.createElement('button'); b.type='button'; b.dataset.tag=k; b.style.setProperty('--tc',t.c);
+      b.innerHTML='<i></i><span></span>'; b.querySelector('i').style.background=t.c; b.querySelector('span').textContent=t.n.replace(' antrenman','');
+      if(k===tag) b.classList.add('on'); b.onclick=function(){ tag=(tag===k)?'':k; tagButtons(); }; box.appendChild(b); });
+  }
+  function fieldButtons(){ document.querySelectorAll('#drc-field button').forEach(function(b){ b.classList.toggle('on',b.dataset.f===field); }); }
+  function setField(f){
+    if(f===field) return;
+    // çizimler sahaya göre oranlı olduğu için saha değişince yerinde kalır
+    var norm=mapPaths(allPaths,1/Math.max(1,pitchW),1/Math.max(1,pitchH));
+    field=f; pitchMode=f; fieldButtons(); resizePitch();
+    allPaths=mapPaths(norm,pitchW,pitchH); redrawCanvas();
+  }
+  function enter(d,isNew){
+    if(active) return;
+    if(typeof animMode!=='undefined' && animMode) toggleAnim();
+    if(typeof linkPanelClose==='function') linkPanelClose();
+    saved={players:players,ball:ball,equip:equip,allPaths:allPaths,links:links,goalsSwapped:goalsSwapped,animFrames:animFrames,animCur:animCur,animSpeed:animSpeed,eqSeq:_eqSeq,tool:tool};
+    cur=d; active=true;
+    var f0=(d.frames&&d.frames[0])||{};
+    players=(f0.people||[]).map(function(q){ var p={id:q.yid,dk:q.kind,side:'home',num:'',name:'',x:q.x,y:q.y,color:q.color,scale:q.scale||1,isGK:q.kind==='gk'}; if(q.vest) p.vest=q.vest; return p; });
+    links=[]; goalsSwapped=false; animFrames=[]; animCur=0;
+    equip=clone(f0.equip||[]); _eqSeq=1; equip.forEach(function(it){ var n=+String(it.id).slice(1); if(n>=_eqSeq) _eqSeq=n+1; });
+    ball=f0.ball?{id:'ball',x:f0.ball[0],y:f0.ball[1]}:null;
+    allPaths=[];
+    field=d.field||'empty'; pitchMode=field; tag=d.tag||'';
+    $('drc-title').textContent=isNew?'Yeni drill':'Drill düzenle';
+    $('drc-name').value=d.name||''; $('drc-desc').value=d.desc||''; $('drc-err').textContent='';
+    folderOptions(d.folderId||null); tagButtons(); fieldButtons();
+    document.body.classList.add('drill-mode');
+    openScreen('tahta');
+    resizePitch();
+    allPaths=mapPaths(f0.paths||[],pitchW,pitchH); redrawCanvas(); renderPlayers();
+    // animasyon kareleri: ilk kare yukarıda kuruldu, sonrakiler konum kaydı
+    var rest=(d.frames||[]).slice(1).map(function(f){ return f&&f.snap; }).filter(Boolean);
+    animFrames=rest.length?[_snap()].concat(clone(rest)):[]; animCur=0; setSpeed(d.speed||1);
+    if(typeof animUpdateUI==='function') animUpdateUI();
+    if(typeof setTool==='function') setTool('select');
+    startSer=ser();
+  }
+  // animasyon varsa: o anki kareyi yakala, ilk karenin konumlarına dön, kareleri ayır
+  function buildFrames(){
+    var snaps=[];
+    if(animMode){ if(animPlaying) animStop(); animSettle(); animCaptureFrame(); }
+    if(animFrames&&animFrames.length>1){ _applySnap(animFrames[0]); snaps=animFrames.slice(1).map(function(f){ return {snap:clone(f)}; }); }
+    return {fr:frameNow(),snaps:snaps};
+  }
+  function setSpeed(v){ animSpeed=v; var r=$('anim-speed'), l=$('anim-speed-lbl'); if(r) r.value=v; if(l) l.textContent=v+'x'; }
+  function restore(){
+    if(!saved) return;
+    if(animMode){ if(animPlaying) animStop(); toggleAnim(); }
+    players=saved.players; ball=saved.ball; equip=saved.equip; allPaths=saved.allPaths; links=saved.links; goalsSwapped=saved.goalsSwapped; animFrames=saved.animFrames; animCur=saved.animCur; _eqSeq=saved.eqSeq; setSpeed(saved.animSpeed||1);
+    var t=saved.tool; saved=null; active=false; cur=null; pitchMode='full';
+    document.body.classList.remove('drill-mode'); $('drc-panel').classList.remove('folded');
+    if(typeof eqHideMenu==='function') try{ eqHideMenu(); }catch(e){}
+    if(typeof pathMenuHide==='function') try{ pathMenuHide(); }catch(e){}
+    resizePitch(); if(typeof setTool==='function') setTool(t||'select');
+  }
+  // ---- OYUNCU ATAMA: antrenmandaki drill ----
+  var asg=null; // {sid,rid,date,sel}
+  window.drcAssigning=function(){ return !!(active&&asg&&!sesEdit); };
+  window.drcAssignSel=function(){ return asg?asg.sel:null; };
+  function asRow(){ var s=asg&&sesGet(asg.sid); return s?{s:s,r:(s.drills||[]).find(function(q){ return q.rid===asg.rid; })}:null; }
+  function teamPl(){ var t=(typeof teamActive==='function')?teamActive():null; var a=(t&&t.players)||[]; try{ a=sortByPos(a.slice()); }catch(e){} return a; }
+  function plKey(p){ return p.pid||(p.num+'|'+p.name); }
+  window.drcAssignInfo=function(yid){ var x=asRow(); if(!x||!x.r) return null; var k=(x.r.assign||{})[yid]; if(!k) return null; return teamPl().find(function(p){ return plKey(p)===k; })||null; };
+  function setAssign(yid,key){ var x=asRow(); if(!x||!x.r) return; var a=x.r.assign=x.r.assign||{};
+    Object.keys(a).forEach(function(y){ if(a[y]===key) delete a[y]; }); if(key) a[yid]=key; else delete a[yid];
+    x.s.updatedAt=Date.now(); var all=JSON.parse(stGet(SESSIONS_KEY)||'[]'), i=all.findIndex(function(q){ return q.id===x.s.id; }); if(i>=0){ all[i]=x.s; stSet(SESSIONS_KEY,JSON.stringify(all)); }
+    asg.sel=null; renderPlayers(); asPanel(); }
+  window.drcAssign=function(yid,key){ setAssign(yid,key); };
+  function slots(){ return players.filter(function(p){ return p.dk&&p.dk!=='coach'; }); }
+  function asPanel(){
+    var x=asRow(); if(!x) return; var a=(x.r&&x.r.assign)||{}, sl=slots(), filled=sl.filter(function(p){ return a[p.id]&&drcAssignInfo(p.id); }).length;
+    $('as-sub').textContent=filled+'/'+sl.length+' oyuncu atandı';
+    $('as-hint').textContent=asg.sel?'Listeden bir oyuncu seç ya da sürükle.':(sl.length?'Sahada boş bir yere dokun ya da oyuncuyu listeden sürükleyip bırak.':'Bu drill\'de atanacak oyuncu yeri yok.');
+    var L=$('as-list'); L.innerHTML=''; var used={}; Object.keys(a).forEach(function(y){ used[a[y]]=y; });
+    var tp=teamPl(); if(!tp.length){ var e=document.createElement('div'); e.className='dp-none'; e.textContent='Takımın kadrosunda oyuncu yok.'; L.appendChild(e); }
+    tp.forEach(function(p){ var b=document.createElement('button'); b.type='button'; b.className='as-pl'+(used[plKey(p)]?' used':''); b.dataset.key=plKey(p);
+      b.innerHTML='<span class="n"></span><span class="t"><span></span><small></small></span>'; b.querySelector('.n').textContent=p.num!==''&&p.num!=null?p.num:'–'; b.querySelector('.t span').textContent=p.name||'Oyuncu'; b.querySelector('.t small').textContent=p.pos||'';
+      if(used[plKey(p)]){ var o=document.createElement('span'); o.className='ok'; o.textContent='Atandı'; b.appendChild(o); }
+      bindPl(b,plKey(p)); L.appendChild(b); });
+  }
+  function bindPl(b,key){
+    b.addEventListener('pointerdown',function(e){ if(e.button>0) return; var sx=e.clientX, sy=e.clientY, pid=e.pointerId, started=false, ghost=null, over=null, touch=e.pointerType!=='mouse', armed=!touch, tmr=null;
+      if(touch) tmr=setTimeout(function(){ armed=true; try{ b.setPointerCapture(pid); }catch(_){} },300);
+      function mv(ev){ if(ev.pointerId!==pid) return; if(!started){ if(Math.hypot(ev.clientX-sx,ev.clientY-sy)<8) return; if(!armed){ clearTimeout(tmr); done(); return; } started=true; try{ b.setPointerCapture(pid); }catch(_){} ghost=document.createElement('div'); ghost.className='dr-ghost'; ghost.textContent=b.querySelector('.t span').textContent; document.body.appendChild(ghost); }
+        ev.preventDefault(); ghost.style.left=ev.clientX+'px'; ghost.style.top=ev.clientY+'px';
+        var t=document.elementFromPoint(ev.clientX,ev.clientY), tk=t&&t.closest('.dk-token:not(.as-na)'); if(over&&over!==tk) over.classList.remove('as-drop'); if(tk) tk.classList.add('as-drop'); over=tk; }
+      function up(ev){ if(ev.pointerId!==pid) return; clearTimeout(tmr); var was=started, tg=over; done();
+        if(was){ if(tg) setAssign(tg.dataset.id,key); return; } if(ev.type==='pointercancel') return;
+        if(asg.sel) setAssign(asg.sel,key); else mmToast('Önce sahada bir yere dokun'); }
+      function done(){ document.removeEventListener('pointermove',mv,true); document.removeEventListener('pointerup',up,true); document.removeEventListener('pointercancel',up,true); if(ghost) ghost.remove(); if(over) over.classList.remove('as-drop'); ghost=null; over=null; }
+      document.addEventListener('pointermove',mv,true); document.addEventListener('pointerup',up,true); document.addEventListener('pointercancel',up,true);
+    });
+  }
+  window.drcSlotTap=function(p,e){
+    if(p.dk==='coach'){ mmToast('Hoca yerine oyuncu atanmaz'); return; }
+    if(drcAssignInfo(p.id)){ drcSlotMenu(p,e.clientX,e.clientY); return; }
+    asg.sel=(asg.sel===p.id)?null:p.id; renderPlayers(); asPanel();
+  };
+  window.drcSlotMenu=function(p,x,y){
+    if(p.dk==='coach'||!drcAssignInfo(p.id)) return; var m=$('as-menu'); m.innerHTML='';
+    [['Başka oyuncuyla değiştir',function(){ asg.sel=p.id; renderPlayers(); asPanel(); }],['Atamayı kaldır',function(){ setAssign(p.id,null); }]].forEach(function(it){ var b=document.createElement('button'); b.type='button'; b.textContent=it[0]; b.onclick=function(ev){ ev.stopPropagation(); asMenuClose(); it[1](); }; m.appendChild(b); });
+    m.classList.add('show'); var w=m.offsetWidth,h=m.offsetHeight; m.style.left=Math.min(x,innerWidth-w-8)+'px'; m.style.top=Math.min(y,innerHeight-h-8)+'px';
+  };
+  function asMenuClose(){ $('as-menu').classList.remove('show'); }
+  window.asMenuOpen=function(){ return $('as-menu').classList.contains('show'); };
+  window.asMenuClose=asMenuClose;
+  document.addEventListener('pointerdown',function(e){ var m=$('as-menu'); if(m&&m.classList.contains('show')&&!m.contains(e.target)) asMenuClose(); },true);
+  window.sesDrillOpen=function(sid,rid){
+    var s=sesGet(sid), r=s&&(s.drills||[]).find(function(q){ return q.rid===rid; }); if(!r){ mmToast('Antrenman satırı bulunamadı'); return; }
+    var d=r.custom||drDrills().find(function(x){ return x.id===r.drillId; }); if(!d){ mmToast('Bu drill kütüphaneden silinmiş'); return; }
+    asg={sid:sid,rid:rid,date:s.date,sel:null};
+    enter(clone(d),false); document.body.classList.add('drill-assign');
+    $('as-title').textContent=d.name||'Drill'; renderPlayers(); asPanel();
+  };
+  // ---- Drill'i bu antrenman için düzenle ----
+  var sesEdit=null; // {sid,rid,libName}
+  window.drcEditForSession=function(){
+    if(!asg) return; var x=asRow(); if(!x||!x.r) return; var lib=drDrills().find(function(q){ return q.id===x.r.drillId; });
+    sesEdit={sid:asg.sid,rid:asg.rid,date:asg.date,libName:lib?lib.name:''}; asMenuClose(); asg.sel=null;
+    document.body.classList.remove('drill-assign'); document.body.classList.add('drill-sesedit');
+    $('drc-title').textContent=(x.r.custom||lib||{}).name||'Drill'; renderPlayers(); resizePitch();
+    allPaths=mapPaths(cur.frames[0].paths||[],pitchW,pitchH); redrawCanvas();
+    startSer=ser();
+  };
+  window.drcSesEditing=function(){ return !!sesEdit; };
+  function backToAssign(){ var e=sesEdit; sesEdit=null; document.body.classList.remove('drill-sesedit'); restore(); asg=null; document.body.classList.remove('drill-assign'); sesDrillOpen(e.sid,e.rid); }
+  function sesSaveChoice(name){
+    dlg('Değişiklik nasıl kaydedilsin?','Kütüphanedeki asıl drill değişmez.','Yalnızca bu antrenmanda kullan',function(){ saveSes(name,false); },
+      ['Yeni drill olarak kaydet',function(){ saveSes(name,true); }]);
+  }
+  function saveSes(name,asNew){
+    var e=sesEdit; if(!e) return;
+    if(asNew && e.libName && name.toLocaleLowerCase('tr')===String(e.libName).toLocaleLowerCase('tr')){ $('drc-err').textContent='Yeni drill için farklı bir ad gir (sağ panelde).'; $('drc-panel').classList.remove('folded'); $('drc-name').focus(); return; }
+    var B=buildFrames(), t=Date.now(), fo=$('drc-folder').value||null; if(fo&&!drFolders().some(function(f){ return f.id===fo; })) fo=null;
+    var body={name:name,desc:$('drc-desc').value,tag:tag,field:field,frames:[B.fr].concat(B.snaps),speed:animSpeed||1};
+    var all=JSON.parse(stGet(SESSIONS_KEY)||'[]'), si=all.findIndex(function(q){ return q.id===e.sid; }); if(si<0) return;
+    var row=(all[si].drills||[]).find(function(q){ return q.rid===e.rid; }); if(!row) return;
+    if(asNew){ var D=drDrills(); var rec=Object.assign({id:'d'+t.toString(36)+Math.random().toString(36).slice(2,7),folderId:fo,createdAt:t,updatedAt:t},body); D.push(rec); stSet(DRILLS_KEY,JSON.stringify(D)); row.drillId=rec.id; delete row.custom; }
+    else { row.custom=body; }
+    // silinen yerlerin ataması kalkar
+    var keep=(B.fr.people||[]).map(function(q){ return q.yid; }); Object.keys(row.assign||{}).forEach(function(y){ if(keep.indexOf(y)<0) delete row.assign[y]; });
+    all[si].updatedAt=t; stSet(SESSIONS_KEY,JSON.stringify(all));
+    mmToast(asNew?('Yeni drill kaydedildi: '+name):'Bu antrenmana özel kaydedildi');
+    backToAssign();
+  }
+  function exitAssign(){ var a=asg; asMenuClose(); restore(); asg=null; document.body.classList.remove('drill-assign');
+    window._drcLeaving=true; try{ openScreen('antrenman'); if(window.dpOpen&&a) dpOpen(a.date,{sesId:a.sid}); } finally { window._drcLeaving=false; } }
+  window.drcAssignDone=exitAssign;
+  function back(){ window._drcLeaving=true; try{ openScreen('antrenman'); if(window.drOpen) drOpen({fromCal:window.drFromCal?drFromCal():false}); } finally { window._drcLeaving=false; } }
+  window.drcForceExit=function(){ restore(); asg=null; sesEdit=null; document.body.classList.remove('drill-assign'); document.body.classList.remove('drill-sesedit'); };
+  window.drcNew=function(folderId){ var t=Date.now(); enter({id:null,name:'',desc:'',tag:'',folderId:folderId||null,field:'empty',frames:[{equip:[],ball:null,paths:[],people:[]}]},true); };
+  window.drcOpen=function(id){ var d=drDrills().find(function(x){ return x.id===id; }); if(!d){ if(window.mmToast) mmToast('Drill bulunamadı'); return; } enter(clone(d),false); };
+  window.drcSave=function(){
+    if(!active) return false;
+    var name=$('drc-name').value.trim().replace(/\s+/g,' ');
+    if(!name){ $('drc-err').textContent='Drill adı gerekli.'; $('drc-panel').classList.remove('folded'); $('drc-name').focus(); return false; }
+    if(sesEdit){ sesSaveChoice(name); return false; }
+    var B=buildFrames(), snaps=B.snaps;
+    var D=drDrills(), t=Date.now(), fr=B.fr, fo=$('drc-folder').value||null;
+    if(fo && !drFolders().some(function(f){ return f.id===fo; })) fo=null;
+    var rec;
+    if(cur.id){ rec=D.find(function(x){ return x.id===cur.id; }); }
+    if(!rec){ rec={id:'d'+t.toString(36)+Math.random().toString(36).slice(2,7),createdAt:t,speed:1}; D.push(rec); }
+    var old=rec.frames||[];
+    rec.name=name; rec.desc=$('drc-desc').value; rec.tag=tag; rec.folderId=fo; rec.field=field;
+    rec.frames=[fr].concat(snaps); rec.speed=animSpeed||1; rec.updatedAt=t;
+    stSet(DRILLS_KEY,JSON.stringify(D));
+    if(window.drGo) drGo(fo);
+    restore(); back(); if(window.mmToast) mmToast('Kaydedildi: '+name);
+    return true;
+  };
+  window.drcCancel=function(){
+    if(!active) return;
+    if(sesEdit){ if(ser()===startSer){ backToAssign(); return; } dlg('Değişiklikler kaydedilmedi','Kaydetmeden çıkarsan yaptığın değişiklikler silinir.','Çık',function(){ backToAssign(); }); return; }
+    if(asg){ if(asMenuOpen()){ asMenuClose(); return; } if(asg.sel){ asg.sel=null; renderPlayers(); asPanel(); return; } exitAssign(); return; }
+    if(ser()===startSer){ restore(); back(); return; }
+    dlg('Değişiklikler kaydedilmedi','Kaydetmeden çıkarsan yaptığın değişiklikler silinir.','Çık',function(){ restore(); back(); });
+  };
+  function dlg(t,p,yes,fn,alt){ $('drc-dlg-t').textContent=t; $('drc-dlg-p').textContent=p; $('drc-dlg-yes').textContent=yes; $('drc-dlg-yes').onclick=function(){ drcDlgClose(); fn(); };
+    var A=$('drc-dlg-alt'); if(alt){ A.style.display=''; A.textContent=alt[0]; A.onclick=function(){ drcDlgClose(); alt[1](); }; } else A.style.display='none'; $('drc-dlg').classList.add('show'); }
+  window.drcDlgClose=function(){ $('drc-dlg').classList.remove('show'); };
+  window.drcDirty=function(){ return active && ser()!==startSer; };
+  // Ekleme düğmeleri sahadaki formaların küçük hali
+  function peopleIcons(){
+    [['drc-add-player','#e84040',false,''],['drc-add-gk','#f5bc30',true,'G'],['drc-add-coach','#263238',false,'C']].forEach(function(x){
+      var b=$(x[0]); if(!b) return;
+      b.innerHTML='<span class="dk-btn">'+makeJerseySVG(x[1],x[1],'solid',x[2],28,null)+(x[3]?'<b style="color:'+_dkText(x[1])+'">'+x[3]+'</b>':'')+'</span>';
+    });
+  }
+  function wire(){
+    try{ peopleIcons(); }catch(e){}
+    $('drc-save').onclick=drcSave; $('drc-cancel').onclick=drcCancel;
+    $('as-done').onclick=function(){ exitAssign(); };
+    $('as-clear').onclick=function(){ var x=asRow(); if(!x||!x.r||!Object.keys(x.r.assign||{}).length) return; dlg('Atamalar temizlensin mi?','Bu drill\'deki bütün oyuncu atamaları kaldırılır.','Temizle',function(){ var y=asRow(); y.r.assign={}; setAssign('__',null); }); };
+    $('as-edit').onclick=function(){ if(window.drcEditForSession) drcEditForSession(); else mmToast("Drill'i bu antrenman için düzenleme sıradaki adımda"); };
+    $('drc-dlg-no').onclick=drcDlgClose; $('drc-dlg').addEventListener('pointerdown',function(e){ if(e.target===this) drcDlgClose(); });
+    $('drc-fold').onclick=function(){ var norm=mapPaths(allPaths,1/Math.max(1,pitchW),1/Math.max(1,pitchH)); $('drc-panel').classList.toggle('folded'); resizePitch(); allPaths=mapPaths(norm,pitchW,pitchH); redrawCanvas(); };
+    document.querySelectorAll('#drc-field button').forEach(function(b){ b.onclick=function(){ setField(b.dataset.f); }; });
+    $('drc-name').addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); e.target.blur(); } });
+    $('drc-name').addEventListener('input',function(){ $('drc-err').textContent=''; });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',wire); else wire();
+  // Kart önizlemesi: saha + çizimler + malzemeler + top (ilk kare)
+  window.drDrawThumb=function(cv,d){
+    var ctx=cv.getContext('2d'), w=cv.width, h=cv.height, f0=(d.frames&&d.frames[0])||{}, fm=d.field||'empty';
+    for(var i=0;i<10;i++){ ctx.fillStyle=i%2?'#1a6b2f':'#1d7a35'; if(fm==='half') ctx.fillRect(0,i*h/10,w,h/10+1); else ctx.fillRect(i*w/10,0,w/10+1,h); }
+    ctx.strokeStyle='rgba(255,255,255,.7)'; ctx.lineWidth=1.2;
+    if(fm==='full'){ ctx.strokeRect(1,1,w-2,h-2); ctx.beginPath(); ctx.moveTo(w/2,0); ctx.lineTo(w/2,h); ctx.stroke(); ctx.beginPath(); ctx.arc(w/2,h/2,w*9.15/105,0,7); ctx.stroke();
+      ctx.strokeRect(1,h*13.84/68,w*16.5/105,h*40.32/68); ctx.strokeRect(w-1-w*16.5/105,h*13.84/68,w*16.5/105,h*40.32/68); }
+    else if(fm==='half'){ var k=h/55, ox=(w-68*k)/2, oy=2.5*k; ctx.strokeRect(ox,oy,68*k,52.5*k); ctx.strokeRect(ox+13.84*k,oy,40.32*k,16.5*k); ctx.strokeRect(ox+24.84*k,oy,18.32*k,5.5*k); ctx.beginPath(); ctx.arc(ox+34*k,oy+52.5*k,9.15*k,Math.PI,0); ctx.stroke(); }
+    (f0.paths||[]).forEach(function(p){ ctx.save(); ctx.strokeStyle=p.color||'#fff'; ctx.lineWidth=2; ctx.setLineDash(p.type==='dash'?[6,4]:[]); ctx.beginPath();
+      if(Array.isArray(p.points)&&p.points.length){ p.points.forEach(function(q,j){ j?ctx.lineTo(q.x*w,q.y*h):ctx.moveTo(q.x*w,q.y*h); }); ctx.stroke(); }
+      else if(p.from&&p.to){ var a=p.from,b=p.to; if(p.type==='circle'){ ctx.beginPath(); ctx.ellipse((a.x+b.x)/2*w,(a.y+b.y)/2*h,Math.abs(b.x-a.x)/2*w,Math.abs(b.y-a.y)/2*h,0,0,7); ctx.stroke(); } else if(p.type==='rect'){ ctx.strokeRect(Math.min(a.x,b.x)*w,Math.min(a.y,b.y)*h,Math.abs(b.x-a.x)*w,Math.abs(b.y-a.y)*h); } else { ctx.moveTo(a.x*w,a.y*h); ctx.lineTo(b.x*w,b.y*h); ctx.stroke(); } }
+      ctx.restore(); });
+    (f0.equip||[]).forEach(function(it){ var T=(typeof EQ_TYPES!=='undefined'&&EQ_TYPES[it.type])||{}; ctx.fillStyle=it.color||T.color||'#ff7a1a'; ctx.beginPath(); ctx.arc(it.x/100*w,it.y/100*h,Math.max(2.5,w/110),0,7); ctx.fill(); });
+    (f0.people||[]).forEach(function(q){ var x=q.x/100*w, y=q.y/100*h, r=Math.max(4,w/60)*(q.scale||1); ctx.fillStyle=q.color||'#e84040'; ctx.strokeStyle=q.vest||'#fff'; ctx.lineWidth=q.vest?2.5:1.5; ctx.beginPath();
+      ctx.arc(x,y,r,0,7); ctx.fill(); ctx.stroke(); });
+    if(f0.ball){ ctx.fillStyle='#fff'; ctx.strokeStyle='#000'; ctx.beginPath(); ctx.arc(f0.ball[0]/100*w,f0.ball[1]/100*h,3.5,0,7); ctx.fill(); ctx.stroke(); }
+  };
+})();
+</script>
+<!-- GÜN PANELİ VE ANTRENMAN DÜZENLEYİCİ (seçili takıma bağlı) -->
+<script>
+(function(){
+  var $=function(id){ return document.getElementById(id); };
+  var AYLAR=['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+  var GUN=['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'];
+  var date=null, sel=null, pickF=null, pickQ='', pickTag='';
+  function J(){ try{ var a=JSON.parse(stGet(SESSIONS_KEY)||'[]'); return Array.isArray(a)?a:[]; }catch(e){ return []; } }
+  function save(a){ stSet(SESSIONS_KEY,JSON.stringify(a)); }
+  function team(){ return (typeof teamActive==='function')?teamActive():null; }
+  function uid(p){ return p+Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+  function toMin(t){ var m=/^(\d{1,2}):(\d{2})$/.exec(t||''); return m?(+m[1])*60+(+m[2]):null; }
+  function hm(n){ n=Math.max(0,Math.min(24*60,Math.round(n))); return String(Math.floor(n/60)).padStart(2,'0')+':'+String(n%60).padStart(2,'0'); }
+  function nice(k){ var p=k.split('-'), d=new Date(+p[0],+p[1]-1,+p[2]); return GUN[d.getDay()]+', '+d.getDate()+' '+AYLAR[d.getMonth()]+' '+d.getFullYear(); }
+  function drill(id){ return drDrills().find(function(d){ return d.id===id; })||null; }
+  // ---- veri ----
+  window.sesAll=function(){ var t=team(); if(!t) return []; return J().filter(function(s){ return s.teamId===t.id; }); };
+  window.sesOnDay=function(k){ return sesAll().filter(function(s){ return s.date===k; }).sort(function(a,b){ return (toMin(a.start)||0)-(toMin(b.start)||0); }); };
+  window.sesGet=function(id){ return J().find(function(s){ return s.id===id; })||null; };
+  function put(s){ var a=J(), i=a.findIndex(function(x){ return x.id===s.id; }); s.updatedAt=Date.now(); if(i<0) a.push(s); else a[i]=s; save(a); return s; }
+  window.sesCreate=function(k,startMin){
+    var t=team(); if(!t) return null;
+    var st=startMin!=null?startMin:17*60; if(startMin==null){ var day=sesOnDay(k); if(day.length){ st=Math.min(22*60,(toMin(day[day.length-1].end)||st)+30); } }
+    var now=Date.now(); return put({id:uid('s'),teamId:t.id,date:k,start:hm(st),end:hm(Math.min(24*60,st+90)),drills:[],createdAt:now,updatedAt:now});
+  };
+  window.sesDelete=function(id){ save(J().filter(function(s){ return s.id!==id; })); };
+  window.sesCopy=function(id,k){ var s=sesGet(id); if(!s) return null; var c=JSON.parse(JSON.stringify(s)), now=Date.now(); c.id=uid('s'); c.date=k; c.createdAt=now; delete c.attendance; delete c.rpe; c.drills.forEach(function(r){ r.rid=uid('r'); }); return put(c); };
+  // Süreler: girilmeyenler kalan süreyi eşit paylaşır; artan dakika son otomatik drill'e
+  window.sesDurations=function(s){
+    var total=Math.max(0,(toMin(s.end)||0)-(toMin(s.start)||0)), rows=s.drills||[], fixed=0, auto=[];
+    rows.forEach(function(r,i){ if(r.min!=null&&r.min!=='') fixed+=Math.max(0,+r.min||0); else auto.push(i); });
+    var rest=total-fixed, share=auto.length?Math.floor(Math.max(0,rest)/auto.length):0, extra=auto.length?Math.max(0,rest)-share*auto.length:0;
+    var out=rows.map(function(r,i){ return (r.min!=null&&r.min!=='')?Math.max(0,+r.min||0):share; });
+    if(auto.length) out[auto[auto.length-1]]+=extra;
+    var at=toMin(s.start)||0, starts=out.map(function(m){ var x=at; at+=m; return x; });
+    return {total:total,mins:out,starts:starts,over:fixed>total?fixed-total:0};
+  };
+  // ---- görünüm ----
+  window.dpIsOpen=function(){ return !!($('dp')&&$('dp').classList.contains('show')); };
+  window.dpOpen=function(k,opts){
+    opts=opts||{}; if(!team()) return;
+    date=k; $('dp-title').textContent=nice(k); var t=team(); $('dp-team').textContent=t?(t.name||''):'';
+    var list=sesOnDay(k);
+    if(opts.newAt!=null){ var s=sesCreate(k,opts.newAt); sel=s&&s.id; }
+    else if(opts.sesId) sel=opts.sesId;
+    else sel=list.length?list[0].id:null;
+    $('dp').classList.add('show'); render();
+  };
+  window.dpClose=function(){ sheetMode=null; $('dp-sheet').classList.remove('show'); $('dp').classList.remove('show'); if(window.drMenuClose) drMenuClose(); if(window.apRender) apRender(); };
+  window.dpBack=function(){ if(!dpIsOpen()) return false; if(window.drDlgOpen&&drDlgOpen()){ drDlgClose(); return true; } var m=$('dr-menu'); if(m&&m.classList.contains('show')){ drMenuClose(); return true; } if(sheetMode){ sheetClose(); return true; } dpClose(); return true; };
+  window.dpSelected=function(){ return sel; };
+  window.dpSelect=function(id){ sel=id; render(); };
+  function render(){ renderList(); renderEditor(); renderPick(); }
+  function tagsOf(s){ var t=[]; (s.drills||[]).forEach(function(r){ var d=r.custom||drill(r.drillId); if(d&&d.tag&&t.indexOf(d.tag)<0) t.push(d.tag); }); return t; }
+  window.sesTags=tagsOf;
+  function dots(tags){ var w=document.createElement('span'); w.className='dp-dots'; tags.forEach(function(k){ var i=document.createElement('i'); i.style.background=(DRILL_TAGS[k]||{}).c||'#888'; w.appendChild(i); }); return w; }
+  function renderList(){
+    var L=$('dp-list'); L.innerHTML=''; var list=sesOnDay(date);
+    if(list.length&&!list.some(function(s){ return s.id===sel; })) sel=list[0].id;
+    if(!list.length){ var e=document.createElement('div'); e.className='dp-none'; e.textContent='Bu gün antrenman yok.'; L.appendChild(e); }
+    list.forEach(function(s){
+      var b=document.createElement('div'); b.className='dp-ses'+(s.id===sel?' on':''); b.tabIndex=0; b.setAttribute('role','button'); b.dataset.sid=s.id;
+      var d=sesDurations(s); var h=document.createElement('span'); h.textContent=s.start+'–'+s.end; b.appendChild(h); b.appendChild(dots(tagsOf(s)));
+      var sm=document.createElement('small'); var A=attSummary(s); sm.textContent=d.total+' dk · '+(s.drills||[]).length+' drill'+(A.marked?' · yoklama '+A.came+'/'+A.total:''); b.appendChild(sm);
+      b.onclick=function(){ sel=s.id; render(); }; b.onkeydown=function(e){ if(e.key==='Enter'){ sel=s.id; render(); } };
+      var m=document.createElement('button'); m.type='button'; m.className='dr-more'; m.textContent='⋯'; m.setAttribute('aria-label','Antrenman seçenekleri');
+      m.onclick=function(e){ e.stopPropagation(); sesMenu(s.id,m); }; b.appendChild(m);
+      b.addEventListener('contextmenu',function(e){ e.preventDefault(); sesMenu(s.id,null,e.clientX,e.clientY); });
+      L.appendChild(b);
+    });
+  }
+  function sesMenu(id,anchor,x,y){
+    if(!window.drShowMenu) return;
+    drShowMenu([
+      ['Yoklama',function(){ sel=id; render(); sheet('att'); }],
+      ['sRPE',function(){ sel=id; render(); sheet('rpe'); }],
+      ['PDF çıktısı',function(){ if(window.sesPdf) sesPdf(id); }],
+      ['Kopyala (başka güne)',function(){ copyDlg(id); }],
+      ['Sil',function(){ drConfirm('Antrenman silinsin mi?','Bu antrenman ve içindeki drill listesi silinir. Kütüphanedeki driller silinmez.','Sil',function(){ sesDelete(id); if(sel===id) sel=null; render(); mmToast('Antrenman silindi'); }); },'del']
+    ],anchor,x,y);
+  }
+  function copyDlg(id){
+    drAskValue('Başka güne kopyala','Hangi güne kopyalansın?','date',date,function(v){ if(!/^\d{4}-\d{2}-\d{2}$/.test(v||'')) return 'Bir tarih seç.'; var c=sesCopy(id,v); if(!c) return 'Kopyalanamadı.'; mmToast(v.split('-').reverse().join('.')+' tarihine kopyalandı'); if(v===date){ sel=c.id; render(); } return true; });
+  }
+  function renderEditor(){
+    var E=$('dp-editor'); E.innerHTML=''; var s=sel&&sesGet(sel);
+    if(!s){ var e=document.createElement('div'); e.className='dp-empty-ed'; e.textContent=sesOnDay(date).length?'Soldan bir antrenman seç.':'"+ Antrenman ekle" ile bu güne antrenman oluştur.'; E.appendChild(e); return; }
+    var D=sesDurations(s);
+    var tm=document.createElement('div'); tm.className='dp-times';
+    // 24 saat biçimi her cihazda aynı olsun diye saat ve dakika ayrı seçilir
+    var mk=function(lbl,id,val){ var l=document.createElement('div'); l.className='dp-tf'; var c=document.createElement('span'); c.textContent=lbl; l.appendChild(c);
+      var w=document.createElement('div'); w.className='dp-hm'; w.id=id; var v=toMin(val)||0, hh=document.createElement('select'), mm=document.createElement('select');
+      hh.setAttribute('aria-label',lbl+' saat'); mm.setAttribute('aria-label',lbl+' dakika');
+      for(var h=0;h<24;h++){ var o=document.createElement('option'); o.value=h; o.textContent=String(h).padStart(2,'0'); hh.appendChild(o); }
+      for(var m=0;m<60;m+=5){ var o2=document.createElement('option'); o2.value=m; o2.textContent=String(m).padStart(2,'0'); mm.appendChild(o2); }
+      if(v%5){ var o3=document.createElement('option'); o3.value=v%60; o3.textContent=String(v%60).padStart(2,'0'); mm.appendChild(o3); }
+      hh.value=Math.floor(v/60); mm.value=v%60; w.appendChild(hh); var col=document.createElement('b'); col.textContent=':'; w.appendChild(col); w.appendChild(mm); l.appendChild(w); tm.appendChild(l);
+      return {get value(){ return hm((+hh.value)*60+(+mm.value)); }, set value(x){ var n=toMin(x)||0; hh.value=Math.floor(n/60); mm.value=n%60; }, on:function(fn){ hh.addEventListener('change',fn); mm.addEventListener('change',fn); }}; };
+    var a=mk('Başlangıç','dp-start',s.start), b=mk('Bitiş','dp-end',s.end);
+    var tot=document.createElement('div'); tot.className='dp-tot'; tot.innerHTML='Toplam<b></b>'; tot.querySelector('b').textContent=D.total+' dk'; tm.appendChild(tot);
+    var onT=function(){ var x=sesGet(s.id); if(!x) return; var st=toMin(a.value), en=toMin(b.value); if(st==null||en==null) return;
+      if(en<=st){ mmToast('Bitiş saati başlangıçtan sonra olmalı'); a.value=x.start; b.value=x.end; return; } x.start=hm(st); x.end=hm(en); put(x); render(); };
+    a.on(onT); b.on(onT);
+    E.appendChild(tm);
+    var tools=document.createElement('div'); tools.className='dp-tools';
+    var A=attSummary(s), R=rpeSummary(s);
+    [['dp-att-btn','Yoklama'+(A.marked?' · '+A.came+'/'+A.total:''),function(){ sheet('att'); }],['dp-rpe-btn','sRPE'+(R.n?' · ort. '+R.avg:''),function(){ sheet('rpe'); }],['dp-pdf-btn','PDF çıktısı',function(){ if(window.sesPdf) sesPdf(s.id); }]].forEach(function(x){ var b=document.createElement('button'); b.type='button'; b.className='ap-btn'; b.id=x[0]; b.textContent=x[1]; b.onclick=x[2]; tools.appendChild(b); });
+    E.appendChild(tools);
+    if(D.over){ var w=document.createElement('div'); w.className='dp-warn'; w.textContent='Elle girilen süreler antrenman süresini '+D.over+' dk aşıyor.'; E.appendChild(w); }
+    var rows=document.createElement('div'); rows.className='dp-rows'; rows.id='dp-rows';
+    if(!(s.drills||[]).length){ var n=document.createElement('div'); n.className='dp-none'; n.textContent='Sağdaki listeden drill seç; antrenmana eklenir.'; rows.appendChild(n); }
+    (s.drills||[]).forEach(function(r,i){
+      var d=r.custom||drill(r.drillId), row=document.createElement('div'); row.className='dp-row'; row.dataset.rid=r.rid;
+      var g=document.createElement('div'); g.className='dp-grip'; g.textContent='⋮⋮'; g.title='Sürükleyerek sırala'; row.appendChild(g);
+      var at=document.createElement('div'); at.className='dp-at'; at.textContent=hm(D.starts[i]); row.appendChild(at);
+      if(d&&d.tag&&DRILL_TAGS[d.tag]){ var tg=document.createElement('span'); tg.className='dr-tag'; tg.style.background=DRILL_TAGS[d.tag].c; row.appendChild(tg); }
+      var nm=document.createElement('div'); nm.className='dp-nm'; nm.textContent=d?(d.name||'Adsız drill'):'(silinmiş drill)';
+      var info=[], src=r.custom||d; if(src&&src.frames&&src.frames.length>1) info.push('▶ animasyon');
+      if(src){ var sl=((src.frames&&src.frames[0]&&src.frames[0].people)||[]).filter(function(q){ return q.kind!=='coach'; }); if(sl.length){ var tp=((typeof teamActive==='function'&&teamActive())||{}).players||[], ks=tp.map(function(p){ return p.pid||(p.num+'|'+p.name); }), A=r.assign||{};
+        var n=sl.filter(function(q){ return A[q.yid]&&ks.indexOf(A[q.yid])>=0; }).length; info.push(n+'/'+sl.length+' oyuncu atandı'); } }
+      if(r.custom) info.push('Bu antrenmana özel');
+      if(info.length){ var sm=document.createElement('small'); sm.textContent=info.join(' · '); nm.appendChild(sm); } row.appendChild(nm);
+      var mn=document.createElement('label'); mn.className='dp-min'; var inp=document.createElement('input'); inp.type='number'; inp.min=0; inp.max=600; inp.inputMode='numeric';
+      var fixed=(r.min!=null&&r.min!==''); inp.value=fixed?r.min:''; inp.placeholder=String(D.mins[i]); if(fixed) inp.classList.add('fixed'); inp.title=fixed?'Elle girildi (silersen otomatik olur)':'Otomatik (eşit pay)';
+      inp.setAttribute('aria-label','Süre (dk)');
+      inp.addEventListener('change',function(){ var x=sesGet(s.id); if(!x) return; var rr=x.drills.find(function(q){ return q.rid===r.rid; }); if(!rr) return; var v=inp.value.trim(); rr.min=v===''?null:Math.max(0,Math.min(600,Math.round(+v)||0)); put(x); render(); });
+      mn.appendChild(inp); mn.appendChild(document.createTextNode('dk')); row.appendChild(mn);
+      var ed=document.createElement('button'); ed.type='button'; ed.className='dp-ib'; ed.textContent='✏️'; ed.title='Düzenle'; ed.setAttribute('aria-label','Düzenle');
+      ed.onclick=function(){ if(window.sesDrillOpen) sesDrillOpen(s.id,r.rid); else mmToast('Oyuncu atama ve antrenmana özel düzenleme sıradaki aşamada'); }; row.appendChild(ed);
+      var del=document.createElement('button'); del.type='button'; del.className='dp-ib'; del.textContent='✕'; del.title='Antrenmandan çıkar'; del.setAttribute('aria-label','Antrenmandan çıkar');
+      del.onclick=function(){ var x=sesGet(s.id); if(!x) return; x.drills=x.drills.filter(function(q){ return q.rid!==r.rid; }); put(x); render(); }; row.appendChild(del);
+      bindGrip(g,row,s.id); rows.appendChild(row);
+    });
+    E.appendChild(rows);
+  }
+  // Sürükleyerek sıralama (fare ve dokunmatik)
+  function bindGrip(g,row,sid){
+    g.addEventListener('pointerdown',function(e){
+      if(e.button>0) return; e.preventDefault(); var pid=e.pointerId; try{ g.setPointerCapture(pid); }catch(_){}
+      row.classList.add('dragging'); var over=null;
+      function mv(ev){ if(ev.pointerId!==pid) return; var t=document.elementFromPoint(ev.clientX,ev.clientY), r=t&&t.closest('.dp-row'); if(over&&over!==r) over.classList.remove('over'); if(r&&r!==row){ r.classList.add('over'); over=r; } else over=null; }
+      function up(ev){ if(ev.pointerId!==pid) return; g.removeEventListener('pointermove',mv); g.removeEventListener('pointerup',up); g.removeEventListener('pointercancel',up); row.classList.remove('dragging'); if(over) over.classList.remove('over');
+        if(over&&ev.type!=='pointercancel'){ var x=sesGet(sid); var from=x.drills.findIndex(function(q){ return q.rid===row.dataset.rid; }), to=x.drills.findIndex(function(q){ return q.rid===over.dataset.rid; });
+          if(from>=0&&to>=0&&from!==to){ var it=x.drills.splice(from,1)[0]; x.drills.splice(to,0,it); put(x); render(); } } }
+      g.addEventListener('pointermove',mv); g.addEventListener('pointerup',up); g.addEventListener('pointercancel',up);
+    });
+  }
+  // ---- Yoklama ve sRPE (isteğe bağlı) ----
+  var ST={came:{n:'Geldi',c:'#7fff5a'},absent:{n:'Gelmedi',c:'#ff6b5a'},injured:{n:'Sakat',c:'#ffa94d'},excused:{n:'İzinli',c:'#5fd0ff'}};
+  window.ATT_STATUS=ST;
+  function roster(){ var t=team(), a=(t&&t.players)||[]; try{ a=sortByPos(a.slice()); }catch(e){} return a; }
+  function key(p){ return p.pid||(p.num+'|'+p.name); }
+  function attSummary(s){ var r=roster(), A=s.attendance||{}, came=0, marked=0; r.forEach(function(p){ var v=A[key(p)]; if(v){ marked++; if(v==='came') came++; } }); return {total:r.length,came:came,marked:marked}; }
+  function rpeSummary(s){ var A=s.attendance||{}, R=s.rpe||{}, tot=sesDurations(s).total, sum=0, n=0; roster().forEach(function(p){ var k=key(p); if(A[k]==='came'&&R[k]){ sum+=+R[k]; n++; } }); return {n:n,avg:n?Math.round(sum/n*10)/10:0,load:n?Math.round(sum/n*tot):0,total:tot}; }
+  window.sesAttSummary=attSummary; window.sesRpeSummary=rpeSummary;
+  window.sesSetAtt=function(sid,k,v){ var x=sesGet(sid); if(!x) return; x.attendance=x.attendance||{}; if(v) x.attendance[k]=v; else delete x.attendance[k]; if(v!=='came'&&x.rpe) delete x.rpe[k]; put(x); };
+  window.sesSetRpe=function(sid,k,v){ var x=sesGet(sid); if(!x) return; x.rpe=x.rpe||{}; if(v) x.rpe[k]=Math.max(1,Math.min(10,+v)); else delete x.rpe[k]; put(x); };
+  var sheetMode=null;
+  window.dpSheetOpen=function(){ return !!sheetMode; };
+  function sheetClose(){ sheetMode=null; $('dp-sheet').classList.remove('show'); render(); }
+  window.dpSheetClose=sheetClose;
+  function sheet(mode){ sheetMode=mode; $('dp-sheet').classList.add('show'); renderSheet(); }
+  window.dpSheet=sheet;
+  function renderSheet(){
+    var S=$('dp-sheet'); S.innerHTML=''; var s=sel&&sesGet(sel); if(!s||!sheetMode){ sheetClose(); return; }
+    var hd=document.createElement('div'); hd.className='sh-head';
+    var h=document.createElement('h3'); h.textContent=sheetMode==='att'?'Yoklama':'sRPE'; hd.appendChild(h);
+    var sm=document.createElement('small'); sm.textContent=nice(s.date)+' · '+s.start+'–'+s.end; hd.appendChild(sm);
+    var sp=document.createElement('span'); sp.className='sp'; hd.appendChild(sp);
+    var bt=function(t,cls,fn,id){ var b=document.createElement('button'); b.type='button'; b.className='ap-btn'+(cls?' '+cls:''); b.textContent=t; b.onclick=fn; if(id) b.id=id; hd.appendChild(b); return b; };
+    if(sheetMode==='att'){ bt('Hepsi geldi','',function(){ roster().forEach(function(p){ var k=key(p); if(!(s.attendance||{})[k]) sesSetAtt(s.id,k,'came'); }); renderSheet(); },'sh-allcame'); bt('sRPE →','',function(){ sheet('rpe'); }); }
+    else bt('← Yoklama','',function(){ sheet('att'); });
+    bt('Bitti','pri',sheetClose,'sh-done');
+    S.appendChild(hd);
+    var L=document.createElement('div'); L.className='sh-list'; S.appendChild(L);
+    var R=roster(), x=sesGet(s.id), A=x.attendance||{}, P=x.rpe||{}, tot=sesDurations(x).total;
+    if(!R.length){ var e=document.createElement('div'); e.className='dp-none'; e.textContent='Takımın kadrosunda oyuncu yok. Kadroyu menüdeki takım adından düzenleyebilirsin.'; L.appendChild(e); }
+    var list=sheetMode==='att'?R:R.filter(function(p){ return A[key(p)]==='came'; });
+    if(sheetMode==='rpe'&&R.length&&!list.length){ var e2=document.createElement('div'); e2.className='dp-none'; e2.textContent='Puanlama için önce yoklamada "Geldi" işaretle.'; L.appendChild(e2); }
+    list.forEach(function(p){ var k=key(p), row=document.createElement('div'); row.className='sh-row'; row.dataset.key=k;
+      row.innerHTML='<span class="n"></span><span class="t"><span></span><small></small></span>'; row.querySelector('.n').textContent=p.num!==''&&p.num!=null?p.num:'–'; row.querySelector('.t span').textContent=p.name||'Oyuncu'; row.querySelector('.t small').textContent=p.pos||'';
+      if(sheetMode==='att'){ var g=document.createElement('div'); g.className='sh-st'; Object.keys(ST).forEach(function(v){ var b=document.createElement('button'); b.type='button'; b.dataset.v=v; b.textContent=ST[v].n; b.style.setProperty('--c',ST[v].c); if(A[k]===v) b.classList.add('on');
+          b.onclick=function(){ sesSetAtt(s.id,k,A[k]===v?null:v); renderSheet(); }; g.appendChild(b); }); row.appendChild(g); }
+      else { var r=document.createElement('div'); r.className='sh-rpe'; for(var i=1;i<=10;i++){ (function(i){ var b=document.createElement('button'); b.type='button'; b.textContent=i; b.dataset.v=i; if(+P[k]===i) b.classList.add('on'); b.onclick=function(){ sesSetRpe(s.id,k,+P[k]===i?null:i); renderSheet(); }; r.appendChild(b); })(i); } row.appendChild(r);
+        var ld=document.createElement('div'); ld.className='sh-load'; ld.innerHTML='Yük<b></b>'; ld.querySelector('b').textContent=P[k]?(P[k]*tot)+'':'–'; row.appendChild(ld); }
+      L.appendChild(row); });
+    var ft=document.createElement('div'); ft.className='sh-foot'; ft.id='sh-foot';
+    if(sheetMode==='att'){ var c={came:0,absent:0,injured:0,excused:0}; R.forEach(function(p){ var v=A[key(p)]; if(v) c[v]++; }); Object.keys(ST).forEach(function(v){ var sp2=document.createElement('span'); sp2.textContent=ST[v].n; var b=document.createElement('b'); b.textContent=c[v]; sp2.appendChild(b); ft.appendChild(sp2); });
+      var sp3=document.createElement('span'); sp3.textContent='İşaretsiz'; var b3=document.createElement('b'); b3.textContent=R.length-Object.keys(c).reduce(function(a,v){ return a+c[v]; },0); sp3.appendChild(b3); ft.appendChild(sp3); }
+    else { var Q=rpeSummary(x); [['Süre',tot+' dk'],['Puanlanan',Q.n+'/'+list.length],['Ortalama RPE',Q.n?Q.avg:'–'],['Ortalama seans yükü',Q.n?Q.load:'–']].forEach(function(z){ var sp4=document.createElement('span'); sp4.textContent=z[0]; var b4=document.createElement('b'); b4.textContent=z[1]; sp4.appendChild(b4); ft.appendChild(sp4); }); }
+    S.appendChild(ft);
+  }
+  window.sesAddDrill=function(sid,drillId){ var x=sesGet(sid); if(!x||!drill(drillId)) return false; x.drills=x.drills||[]; x.drills.push({rid:uid('r'),drillId:drillId,min:null,assign:{}}); put(x); return true; };
+  window.sesMove=function(sid,from,to){ var x=sesGet(sid); if(!x) return; var it=x.drills.splice(from,1)[0]; x.drills.splice(to,0,it); put(x); if(dpIsOpen()) render(); };
+  // ---- Drill ekle alanı: klasörler, arama, etiket ----
+  var IC_F='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>';
+  function renderPick(){
+    var P=$('dp-pick'); var keepFocus=document.activeElement&&document.activeElement.id==='dp-q'; P.innerHTML='';
+    var hd=document.createElement('div'); hd.className='dp-sec'; hd.textContent='DRİLL EKLE'; P.appendChild(hd);
+    var q=document.createElement('input'); q.type='search'; q.className='dp-search'; q.id='dp-q'; q.placeholder='Drill ara'; q.value=pickQ; q.oninput=function(){ pickQ=q.value; renderPick(); }; P.appendChild(q);
+    var tf=document.createElement('div'); tf.className='dp-tagf'; Object.keys(DRILL_TAGS).forEach(function(k){ var t=DRILL_TAGS[k], b=document.createElement('button'); b.type='button'; b.dataset.tag=k; b.style.setProperty('--tc',t.c); b.innerHTML='<i></i><span></span>'; b.querySelector('i').style.background=t.c; b.querySelector('span').textContent=t.n.replace(' antrenman',''); if(pickTag===k) b.classList.add('on'); b.onclick=function(){ pickTag=pickTag===k?'':k; renderPick(); }; tf.appendChild(b); }); P.appendChild(tf);
+    var s=sel&&sesGet(sel);
+    if(!s){ var n=document.createElement('div'); n.className='dp-none'; n.textContent='Drill eklemek için önce bir antrenman seç ya da oluştur.'; P.appendChild(n); if(keepFocus) q.focus(); return; }
+    var D=drDrills(), qq=pickQ.trim().toLocaleLowerCase('tr');
+    var tagOk=function(d){ return !pickTag||d.tag===pickTag; };
+    if(qq||pickTag){
+      var res=D.filter(function(d){ return tagOk(d)&&(!qq||String(d.name||'').toLocaleLowerCase('tr').indexOf(qq)>=0); }).sort(function(a,b){ return String(a.name).localeCompare(String(b.name),'tr'); });
+      if(!res.length){ var e=document.createElement('div'); e.className='dp-none'; e.textContent='Sonuç yok.'; P.appendChild(e); }
+      res.forEach(function(d){ P.appendChild(drillItem(d,s.id,true)); });
+    } else {
+      if(pickF&&!drFolders().some(function(f){ return f.id===pickF; })) pickF=null;
+      var cr=document.createElement('div'); cr.className='dp-crumb';
+      var mk=function(l,id){ var b=document.createElement('button'); b.type='button'; b.textContent=l; b.onclick=function(){ pickF=id; renderPick(); }; return b; };
+      cr.appendChild(mk('Driller',null)); drPath(pickF).forEach(function(f){ var i=document.createElement('span'); i.textContent='›'; i.style.color='#4d6a50'; cr.appendChild(i); cr.appendChild(mk(f.name,f.id)); }); P.appendChild(cr);
+      if(pickF){ var up=document.createElement('button'); up.type='button'; up.className='dp-pi dp-up'; up.textContent='↑ Bir üst klasöre dön'; up.onclick=function(){ var f=drFolders().find(function(x){ return x.id===pickF; }); pickF=f?(f.parentId||null):null; renderPick(); }; P.appendChild(up); }
+      drKids(pickF).forEach(function(f){ var b=document.createElement('button'); b.type='button'; b.className='dp-pi'; b.dataset.fid=f.id; b.innerHTML=IC_F+'<span><span></span><small></small></span>'; b.querySelector('span span').textContent=f.name;
+        var all=[f.id].concat(drDesc(f.id)), nd=D.filter(function(d){ return all.indexOf(d.folderId||null)>=0; }).length, nf=all.length-1; b.querySelector('small').textContent=nd+' drill'+(nf?' · '+nf+' alt klasör':'');
+        b.onclick=function(){ pickF=f.id; renderPick(); }; P.appendChild(b); });
+      var here=drInFolder(pickF); here.forEach(function(d){ P.appendChild(drillItem(d,s.id,false)); });
+      if(!here.length&&!drKids(pickF).length){ var e2=document.createElement('div'); e2.className='dp-none'; e2.textContent=pickF?'Bu klasör boş.':'Kütüphanede drill yok. Önce Driller bölümünden drill oluştur.'; P.appendChild(e2); }
+    }
+    if(keepFocus){ q.focus(); try{ q.setSelectionRange(q.value.length,q.value.length); }catch(_){} }
+  }
+  function drillItem(d,sid,withPath){
+    var b=document.createElement('button'); b.type='button'; b.className='dp-pi'; b.dataset.did=d.id;
+    var tg=document.createElement('span'); tg.className='dr-tag'; tg.style.background=(DRILL_TAGS[d.tag]||{}).c||'#556'; b.appendChild(tg);
+    var t=document.createElement('span'); t.textContent=d.name||'Adsız drill'; var sm=document.createElement('small');
+    var bits=[]; if(withPath){ var pth=drPath(d.folderId).map(function(f){ return f.name; }).join(' › '); bits.push(pth||'Klasörsüz'); } if(d.frames&&d.frames.length>1) bits.push('▶');
+    if(bits.length){ sm.textContent=bits.join(' · '); t.appendChild(sm); } b.appendChild(t);
+    b.onclick=function(){ if(sesAddDrill(sid,d.id)){ renderList(); renderEditor(); mmToast('Eklendi: '+(d.name||'Drill')); } };
+    return b;
+  }
+  function wire(){
+    $('dp-close').onclick=dpClose;
+    $('dp-add').onclick=function(){ var s=sesCreate(date); if(s){ sel=s.id; render(); } };
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',wire); else wire();
+})();
+</script>
+<!-- ANTRENMAN PDF ÇIKTISI: sayfalar tuvale çizilir, JPEG olarak küçük bir PDF dosyasına yazılır (internetsiz) -->
+<script>
+(function(){
+  var PW=1240, PH=1754, M=80, FONT="'DM Sans',Arial,sans-serif";
+  var AYLAR=['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'], GUN=['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'];
+  function nice(k){ var p=k.split('-'), d=new Date(+p[0],+p[1]-1,+p[2]); return d.getDate()+' '+AYLAR[d.getMonth()]+' '+d.getFullYear()+', '+GUN[d.getDay()]; }
+  function img(svg){ return new Promise(function(res){ var i=new Image(); i.onload=function(){ res(i); }; i.onerror=function(){ res(null); }; i.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg); }); }
+  function wrap(ctx,text,maxW){ var out=[]; String(text||'').split(/\n/).forEach(function(par){ var words=par.split(/\s+/), line=''; words.forEach(function(w){ var t=line?line+' '+w:w; if(ctx.measureText(t).width>maxW&&line){ out.push(line); line=w; } else line=t; }); out.push(line); }); return out; }
+  function key(p){ return p.pid||(p.num+'|'+p.name); }
+  // Saha + drill ilk karesi
+  async function drawField(ctx,x,y,w,h,d,assign,roster){
+    var f0=(d.frames&&d.frames[0])||{}, fm=d.field||'empty';
+    ctx.save(); ctx.beginPath(); ctx.rect(x,y,w,h); ctx.clip(); ctx.translate(x,y);
+    for(var i=0;i<10;i++){ ctx.fillStyle=i%2?'#1a6b2f':'#1d7a35'; if(fm==='half') ctx.fillRect(0,i*h/10,w,h/10+1); else ctx.fillRect(i*w/10,0,w/10+1,h); }
+    ctx.strokeStyle='rgba(255,255,255,.8)'; ctx.lineWidth=2;
+    if(fm==='full'){ var X=function(m){ return m/105*w; }, Y=function(m){ return m/68*h; };
+      ctx.strokeRect(1,1,w-2,h-2); ctx.beginPath(); ctx.moveTo(w/2,0); ctx.lineTo(w/2,h); ctx.stroke(); ctx.beginPath(); ctx.arc(w/2,h/2,X(9.15),0,7); ctx.stroke();
+      [[0,1],[105-16.5,0]].forEach(function(a){ ctx.strokeRect(X(a[0]),Y(13.84),X(16.5),Y(40.32)); }); ctx.strokeRect(0,Y(24.84),X(5.5),Y(18.32)); ctx.strokeRect(X(99.5),Y(24.84),X(5.5),Y(18.32)); }
+    else if(fm==='half'){ var k=h/55, ox=(w-68*k)/2, oy=2.5*k; ctx.strokeRect(ox,oy,68*k,52.5*k); ctx.strokeRect(ox+13.84*k,oy,40.32*k,16.5*k); ctx.strokeRect(ox+24.84*k,oy,18.32*k,5.5*k); ctx.strokeRect(ox+30.34*k,oy-2*k,7.32*k,2*k);
+      ctx.beginPath(); ctx.arc(ox+34*k,oy+11*k+0,0.5*k,0,7); ctx.fillStyle='rgba(255,255,255,.8)'; ctx.fill(); ctx.beginPath(); ctx.arc(ox+34*k,oy+11*k,9.15*k,0.2*Math.PI,0.8*Math.PI); ctx.stroke(); ctx.beginPath(); ctx.arc(ox+34*k,oy+52.5*k,9.15*k,Math.PI,0); ctx.stroke(); }
+    var K=w/980;
+    // çizimler
+    (f0.paths||[]).forEach(function(p0){ var q=JSON.parse(JSON.stringify(p0)); var m=function(o){ if(o&&typeof o.x==='number'){ o.x*=w; o.y*=h; } }; m(q.from); m(q.to); if(Array.isArray(q.points)) q.points.forEach(m); q.size=(q.size||3)*K;
+      ctx.save(); ctx.strokeStyle=q.color; ctx.lineWidth=q.size; ctx.lineCap='round'; ctx.lineJoin='round'; ctx.setLineDash([]);
+      try{ if(q.type==='free'&&q.points&&q.points.length>1){ ctx.beginPath(); ctx.moveTo(q.points[0].x,q.points[0].y); q.points.forEach(function(t){ ctx.lineTo(t.x,t.y); }); ctx.stroke(); }
+        else if(q.type==='arrow'||q.type==='line'||q.type==='dash') drawLinePath(ctx,q); else if(q.type==='circle'||q.type==='rect') drawShape(ctx,q.type,q.from,q.to,q.color,q.size,q); }catch(e){}
+      ctx.restore(); });
+    // malzemeler
+    for(var j=0;j<(f0.equip||[]).length;j++){ var it=f0.equip[j], T=EQ_TYPES[it.type]; if(!T) continue; var kk=(w/1000)*(it.sc||1), ew=T.w*kk, eh=T.h*kk; var im=await img(T.svg(it.color||T.color,ew,eh));
+      if(im){ ctx.save(); ctx.translate(it.x/100*w,it.y/100*h); ctx.rotate((it.rot||0)*Math.PI/180); ctx.drawImage(im,-ew/2,-eh/2,ew,eh); ctx.restore(); } }
+    // top
+    if(f0.ball){ var bx=f0.ball[0]/100*w, by=f0.ball[1]/100*h, br=9*K; ctx.fillStyle='#fff'; ctx.strokeStyle='#111'; ctx.lineWidth=2; ctx.beginPath(); ctx.arc(bx,by,br,0,7); ctx.fill(); ctx.stroke(); ctx.fillStyle='#111'; ctx.beginPath(); ctx.arc(bx,by,br*0.38,0,7); ctx.fill(); }
+    // kişiler
+    var js=Math.round(38*K*1.25);
+    for(var n=0;n<(f0.people||[]).length;n++){ var q2=f0.people[n], sz=js*(q2.scale||1), cx=q2.x/100*w, cy=q2.y/100*h;
+      var jim=await img(makeJerseySVG(q2.color,q2.color,'solid',q2.kind==='gk',Math.round(sz),null)); if(jim) ctx.drawImage(jim,cx-sz/2,cy-sz/2,sz,sz);
+      if(q2.vest){ ctx.strokeStyle=q2.vest; ctx.lineWidth=4*K; ctx.beginPath(); ctx.arc(cx,cy,sz*0.52,0,7); ctx.stroke(); }
+      var pl=null; if(q2.kind!=='coach'&&assign&&assign[q2.yid]) pl=roster.find(function(r){ return key(r)===assign[q2.yid]; })||null;
+      var lt=q2.kind==='gk'?'G':q2.kind==='coach'?'C':''; if(pl) lt=(pl.num!==''&&pl.num!=null)?String(pl.num):lt;
+      if(lt){ ctx.fillStyle=_dkText(q2.color); ctx.font='800 '+Math.round(sz*0.42)+'px '+FONT; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(lt,cx,cy+sz*0.05); }
+      if(pl&&pl.name){ ctx.font='700 '+Math.round(15*K*1.3)+'px '+FONT; var tw=ctx.measureText(pl.name).width+12, th=Math.round(22*K*1.2); ctx.fillStyle='rgba(0,0,0,.75)'; ctx.fillRect(cx-tw/2,cy+sz/2+2,tw,th); ctx.fillStyle='#fff'; ctx.textBaseline='middle'; ctx.fillText(pl.name,cx,cy+sz/2+2+th/2); }
+    }
+    ctx.restore(); ctx.strokeStyle='#999'; ctx.lineWidth=1; ctx.strokeRect(x,y,w,h);
+  }
+  function newPage(){ var c=document.createElement('canvas'); c.width=PW; c.height=PH; var x=c.getContext('2d'); x.fillStyle='#fff'; x.fillRect(0,0,PW,PH); return {c:c,x:x,y:M}; }
+  function footer(pg,i,n,title){ var x=pg.x; x.fillStyle='#888'; x.font='20px '+FONT; x.textAlign='left'; x.textBaseline='alphabetic'; x.fillText('TacTech · '+title,M,PH-40); x.textAlign='right'; x.fillText(i+' / '+n,PW-M,PH-40); }
+  window.sesPdfPages=async function(sid){
+    var s=sesGet(sid); if(!s) throw new Error('Antrenman bulunamadı');
+    var t=(typeof teamActive==='function'&&teamActive())||{}, roster=t.players||[], D=sesDurations(s), lib=drDrills();
+    var rows=(s.drills||[]).map(function(r,i){ return {r:r,d:r.custom||lib.find(function(q){ return q.id===r.drillId; })||null,min:D.mins[i],at:D.starts[i]}; });
+    var hm=function(n){ return String(Math.floor(n/60)).padStart(2,'0')+':'+String(n%60).padStart(2,'0'); };
+    var pages=[], pg=newPage(); pages.push(pg); var X=pg.x, W=PW-2*M;
+    // başlık
+    X.fillStyle='#111'; X.textAlign='left'; X.textBaseline='alphabetic';
+    X.font='700 46px '+FONT; X.fillText('Antrenman Planı',M,pg.y+40); pg.y+=70;
+    X.font='600 28px '+FONT; X.fillStyle='#333'; X.fillText((t.name||'')+(t.season?' · '+t.season:''),M,pg.y); pg.y+=40;
+    X.font='26px '+FONT; X.fillText(nice(s.date)+' · '+s.start+'–'+s.end+' · '+D.total+' dk · '+rows.length+' drill',M,pg.y); pg.y+=34;
+    X.strokeStyle='#ccc'; X.lineWidth=2; X.beginPath(); X.moveTo(M,pg.y); X.lineTo(PW-M,pg.y); X.stroke(); pg.y+=40;
+    // drill tablosu
+    var cols=[M,M+60,M+170,M+800,PW-M-120];
+    X.font='700 22px '+FONT; X.fillStyle='#666'; ['#','SAAT','DRİLL','ETİKET','SÜRE'].forEach(function(h,i){ X.fillText(h,cols[i],pg.y); }); pg.y+=14;
+    rows.forEach(function(o,i){ pg.y+=40; X.fillStyle=i%2?'#fff':'#f3f6f3'; X.fillRect(M-10,pg.y-28,W+20,40); X.fillStyle='#111'; X.font='600 24px '+FONT;
+      var tg=o.d&&DRILL_TAGS[o.d.tag];
+      X.fillText(String(i+1),cols[0],pg.y); X.fillText(hm(o.at),cols[1],pg.y); var nm=o.d?(o.d.name||'Adsız drill'):'(silinmiş drill)'; while(X.measureText(nm).width>600&&nm.length>3) nm=nm.slice(0,-2)+'…'; X.fillText(nm,cols[2],pg.y);
+      if(tg){ X.fillStyle=tg.c; X.beginPath(); X.arc(cols[3]+8,pg.y-8,8,0,7); X.fill(); X.fillStyle='#111'; X.font='22px '+FONT; X.fillText(tg.n.replace(' antrenman',''),cols[3]+24,pg.y); }
+      X.font='600 24px '+FONT; X.fillText(o.min+' dk',cols[4],pg.y); });
+    pg.y+=50; X.font='700 24px '+FONT; X.fillStyle='#111'; X.fillText('Toplam: '+D.total+' dk',cols[4]-60,pg.y); pg.y+=50;
+    // drill sayfaları
+    for(var i=0;i<rows.length;i++){ var o=rows[i]; if(!o.d) continue;
+      var fw=Math.round(W*0.74), fh=Math.round(fw*0.648); X.font='24px '+FONT; var lines=o.d.desc?wrap(X,o.d.desc,W):[]; var need=70+fh+20+lines.length*34+30;
+      if(pg.y+Math.min(need,70+fh+60)>PH-90){ pg=newPage(); pages.push(pg); X=pg.x; }
+      var tg2=DRILL_TAGS[o.d.tag];
+      X.fillStyle='#111'; X.textAlign='left'; X.textBaseline='alphabetic'; X.font='700 32px '+FONT; X.fillText((i+1)+'. '+(o.d.name||'Drill'),M,pg.y+30);
+      X.font='24px '+FONT; X.fillStyle='#555'; var sub=hm(o.at)+' · '+o.min+' dk'+(tg2?' · '+tg2.n:'')+(o.r.custom?' · Bu antrenmana özel':'')+((o.d.frames||[]).length>1?' · Animasyonlu (ilk kare)':'');
+      X.fillText(sub,M,pg.y+64); if(tg2){ X.fillStyle=tg2.c; X.fillRect(M-24,pg.y+4,8,64); }
+      pg.y+=84; await drawField(X,M,pg.y,fw,fh,o.d,o.r.assign||{},roster); pg.y+=fh+30;
+      X.fillStyle='#222'; X.font='24px '+FONT;
+      for(var L=0;L<lines.length;L++){ if(pg.y>PH-110){ pg=newPage(); pages.push(pg); X=pg.x; X.fillStyle='#222'; X.font='24px '+FONT; } X.fillText(lines[L],M,pg.y+4); pg.y+=34; }
+      pg.y+=40;
+    }
+    var title=(t.name||'')+' · '+s.date.split('-').reverse().join('.')+' '+s.start;
+    pages.forEach(function(p,i){ footer(p,i+1,pages.length,title); });
+    return pages.map(function(p){ return p.c; });
+  };
+  // En küçük PDF: her sayfa tek JPEG resim (A4)
+  function b64(d){ var s=atob(d.split(',')[1]), a=new Uint8Array(s.length); for(var i=0;i<s.length;i++) a[i]=s.charCodeAt(i); return a; }
+  window.pdfFromCanvases=function(canvases){
+    var parts=[], off=0, offs=[], enc=function(t){ var a=new Uint8Array(t.length); for(var i=0;i<t.length;i++) a[i]=t.charCodeAt(i)&255; return a; };
+    var add=function(x){ var b=typeof x==='string'?enc(x):x; parts.push(b); off+=b.length; };
+    var obj=function(n,body){ offs[n]=off; add(n+' 0 obj\n'); if(typeof body==='string') add(body); else body.forEach(add); add('\nendobj\n'); };
+    add('%PDF-1.4\n%âãÏÓ\n');
+    var n=canvases.length, kids=[]; for(var i=0;i<n;i++) kids.push((3+i*3)+' 0 R');
+    obj(1,'<< /Type /Catalog /Pages 2 0 R >>');
+    obj(2,'<< /Type /Pages /Kids ['+kids.join(' ')+'] /Count '+n+' >>');
+    canvases.forEach(function(c,i){ var pn=3+i*3, cn=pn+1, im=pn+2, jpg=b64(c.toDataURL('image/jpeg',0.88)), cs='q 595.28 0 0 841.89 0 0 cm /Im0 Do Q';
+      obj(pn,'<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /XObject << /Im0 '+im+' 0 R >> >> /Contents '+cn+' 0 R >>');
+      obj(cn,'<< /Length '+cs.length+' >>\nstream\n'+cs+'\nendstream');
+      obj(im,['<< /Type /XObject /Subtype /Image /Width '+c.width+' /Height '+c.height+' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length '+jpg.length+' >>\nstream\n',jpg,'\nendstream']); });
+    var total=3+n*3, xref=off, x='xref\n0 '+total+'\n0000000000 65535 f \n'; for(var k=1;k<total;k++) x+=String(offs[k]).padStart(10,'0')+' 00000 n \n';
+    add(x); add('trailer\n<< /Size '+total+' /Root 1 0 R >>\nstartxref\n'+xref+'\n%%EOF\n');
+    return new Blob(parts,{type:'application/pdf'});
+  };
+  var busy=false;
+  window.sesPdfBlob=async function(sid){ var c=await sesPdfPages(sid); return pdfFromCanvases(c); };
+  window.sesPdf=async function(sid){
+    if(busy) return; busy=true; if(window.mmToast) mmToast('PDF hazırlanıyor…');
+    try{ var s=sesGet(sid), t=(typeof teamActive==='function'&&teamActive())||{}; var blob=await sesPdfBlob(sid);
+      var nm=('Antrenman-'+(t.name||'')+'-'+s.date+'-'+s.start.replace(':','')).replace(/[^\wçğıöşüÇĞİÖŞÜ-]+/g,'-').replace(/-+/g,'-')+'.pdf';
+      downloadBlob(blob,nm); if(window.mmToast) mmToast('PDF hazır: '+nm); }
+    catch(e){ console.error(e); if(window.mmToast) mmToast('PDF oluşturulamadı'); }
+    finally{ busy=false; }
+  };
+})();
+</script>
 <!-- GOOGLE İLE GİRİŞ + DRIVE EŞİTLEME -->
 <script>
 // ---- Android: Google girişi (Capacitor SocialLogin eklentisi) ----
@@ -4797,7 +6211,7 @@ function tmLoadIntoModal(id,kind){
   const G=()=>window.tactechNative&&window.tactechNative.google;
   const FILE='tactech-data.json', API='https://www.googleapis.com';
   const META='tactech_sync_meta', TOMB='tactech_sync_tomb', TTOMB='tactech_sync_teamtomb', LAST='tactech_sync_last';
-  const TEAMKEYS=[TEAMS_KEY,SAVED_TEAMS_KEY];
+  const TEAMKEYS=listKeys();
   // Eşitlenmeyen, cihaza özel kayıtlar
   const syncable=k=>!!k && (k.indexOf('tactech_')===0||k.indexOf('taktik_squad_')===0) && k.indexOf('tactech_sync_')!==0 && k.indexOf('tactech_g_')!==0 && k.indexOf('tactech_mig_')!==0 && k!=='tactech_splash_off' && k!==ACTIVE_TEAM_KEY;
   const J=(k,d)=>{ try{ return JSON.parse(stGet(k)||'')||d; }catch(e){ return d; } };
